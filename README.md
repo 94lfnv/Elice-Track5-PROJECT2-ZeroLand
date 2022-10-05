@@ -11,11 +11,9 @@
   - 사용하려는 데이터(제안된 데이터 중 하나 또는 선택한 다른 데이터 세트)를 명시, 이에 대한 설명
 
 **기술 스택**
-| 백엔드 | 프론트엔드 | 데이터분석 |
-| ------ | ------ |
-| TypeScript | TypeScript | Python |
-| Node.js | JavaScript |  |
-| SQL | React |  |
+  - 백엔드 : TypeScript, Node.js, SQL
+  - 프론트엔드 : TypeScript, JavaScript, React
+  - 데이터분석 : Python
 
 **사용 라이브러리**
   - 사용된 라이브러리 (numpy, matplotlib, wordcloud 등)
