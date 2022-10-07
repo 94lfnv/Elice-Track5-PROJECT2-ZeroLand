@@ -1,22 +1,26 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
-import Header from './components/Header';
-import Welcome from './components/Welcome';
+
+import Navbar from './components/Navbar';
+import Welcome from './components/Pages/Welcome';
+import Introduction from './components/Pages/Introduction';
+import Login from './components/Pages/Login';
 
 import './App.css'
 
 function App () {
   return (
     <>
-      <Header />
+      <Navbar />
       <Welcome />
-      {/* <Routes>
-        <Route path="/introduction" exact element={<Introduction />} />
-        <Route path="user/register" exact element={<RegisterForm />} />
-        <Route path="user/login" exact element={<LoginForm />} />
-        <Route path="user/:id" exact element={<MyPage />} />
-      </Routes> */}
+      <Router>
+        <Routes>
+          <Route path="introduction" element={<Introduction />} />
+          <Route path="login" element={<Login />} />
+          <Route path="welcome" element={<Welcome />} />
+        </Routes>
+      </Router>
     </>
   )
 }
