@@ -1,0 +1,76 @@
+html, body {
+    margin: 0;
+      padding: 0;
+      border: 0;
+      /* font-size: 100%;
+      font: inherit;
+      vertical-align: baseline; */
+  }
+  
+  /* 먼저 깔끔 -> 애니메이션 나오면서 불투명 앤 흰색 바탕 혹은 상자 
+  그리고 글자 폰트 지정 
+  1. 애니메이션으로 깔끔한 화면 -> 바로 불투명 앤 바탕 -> 로고 앤 글자 */
+  
+  
+  body {
+    /* background-image: url("./photos/photo3-3.jpg"); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+    background-attachment: fixed;
+    width: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    animation: fadein 5s ease 3s;
+    -webkit-animation: fadein 3s;
+  }
+  @keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+  }
+  
+  @-webkit-keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+  }
+  
+  .welcome {
+    width: 100vw;
+    height: 100vh;
+    /* background-color: #000; */
+    background-image: url("./photos/photo3-3.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top center;
+    background-attachment: fixed;
+    margin: 0 auto;
+    opacity: 0.3;
+    position: relative;
+  }
+  
+  .main {
+    color: #fff;
+    position: absolute;
+    top: 15rem;
+    left: 14rem;
+    animation: transY 2s ease-in-out;
+    font-size: 27px;
+  }
+  @keyframes transY {
+    0% {
+      transform: translateY(300px); 
+      opacity: 0; 
+    }
+    100% {
+      transform: translateY(0px);   
+      opacity: 1; 
+    }
+  }
