@@ -18,7 +18,8 @@
     "react-icons": "^4.4.0",
     "react-router-dom": "^6.4.2",
     "react-theme-toggle-button": "^1.1.0",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "swiper": "^8.4.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",

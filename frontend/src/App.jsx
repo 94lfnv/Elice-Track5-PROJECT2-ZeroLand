@@ -1,11 +1,9 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Navbar";
 
-// import Welcome from "./components/Pages/Welcome";
 // const _sleep = async () =>
 //   await new Promise((resolve) => setTimeout(() => resolve(), 3000));
-// const Welcome = lazy(() => {  return import("./components/Pages/Welcome");});
+
 // import Introduction from "./components/Pages/Introduction";
 const Introduction = lazy(() => import("./components/Pages/Introduction"));
 // import Login from "./components/Pages/Login";
