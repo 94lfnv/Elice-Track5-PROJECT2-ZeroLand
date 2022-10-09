@@ -2,10 +2,10 @@ import React from "react"
 
 function Landing() {
     return (
-      <div className="welcome">
+      <div className="welcome" style={{textDecoration: "none"}}>
         <div className="main">
           <h2><a href="/map">ZEROLAND</a></h2>
-          <p>제로웨이스트샵 위치 안내 지도</p>
+          <h6 style= {{fontSize: '20px'}}>당신 곁의 제로웨이스트 샵</h6>
         </div>
     </div>
     );

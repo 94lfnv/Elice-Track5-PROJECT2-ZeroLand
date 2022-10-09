@@ -5,13 +5,16 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //   await new Promise((resolve) => setTimeout(() => resolve(), 3000));
 
 // import Introduction from "./components/Pages/Introduction";
-const Introduction = lazy(() => import("./components/Pages/Introduction"));
 // import Login from "./components/Pages/Login";
-const Login = lazy(() => import("./components/Pages/Login"));
+// import Landing from "./components/Pages/Landing";
+// import Map from "./components/Pages/Map";
+// import Register from "./components/Pages/Register";
 
-import Landing from "./components/Pages/Landing";
-import Map from "./components/Pages/Map";
-import Register from "./components/Pages/Register";
+const Introduction = lazy(() => import("./components/Pages/Introduction"));
+const Login = lazy(() => import("./components/Pages/Login"));
+const Landing = lazy(() => import("./components/Pages/Landing"));
+const Map = lazy(() => import("./components/Pages/Map"));
+const Register = lazy(() => import("./components/Pages/Register"));
 
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
@@ -23,7 +26,7 @@ function App() {
     <>
       <ErrorBoundary FallbackComponent={UiErrorFallback}>
         <Suspense
-          fallback={<div style={{ fontSize: "100px" }}>loading....</div>}
+          fallback={<div style={{ fontSize: "12px", textAlign: 'center'}}>Loading...</div>}
         >
           <Layout>
             <Router>
