@@ -1,11 +1,12 @@
 import React from "react";
+import RegisterForm from "../User/RegisterForm";
 
 function Register () {
   return (
     <div className="banner">
       <section id="banner">
         <div className="inner">
-          <p>Register test page</p>
+          <RegisterForm />
         </div>
       </section>
     </div>

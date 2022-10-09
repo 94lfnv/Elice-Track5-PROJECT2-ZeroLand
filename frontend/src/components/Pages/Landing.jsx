@@ -4,8 +4,8 @@ function Landing() {
     return (
       <div className="welcome">
         <div className="main">
-          <h2><a href="/map">제로웨이스트 샵</a></h2>
-          <p>제로제로 웨이스트웨이스트</p>
+        <p>아무것도 남지 않는 당신의 공간을 찾아드립니다.</p>
+          <h2><a href="/map">ZeroLand</a></h2>
         </div>
     </div>
     );
