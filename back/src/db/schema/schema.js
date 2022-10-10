@@ -82,7 +82,7 @@ knex.schema
       table.foreign("store_id").references("stores.store_id");
     })
   )
-  .the(() =>
+  .then(() =>
     knex.schema.createTable("posts", function (table) {
       table.increments("post_id").primary();
       table.enum("tag", [board_A, board_B, board_C]).notNullable();
