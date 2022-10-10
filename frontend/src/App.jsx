@@ -11,6 +11,9 @@ const Login = lazy(() => import("./components/Pages/Login"));
 
 import Landing from "./components/Pages/Landing";
 import Map from "./components/Pages/Map";
+// 실험코드
+import Mypage from "./components/Pages/Mypage";
+// 실험코드
 import Register from "./components/Pages/Register";
 
 import "./App.css";
@@ -32,6 +35,9 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="/" element={<Landing />} />
                 <Route path="map" element={<Map />} />
+                {/* 실험코드 */}
+                <Route path="mypage" element={<Mypage />} />
+                {/* 실험코드 */}
                 <Route path="register" element={<Register />} />
               </Routes>
             </Router>

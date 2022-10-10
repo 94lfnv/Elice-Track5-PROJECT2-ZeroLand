@@ -15,6 +15,11 @@ function Header () {
                 <Nav.Item id="my-nav-item" className="ms-4">
                     <Nav.Link href="/map">Map</Nav.Link>
                 </Nav.Item>
+                {/* 실험코드 */}
+                <Nav.Item id="my-nav-item" className="ms-4">
+                    <Nav.Link href="/mypage">Mypage</Nav.Link>
+                </Nav.Item>
+                {/* 실험코드 */}
                 <div class="justify-content-end" className="ms-3">
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
