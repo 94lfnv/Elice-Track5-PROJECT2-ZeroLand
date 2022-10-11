@@ -1,15 +1,5 @@
-// reference:
-// 1차 프로젝트
-
-// import is from "@sindresorhus/is";
-// import { Router } from "express";
-// import { login_required } from "../middlewares/login_required";
-// import { userAuthService } from "../services/userService";
-// import { upload } from "../middlewares/imageUpload";
-
-// const is = require("@sindresorhus/is");
 const express = require("express");
-// const { Router } = require("express");
+const { Router } = require("express");
 // const { response } = require("../app");
 const User = require("./../models/User");
 // const { login_required } = require("../middlewares/login_required");

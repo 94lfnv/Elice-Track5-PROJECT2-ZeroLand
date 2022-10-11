@@ -1,6 +1,6 @@
 // reference:
 // 1차 프로젝트 파일
-const knex = require("../db");
+const knex = require("../database");
 // const { UserModel } = require("../schemas/user");
 // import { UserModel } from "../schemas/user";
 

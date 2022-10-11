@@ -3,7 +3,7 @@
 // 1차 프로젝트에서는 index.js라는 이름이었으나, 그렇게 하면 "db > index.js"와 "back > index.js" 두개의 "index.js"파일이 존재하게 되어 혼동을 줄이고자 "db.js"라는 이름으로 변경.
 
 const mysql = require("mysql2");
-require("dotenv").config();
+// require("dotenv").config();  // index.js
 
 const DB_HOST =
   process.env.DB_HOST ||
