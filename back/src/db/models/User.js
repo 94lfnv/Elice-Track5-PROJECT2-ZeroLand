@@ -1,36 +1,46 @@
-// reference:
-// 1차 프로젝트 파일
-const knex = require("../database");
-// const { UserModel } = require("../schemas/user");
-// import { UserModel } from "../schemas/user";
+// const mysql = require("mysql2");
+const { connection } = require("../database");
+// const express = require("express");
 
-const list = (params = {}) => {
-  knex(process.env.T_USERS)
-    .select(
-      "user_id",
-      "email",
-      "passowrd",
-      "nickname",
-      "profile_photo",
-      "created_time",
-      "updated_time",
-      "current_latitude",
-      "current_longitude"
-    )
-    // .where({ user_id: 1 }); // 예시
-    .where(params) // 예시
-    .andwhere({ "user_id",">", 0 })}; // 예시
+//-------1st option-----//
+// const list = () => {
+//   connection.query(
+//     `SELCET user_id, email, nickname FROM ${process.env.T_USERS}`
+//   );
+// };
 
-const create = (obj) => {
-  knex(process.env.T_USERS)
-    .insert(obj)
-};
-const update = (params, obj) => {
-  knex(process.env.T_USERS)
-    .where(params)
-    .update(obj);
-};
+// const list = () => {
+//   connection.query(
+//     {
+//       sql: "SELCET `user_id`, `email`, `nickname` FROM ?",
+//       timeout: 4000, // 40s
+//       values: [process.env.T_USERS],
+//     },
+//     function (error, results, fields) {
+//       if (error) throw error;
+//       console.log(results);
+//       // return results;
+//     }
+//   );
+// };
 
-
-// export { User };
-module.exports = { list, create, update };
+//-------2nd option-----//
+class User {
+  static async findAll() {
+    // const users = await UserModel.find({});
+    const userList = await connection.query(
+      {
+        sql: "SELCET `user_id`, `email`, `nickname` FROM ?",
+        timeout: 4000, // 40s
+        values: [process.env.T_USERS],
+      },
+      function (error, results, fields) {
+        if (error) throw error;
+        console.log(results);
+        return results;
+      }
+    );
+    return userList;
+  }
+}
+module.exports = { User };
