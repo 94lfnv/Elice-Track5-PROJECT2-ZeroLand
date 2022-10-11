@@ -6,8 +6,8 @@ CREATE TABLE `users` (
   `profile_photo` varchar(255) DEFAULT ('./default.jpg'),
   `created_time` timestamp,
   `updated_time` timestamp,
-  `currrent_latitude` varchar(255),
-  `currrent_longitude` varchar(255)
+  `current_latitude` varchar(255),
+  `current_longitude` varchar(255)
 );
 
 CREATE TABLE `stores` (
@@ -19,8 +19,8 @@ CREATE TABLE `stores` (
   `phone` int,
   `open_time` time,
   `close_time` time,
-  `currrent_latitude` varchar(255),
-  `currrent_longitude` varchar(255),
+  `latitude` varchar(255),
+  `longitude` varchar(255),
   `address_id` int,
   `address_detail` varchar(255)
 );
@@ -50,7 +50,7 @@ CREATE TABLE `reviews` (
   `review_id` int PRIMARY KEY AUTO_INCREMENT,
   `star` int,
   `description` varchar(255),
-  `photo` varchar(255) DEFAULT null,
+  `photo` longblob DEFAULT null,
   `created_time` timestamp,
   `updated_time` timestamp,
   `user_id` int,
@@ -62,7 +62,7 @@ CREATE TABLE `posts` (
   `tag` ENUM ('board_A', 'board_B', 'board_C'),
   `title` varchar(255),
   `description` varchar(255),
-  `photo` varchar(255),
+  `photo` longblob DEFAULT null,
   `created_time` timestamp,
   `updated_time` timestamp,
   `user_id` int
