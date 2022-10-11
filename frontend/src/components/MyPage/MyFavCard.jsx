@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import StarRate from "./StarRate.jsx"
 
-function MyReviewCard() {
+function MyFavCard() {
 
   return(
     <div className="card mb-3">
@@ -12,11 +12,12 @@ function MyReviewCard() {
             <div className="col-md-8">
                 <div className="card-body">
                     <div className="row">
-                        <h4 className="col card-title text-secondary">매장 명</h4>
+                        <h4 className="col card-title text-dark">매장 명</h4>
+                        <h5 className="col text-secondary">매장 주소</h5>
+                        <div className="col text-secondary">🧡x6</div>
                         <div className="col"><StarRate /></div>
-                        <p className="card-text col"><small className="text-muted text-secondary">2022. 10. 22.</small></p>
                     </div>
-                    <p className="card-text text-secondary">리뷰 내용 This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p className="card-text text-secondary">매장 정보 This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                 </div>
             </div>
         </div>
@@ -24,4 +25,4 @@ function MyReviewCard() {
   )
 }
 
-export default MyReviewCard;
+export default MyFavCard;

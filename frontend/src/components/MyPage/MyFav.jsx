@@ -1,14 +1,21 @@
 import React, {useState} from "react"
-
+import MyFavCard from "./MyFavCard.jsx"
 
 function MyFav( ) {
 
-  let [reward, setReward] = useState(0)
-  let [fav, setFav] = useState(0)
-  let [myReview,setMyReview] = useState(0)
+  // let [reward, setReward] = useState(0)
+  // let [fav, setFav] = useState(0)
+  // let [myReview,setMyReview] = useState(0)
 
   return(
-    <p className="text-secondary">My Fav</p>
+    <>
+      <h3 className="text-secondary">My Fav</h3>
+      <MyFavCard />
+      <MyFavCard />
+      <MyFavCard />
+      <MyFavCard />
+    </>
+    
   )
 }
 
