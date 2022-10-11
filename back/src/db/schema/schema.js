@@ -1,5 +1,5 @@
 // schema.js
-const knex = require("../knex");
+const knex = require("../db");
 
 knex.schema
   .createTable("users", function (table) {

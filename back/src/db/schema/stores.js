@@ -1,6 +1,6 @@
 // references:
 // https://knexjs.org/guide/schema-builder.html
-const knex = require("../knex");
+const knex = require("../db");
 
 // // public????
 // knex.schema.withSchema('public').createTable('users', function (table) {

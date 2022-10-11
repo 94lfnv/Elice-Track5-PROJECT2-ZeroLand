@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const knex = require("../db");
 
 knex.schema.createTable("like_store", function (table) {
   table.increments("like_store_id").primary();

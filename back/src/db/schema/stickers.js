@@ -1,4 +1,4 @@
-const knex = require("../knex");
+const knex = require("../db");
 
 knex.schema.createTable("stickers", function (table) {
   table.increments("sticker_id").primary();
