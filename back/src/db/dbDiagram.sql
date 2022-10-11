@@ -3,7 +3,7 @@ CREATE TABLE `users` (
   `email` varchar(255),
   `password` varchar(255),
   `nickname` varchar(255) DEFAULT (U.email),
-  `profile_photo` varchar(255) DEFAULT (./default.jpg),
+  `profile_photo` varchar(255) DEFAULT ('./default.jpg'),
   `created_time` timestamp,
   `updated_time` timestamp,
   `currrent_latitude` varchar(255),
