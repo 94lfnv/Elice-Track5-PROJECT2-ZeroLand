@@ -1,30 +1,25 @@
 const { Router } = require("express");
-// const { User } = require("../db/database");
+const { User, connection, pool } = require("../db/database");
+const { list } = require("../db/models/User");
 // const { login_required } = require("../middlewares/login_required");
 const { userAuthService } = require("../services/userService");
 // const { upload } = require("../middlewares/imageUpload");
-
 // 시작!
 const userAuthRouter = Router();
 
-// const userList = (req, res) =>
-//   User.list()
-//     .then((response) => res.json(response))
-//     .catch((e) => res.json({ e }));
+// userAuthRouter.get("/userlist", async (req, res, next) => {
+const userList = async (req, res, next) => {
+  try {
+    const [results, fields, error] = await pool.query("SELECT * FROM users");
+    if (error) throw error;
+    // console.log(results);
+    // console.log(fields);
 
-userAuthRouter.get(
-  "/userlist",
-  // login_required,
-  async function (req, res, next) {
-    try {
-      // 전체 사용자 목록을 얻음
-      const userlist = await userAuthService.getUsers();
-      res.status(200).send(userlist);
-    } catch (error) {
-      next(error);
-    }
+    res.status(200).send(JSON.stringify(results));
+  } catch (err) {
+    next(err);
   }
-);
+};
 
 // const single = (req, res) =>
 //   User.list({ id: req.params.id })
@@ -55,7 +50,7 @@ userAuthRouter.get(
 //     .catch((e) => res.json(e));
 // };
 
-// userAuthRouter.get("/", userList);
+userAuthRouter.get("/userlist", userList);
 // userAuthRouter.get("/:id", single);
 // userAuthRouter.post("/register", register);
 // userAuthRouter.put("/:id", update);

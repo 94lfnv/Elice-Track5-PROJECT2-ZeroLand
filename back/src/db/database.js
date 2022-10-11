@@ -1,53 +1,61 @@
 // references:
 // https://github.com/sidorares/node-mysql2
-const mysql = require("mysql2");
-const User = require("./models/User");
+// const mysql = require("mysql2");
+// // const app = require("../app");
+// const User = require("./models/User");
+// // require("dotenv").config({ path: "../../.env" });
+// require("dotenv").config();
 
-// require("dotenv").config();  // index.js
-
-// const DB_HOST =
-//   process.env.DB_HOST ||
-//   "MySQL 서버 HOST가 일치하지 않습니다. \n./db/index.js 파일을 확인해 주세요.";
-
-// const DB_USER =
-//   process.env.DB_USER ||
-//   "MySQL 서버 USER가 일치하지 않습니다. \n./db/index.js 파일을 확인해 주세요.";
-
-// const DB_PASSWORD =
-//   process.env.DB_PASSWORD ||
-//   "MySQL 서버 PASSWORD가 일치하지 않습니다. \n./db/index.js 파일을 확인해 주세요.";
-
-// const DB_DATABASE =
-//   process.env.DB_DATABASE ||
-//   "MySQL 서버 DATABASE가 일치하지 않습니다. \n./db/index.js 파일을 확인해 주세요.";
-
+//----------정상작동-start---------//
+// Error: Can't add new command when connection is in closed state
 // const connection = mysql.createConnection({
-//   host: DB_HOST,
-//   user: DB_USER,
-//   password: DB_PASSWORD,
-//   database: DB_DATABASE,
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_DATABASE,
 // });
 
-const connection = mysql.createConnection({
+// connection.connect();
+
+// connection.query(
+//   "SELECT 10 + 1 AS solution",
+//   function (error, results, fields) {
+//     if (error) throw error;
+//     console.log(
+//       "정상적으로 MySQL 서버에 연결되었습니다. '1' + '1'은?: ",
+//       results[0].solution
+//     );
+//   }
+// );
+
+// connection.query("SELECT * FROM users", function (error, results, fields) {
+//   if (error) throw error;
+//   console.log(results);
+// });
+
+// connection.end();
+
+// // module.exports = { connection };
+// module.exports = { connection, User };
+
+//----------정상작동-end---------//
+
+// -----------start---------//
+// https://github.com/sidorares/node-mysql2/issues/939
+const mysql = require("mysql2/promise");
+// const app = require("../app");
+const User = require("./models/User");
+// require("dotenv").config({ path: "../../.env" });
+require("dotenv").config();
+
+// Error: Can't add new command when connection is in closed state
+const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-});
+};
+// exporting MySQL connection pool object
+const pool = mysql.createPool(dbConfig);
 
-connection.connect();
-
-connection.query(
-  "SELECT 10 + 1 AS solution",
-  function (error, results, fields) {
-    if (error) throw error;
-    console.log(
-      "정상적으로 MySQL 서버에 연결되었습니다. '1' + '1'은?: ",
-      results[0].solution
-    );
-  }
-);
-connection.end();
-
-// module.exports = { connection };
-module.exports = { connection, User };
+module.exports = { pool };

@@ -8,21 +8,14 @@ const { connection } = require("../database");
 //     `SELCET user_id, email, nickname FROM ${process.env.T_USERS}`
 //   );
 // };
-
 // const list = () => {
-//   connection.query(
-//     {
-//       sql: "SELCET `user_id`, `email`, `nickname` FROM ?",
-//       timeout: 4000, // 40s
-//       values: [process.env.T_USERS],
-//     },
-//     function (error, results, fields) {
-//       if (error) throw error;
-//       console.log(results);
-//       // return results;
-//     }
-//   );
+//   connection.query("SELCET * FROM 'users'", function (error, results, fields) {
+//     if (error) throw error;
+//     console.log(results);
+//     return results;
+//   });
 // };
+// module.exports = { list };
 
 //-------2nd option-----//
 class User {
