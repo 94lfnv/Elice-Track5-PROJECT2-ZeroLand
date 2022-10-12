@@ -42,8 +42,9 @@
 
 // -----------start---------//
 // https://github.com/sidorares/node-mysql2/issues/939
+// const mysql = require("mysql2");
 const mysql = require("mysql2/promise");
-// const app = require("../app");
+const app = require("../app");
 const User = require("./models/User");
 // require("dotenv").config({ path: "../../.env" });
 // const bluebird = require("bluebird");
@@ -59,5 +60,17 @@ const dbConfig = {
 };
 // exporting MySQL connection pool object
 const pool = mysql.createPool(dbConfig);
-
-module.exports = { pool, User };
+const connection = mysql.createConnection(dbConfig);
+// connection.connect();
+// connection.query(
+//   "SELECT 10 + 1 AS solution",
+//   function (error, results, fields) {
+//     if (error) throw error;
+//     console.log(
+//       "정상적으로 MySQL 서버에 연결되었습니다.(connection) '1' + '1'은?: ",
+//       results[0].solution
+//     );
+//   }
+// );
+// connection.end();
+module.exports = { pool, connection, User };

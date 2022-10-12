@@ -1,6 +1,6 @@
 // const { Router, app } = require("express");
 const express = require("express");
-const { pool } = require("../db/database");
+const { pool, connection } = require("../db/database");
 const { list } = require("../db/models/User");
 // const { login_required } = require("../middlewares/login_required");
 const { userAuthService } = require("../services/userService");
@@ -24,57 +24,55 @@ userAuthRouter.get("/userlist", async (req, res, next) => {
     next(err);
   }
 });
+
+// 회원가입 기능
+userAuthRouter.post("/user/register", async (req, res, next) => {
+  try {
+    // if (is.emptyObject(req.body)) {
+    //   throw new Error(
+    //     "headers의 Content-Type을 application/json으로 설정해주세요"
+    //   );
+    // }
+    // // 이메일 중복 확인
+    // const [results, fields, error] = await pool.query(
+    //   `SELECT email FROM users WHERE 'email = ${req.body.email}'`
+    // );
+    // if (error) throw error;
+    // else if (results) {
+    //   // const errorMessage =
+    //   // "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.";
+    //   console.log(results);
+    //   // return { errorMessage };
+    // }
+    // // req (request) 에서 데이터 가져오기
+    const email = req.body.email;
+    const password = req.body.password;
+    const nickname = req.body.nickname;
+
+    // // 위 데이터를 유저 db에 추가하기
+
+    // 비밀번호 해쉬화
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // db에 저장
+    const [res_save, fld_save, err_save] = await pool.query({
+      sql: "INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)",
+      // timeout: 4000, // 40s
+      values: [email, hashedPassword, nickname],
+    });
+    // function (error, results, fields) {
+    if (err_save) throw err_save;
+    const newUser = JSON.stringify(res_save, ["insertId"]);
+    console.log(newUser);
+    // }
+
+    res.status(200).send(newUser);
+  } catch (err) {
+    next(err);
+  }
+});
 module.exports = userAuthRouter;
 
-// // 회원가입 기능
-// userAuthRouter.post("/user/register", async (req, res, next) => {
-//   try {
-//     // if (is.emptyObject(req.body)) {
-//     //   throw new Error(
-//     //     "headers의 Content-Type을 application/json으로 설정해주세요"
-//     //   );
-//     // }
-
-//     // // req (request) 에서 데이터 가져오기
-//     // const email = req.body.email;
-//     // const password = req.body.password;
-//     // const nickname = req.body.nickname;
-
-//     // // 위 데이터를 유저 db에 추가하기
-//     // 이메일 중복 확인
-//     const [results, fields, error] = await pool.query(
-//       `SELECT email FROM users WHERE email = ${req.body.email}`
-//     );
-//     if (error) throw error;
-//     // else if (results) {
-//     //   const errorMessage =
-//     //     "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.";
-//     //   console.log(results);
-//     //   return { errorMessage };
-//     // }
-//     res.status(200).json(results);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-// module.exports = userAuthRouter;
-
 // /////
-// 비밀번호 해쉬화
-// const hashedPassword = await bcrypt.hash(password, 10);
-
-// db에 저장
-// const [results, fields, error] = await pool.query(
-//   {
-//     sql: "INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)",
-//     timeout: 4000, // 40s
-//     values: [email, hashedPassword, nickname],
-//   },
-//   function (error, results, fields) {
-//     if (error) throw error;
-//     // console.log(JSON.stringify(results));
-//   }
-// );
 // const createdNewUser = await User.create({ newUser });
 // createdNewUser.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
 
