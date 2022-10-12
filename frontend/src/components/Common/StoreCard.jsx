@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import StarRate from "./StarRate.jsx"
 
-function MyFavCard() {
+function StoreCard() {
 
   return(
     <div className="card mb-3">
@@ -25,4 +25,4 @@ function MyFavCard() {
   )
 }
 
-export default MyFavCard;
+export default StoreCard;

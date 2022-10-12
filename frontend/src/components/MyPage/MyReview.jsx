@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MyReviewCard from "./MyReviewCard.jsx";
+import ReviewCard from "../Common/ReviewCard.jsx";
 
 
 function MyReview( ) {
@@ -13,10 +13,10 @@ function MyReview( ) {
   return(
     <>
         <h3 className="text-secondary">My Review</h3>
-        <MyReviewCard />
-        <MyReviewCard />
-        <MyReviewCard />
-        <MyReviewCard />
+        <ReviewCard />
+        <ReviewCard />
+        <ReviewCard />
+        <ReviewCard />
     </>
   )
 }

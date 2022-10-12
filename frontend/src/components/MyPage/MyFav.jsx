@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import MyFavCard from "./MyFavCard.jsx"
+import StoreCard from "../Common//StoreCard.jsx"
 
 function MyFav( ) {
 
@@ -10,10 +10,10 @@ function MyFav( ) {
   return(
     <>
       <h3 className="text-secondary">My Fav</h3>
-      <MyFavCard />
-      <MyFavCard />
-      <MyFavCard />
-      <MyFavCard />
+      <StoreCard />
+      <StoreCard />
+      <StoreCard />
+      <StoreCard />
     </>
     
   )
