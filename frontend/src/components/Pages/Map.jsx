@@ -1,5 +1,7 @@
 import React, { useEfeect } from "react"
+
 import Location from "../Map/Location";
+import StoreInfo from "../Map/StoreInfo";
 
 function Map() {
   return (
@@ -12,8 +14,7 @@ function Map() {
           <div>
             <h3>내 주변의 제로웨이스트샵</h3>
             <Location />
-            {/* 새 컴포넌트 (스토어 목록 컴포넌트 자리)*/}
-            <p>새 컴포넌트 (스토어 목록) 자리 (지도 오른쪽으로 붙게... 하기...)</p>
+            <StoreInfo />
           </div>
         </div>
       </section>

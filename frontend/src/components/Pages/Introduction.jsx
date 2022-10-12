@@ -9,9 +9,6 @@ import "swiper/css/navigation";
 function Introduction() {
   return (
     <article id="main">
-      <header>
-        <h2>ZEROLAND / 서비스 소개</h2>
-      </header>
       <section class="wrapper style5">
         <div class="inner">
         <Swiper
