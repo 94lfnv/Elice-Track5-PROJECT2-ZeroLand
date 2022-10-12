@@ -27,29 +27,23 @@ userAuthRouter.get("/userlist", async (req, res, next) => {
 // 회원가입 기능
 userAuthRouter.post("/user/register", async (req, res, next) => {
   try {
-    // if (is.emptyObject(req.body)) {
-    //   throw new Error(
-    //     "headers의 Content-Type을 application/json으로 설정해주세요"
-    //   );
-    // }
-    // // 이메일 중복 확인
-    // const [results, fields, error] = await pool.query(
-    //   `SELECT email FROM users WHERE 'email = ${req.body.email}'`
-    // );
-    // if (error) throw error;
-    // else if (results) {
-    //   // const errorMessage =
-    //   // "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.";
-    //   console.log(results);
-    //   // return { errorMessage };
-    // }
-    // // req (request) 에서 데이터 가져오기
     const email = req.body.email;
     const password = req.body.password;
     const nickname = req.body.nickname;
 
+    // 이메일 중복 확인
+    const [res_checkID, fld_checkID, err_checkID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [email],
+    });
+    if (err_checkID) throw err_checkID;
+    else if (JSON.stringify(res_checkID) !== "[]") {
+      const errorMessage =
+        "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.";
+      console.log(errorMessage);
+      res.status(200).send(errorMessage);
+    }
     // // 위 데이터를 유저 db에 추가하기
-
     // 비밀번호 해쉬화
     const hashedPassword = await bcrypt.hash(password, 10);
     // db에 저장
@@ -66,34 +60,61 @@ userAuthRouter.post("/user/register", async (req, res, next) => {
       sql: "SELECT * FROM users WHERE `email` = ? ",
       values: [email],
     });
-    // if (err_new) throw err_new;
+    if (err_new) throw err_new;
     console.log(JSON.stringify(res_new));
     res.status(200).json(res_new);
-    // res.status(200).send(res_new);
   } catch (err) {
     next(err);
   }
 });
 
-// // 로그인 기능
-// userAuthRouter.post("/user/login", async function (req, res, next) {
-//   try {
-//     // req (request) 에서 데이터 가져오기
-//     const email = req.body.email;
-//     const password = req.body.password;
+// 로그인 기능
+userAuthRouter.post("/user/login", async function (req, res, next) {
+  try {
+    // req (request) 에서 데이터 가져오기
+    const email = req.body.email;
+    const password = req.body.password;
 
-//     // 위 데이터를 이용하여 유저 db에서 유저 찾기
-//     const user = await userAuthService.getUser({ email, password });
+    // 위 데이터를 이용하여 유저 db에서 유저 찾기
+    // const user = await userAuthService.getUser({ email, password });
+    // email 확인
+    // const newUser = JSON.stringify(res_save, ["insertId"]);
+    // console.log(newUser);
+    const [res_logID, fld_logID, err_logID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [email],
+    });
+    if (err_logID) throw err_logID;
+    else if (JSON.stringify(res_logID) === "[]") {
+      const errorMessage =
+        "일치하는 email이 없습니다. 다시 한 번 확인해 주세요.";
+      console.log(errorMessage);
+      res.status(200).send(errorMessage);
+    }
+    console.log(JSON.stringify(res_logID, ["password"]));
 
-//     if (user.errorMessage) {
-//       throw new Error(user.errorMessage);
-//     }
+    // 비밀번호 일치 여부 확인
+    const correctPasswordHash = JSON.stringify(res_logID, ["password"]);
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      correctPasswordHash
+    );
+    if (!isPasswordCorrect) {
+      const errorMessage =
+        "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
+      return { errorMessage };
+    }
 
-//     res.status(200).send(user);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    /////////
+    // if (user.errorMessage) {
+    //   throw new Error(user.errorMessage);
+    // }
+
+    // res.status(200).send(user);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = userAuthRouter;
 
