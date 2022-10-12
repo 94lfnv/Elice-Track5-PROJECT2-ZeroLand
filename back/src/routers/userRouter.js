@@ -47,7 +47,7 @@ const userRegister = async (req, res, next) => {
       values: [email],
     });
     if (err_new) throw err_new;
-    res.status(200).json(res_new);
+    res.status(200).json(res_new[0]);
   } catch (err) {
     next(err);
   }
