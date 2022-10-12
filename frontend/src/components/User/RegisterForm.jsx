@@ -6,9 +6,8 @@ import { KaKaoButton } from "./KakaoLogin";
 import CheckModal from "./CheckModal";
 
 // 중복 이메일 찾아야 하고 
-// 약관 동의 체크 박스나 모달로 말해야 하고
 // 체크 박스는 맨 마지막에 allvalid면 나오는 걸로 (칸이 작아서)
-// 인증 메일 보내야 함. (버튼을 다음으로 바꾸고 인증메일 쓰라는 모달을 띄우면 어떨까?)
+// 인증 메일 보내야 함. 링크 보내서 누르면 true 되고 -> 인증되게끔
 
 function RegisterForm () {
   //로그인 성공하면 내비게이트로 메인페이지 보내기
@@ -18,6 +17,9 @@ function RegisterForm () {
   const [pwd, setPwd] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [nickname, setNickname] = useState("");
+
+  const [isAccepted, setIsAccpted] = useState(false);
+  
 
   //각 항목 조건이 맞지 않을 때 띄우는 메시지 
   const [emailMsg, setEmailMsg] = useState("");
@@ -49,12 +51,12 @@ function RegisterForm () {
   const isConfirmPwd = pwd === confirmPwd;
   const isNicknameValid = validateNickname(nickname);
 
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isNicknameValid;
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isNicknameValid && isAccepted;
 
   const onSubmit = async (e) => {
-    e.stopPropagaion();
     e.preventDefault();
-    console.log("로그인 됐어? 됐다!")
+
+      console.log("안녕");
     //navigate("/login")
   }
 
@@ -104,12 +106,18 @@ function RegisterForm () {
       } else {
         setNicknameMsg("올바른 닉네임입니다.")
       }
-    }, [])
+    }, []);
+
+    const handleCheckAccept = useCallback(() => {
+      setIsAccpted(true);
+    }, []);
+
 
   return (
     <ResisterStyled.FormBox>
         <ResisterStyled.InputBox onSubmit={onSubmit}>
         <ResisterStyled.FormTitle>회원가입</ResisterStyled.FormTitle>
+
         <ResisterStyled.InputTitle>이메일 주소 *</ResisterStyled.InputTitle>
             <ResisterStyled.InputText 
                 name="email"
@@ -117,6 +125,7 @@ function RegisterForm () {
                 placeholder="ex) zeroland@zeroland.com"
                 onChange={onChangeEmail}/>
                 <ResisterStyled.OutputText className={isEmailValid ? 'success' : 'error'}>{emailMsg}</ResisterStyled.OutputText>
+
         <ResisterStyled.InputTitle>비밀번호 *</ResisterStyled.InputTitle>
             <ResisterStyled.InputText 
                 name="password"
@@ -124,6 +133,7 @@ function RegisterForm () {
                 placeholder="**********"
                 onChange={onChangePwd}/>
                 <ResisterStyled.OutputText className={isPwdValid ? 'success' : 'error'}>{pwdMsg}</ResisterStyled.OutputText>
+
         <ResisterStyled.InputTitle>비밀번호 확인 *</ResisterStyled.InputTitle>
             <ResisterStyled.InputText 
                 name="confirmPassword"
@@ -131,6 +141,7 @@ function RegisterForm () {
                 placeholder="**********"
                 onChange={onChangeConfirmPwd}/>
                 <ResisterStyled.OutputText className={isConfirmPwd ? 'success' : 'error'}>{confirmPwdMsg}</ResisterStyled.OutputText>
+
         <ResisterStyled.InputTitle>닉네임 *</ResisterStyled.InputTitle>
             <ResisterStyled.InputText 
                 name="nickname"
@@ -138,16 +149,20 @@ function RegisterForm () {
                 placeholder="제로랜드"
                 onChange={onChangeNickname}/>
                 <ResisterStyled.OutputText className={isNicknameValid ? 'success' : 'error'}>{nicknameMsg}</ResisterStyled.OutputText> 
-                <CheckModal />
+
+                <CheckModal isAccepted={isAccepted} onCheckAccept={handleCheckAccept} />
+
         <ResisterStyled.FootBtnBox>
           <ResisterStyled.FootButton type="submit" disabled={!isAllValid}>
         가입하기
           </ResisterStyled.FootButton>
         </ResisterStyled.FootBtnBox>
+
         <ResisterStyled.LogoBox>
           <NaverLogin /> 
           <KaKaoButton />
         </ResisterStyled.LogoBox>
+
         </ResisterStyled.InputBox>
     </ResisterStyled.FormBox>
   );

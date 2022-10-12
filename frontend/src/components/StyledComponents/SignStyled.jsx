@@ -49,10 +49,10 @@ export const InputBox = styled.div`
 `;
 
 export const FormTitle = styled.h1`
-    font-size: 20px;
+    font-size: 23px;
     color: #01402E;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 `;
 
 export const InputTitle = styled.div`
@@ -69,7 +69,7 @@ export const InputTitle = styled.div`
 export const InputText = styled.input`
     font-size: 15px;
     &::placeholder {
-        font-size: 13px;
+        font-size: 14px;
     }
     &:hover {
         cursor: pointer;
@@ -101,6 +101,7 @@ export const FootButton = styled.button`
     height: 45px;
     line-height: 45px;
     margin-bottom: 15px;
+    font-size: 15px;
     &:hover {
         background-color: #01402E;
     }

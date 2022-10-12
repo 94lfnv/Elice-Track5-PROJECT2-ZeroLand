@@ -4,10 +4,10 @@ export const ModalButton = styled.div`
         width: 70px;
         height: 20px;
         float: left;
-        margin-top: 8px;
-        margin-left: 2%;
+        margin-top: 10px;
+        margin-left: 2.5%;
         cursor: pointer;
-        font-size: 12px;
+        font-size: 13px;
         line-height: 18px;
 
     span.no {
@@ -22,7 +22,7 @@ export const ModalButton = styled.div`
 
 export const ModalForm = styled.div`
     width: 450px;
-    height: 420px;
+    height: 430px;
     background-color: #f2f2f2;
     border: 2px solid #01402E;
     font-size: 15px;
@@ -35,7 +35,7 @@ export const ModalForm = styled.div`
     transform: translate(-50%, -50%);
 
     h1 {
-        font-size: 17.5px;
+        font-size: 18px;
         color: #734838;
         padding: 20px;
         font-weight: bolder;
@@ -52,7 +52,8 @@ export const ModalForm = styled.div`
     button {
         border: 1px solid #01402E;
         color: #01402E;
-        width: 60px;
-        height: 30px;
+        width: 120px;
+        height: 35px;
+        font-size: 15px;
     }
 `;
