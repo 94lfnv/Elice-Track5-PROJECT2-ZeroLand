@@ -17,39 +17,37 @@ storesRouter.get("/stores/:storeId", async (req, res, next) => {
   }
 });
 
-// 회원가입 기능
-storesRouter.post("/stores/:storeId", async (req, res, next) => {
+// 새로운 가게 정보 등록
+storesRouter.post("/stores/add", async (req, res, next) => {
   try {
-    // if (is.emptyObject(req.body)) {
-    //   throw new Error(
-    //     "headers의 Content-Type을 application/json으로 설정해주세요"
-    //   );
-    // }
-    // // 이메일 중복 확인
-    // const [results, fields, error] = await pool.query(
-    //   `SELECT email FROM users WHERE 'email = ${req.body.email}'`
-    // );
-    // if (error) throw error;
-    // else if (results) {
-    //   // const errorMessage =
-    //   // "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.";
-    //   console.log(results);
-    //   // return { errorMessage };
-    // }
-    // // req (request) 에서 데이터 가져오기
-    const email = req.body.email;
-    const password = req.body.password;
-    const nickname = req.body.nickname;
+    const {
+      name,
+      description,
+      tag,
+      url,
+      phone,
+      open_time,
+      close_time,
+      latitude,
+      longitude,
+      address_detail,
+    } = req.body;
 
     // // 위 데이터를 유저 db에 추가하기
-
-    // 비밀번호 해쉬화
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // db에 저장
     const [res_save, fld_save, err_save] = await pool.query({
-      sql: "INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)",
-      // timeout: 4000, // 40s
-      values: [email, hashedPassword, nickname],
+      sql: "INSERT INTO stores (name, description, tag, url, phone, open_time, close_time, latitude, longitude, address_detail) VALUES (?,?,?,?,?,?,?,?,?,?)",
+      values: [
+        name,
+        description,
+        tag,
+        url,
+        phone,
+        open_time,
+        close_time,
+        latitude,
+        longitude,
+        address_detail,
+      ],
     });
     // function (error, results, fields) {
     if (err_save) throw err_save;
