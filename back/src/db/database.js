@@ -46,6 +46,7 @@ const mysql = require("mysql2/promise");
 // const app = require("../app");
 const User = require("./models/User");
 // require("dotenv").config({ path: "../../.env" });
+// const bluebird = require("bluebird");
 require("dotenv").config();
 
 // Error: Can't add new command when connection is in closed state
@@ -54,8 +55,9 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
+  // Promise: bluebird,
 };
 // exporting MySQL connection pool object
 const pool = mysql.createPool(dbConfig);
 
-module.exports = { pool };
+module.exports = { pool, User };
