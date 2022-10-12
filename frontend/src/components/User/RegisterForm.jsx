@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as ResisterStyled from "../StyledComponents/SignStyled";
+import NaverLogin from "./NaverLogin";
+import { KaKaoButton } from "./KakaoLogin";
+import CheckModal from "./CheckModal";
 
 // 중복 이메일 찾아야 하고 
 // 약관 동의 체크 박스나 모달로 말해야 하고
@@ -135,11 +138,16 @@ function RegisterForm () {
                 placeholder="제로랜드"
                 onChange={onChangeNickname}/>
                 <ResisterStyled.OutputText className={isNicknameValid ? 'success' : 'error'}>{nicknameMsg}</ResisterStyled.OutputText> 
+                <CheckModal />
         <ResisterStyled.FootBtnBox>
           <ResisterStyled.FootButton type="submit" disabled={!isAllValid}>
         가입하기
           </ResisterStyled.FootButton>
         </ResisterStyled.FootBtnBox>
+        <ResisterStyled.LogoBox>
+          <NaverLogin /> 
+          <KaKaoButton />
+        </ResisterStyled.LogoBox>
         </ResisterStyled.InputBox>
     </ResisterStyled.FormBox>
   );

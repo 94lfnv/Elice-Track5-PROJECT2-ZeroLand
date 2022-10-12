@@ -1,6 +1,8 @@
 import React, { useContext, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import * as LoginStyled from "../StyledComponents/SignStyled";
+import { KaKaoButton } from "./KakaoLogin";
+import NaverLogin from "./NaverLogin";
 
 function LoginForm () {
     const navigate = useNavigate();
@@ -79,7 +81,13 @@ function LoginForm () {
                 <LoginStyled.OutputText className={isPwdValid ? 'success' : 'error'}>{pwdMsg}</LoginStyled.OutputText>
                 <LoginStyled.FootBtnBox>
                     <LoginStyled.FootButton type="submit" disabled={!isAllValid}>로그인</LoginStyled.FootButton>
+                    <a href="./register"><LoginStyled.FootButton>회원가입
+                    </LoginStyled.FootButton></a>
                 </LoginStyled.FootBtnBox>
+                <LoginStyled.LogoBox>
+                  <NaverLogin /> 
+                  <KaKaoButton />
+                </LoginStyled.LogoBox>
             </LoginStyled.LoginInputBox>
         </LoginStyled.FormBox>
     );

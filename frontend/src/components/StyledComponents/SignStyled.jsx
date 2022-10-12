@@ -1,6 +1,5 @@
 import styled, { keyframes } from "styled-components";
 
-// 로그인 박스 하나 만들어서 크기 조절해보자.
 
 const boxFade = keyframes`
   0% {
@@ -17,16 +16,22 @@ export const LoginInputBox = styled.div`
     padding-top: 40px;
     background-color: #f2f2f2;
     color: #734838;
-    width: 500px;
+    width: 50vw;
     height: 55vh;
+    max-width: 500px;
     margin: 0 auto;
     border-radius: 35px;
-    animation: ${boxFade} 1.5s ease-in-out;`
+    animation: ${boxFade} 1.5s ease-in-out;
+
+    a:hover {
+        color: #f2f2f2;
+    }
+`;
 
 export const FormBox = styled.div`
-    padding-top: 17px;
+    padding-top: 18px;
     width: 100%;
-    height: 100vh;
+    height: 84.5vh;
     margin: 0 auto;
     background-color: rgba(0, 0, 0, 0.5);
 `;
@@ -35,17 +40,19 @@ export const InputBox = styled.div`
     padding-top: 40px;
     background-color: #f2f2f2;
     color: #734838;
-    width: 500px;
+    width: 50vw;
     height: 80vh;
+    max-width: 500px;
     margin: 0 auto;
     border-radius: 35px;
     animation: ${boxFade} 1.5s ease-in-out;
 `;
 
-export const FormTitle = styled.h3`
+export const FormTitle = styled.h1`
+    font-size: 20px;
     color: #01402E;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 `;
 
 export const InputTitle = styled.div`
@@ -83,16 +90,28 @@ export const OutputText = styled.div`
 export const FootBtnBox = styled.div`
     width: 100%;
     text-align: center;
-    padding-top: 35px;
+    padding-top: 40px;
 `
 
 export const FootButton = styled.button`
     border-radius: 30px;
     background-color: #025f44;
-    width: 180px;
+    color:#f2f2f2;
+    width: 200px;
     height: 45px;
     line-height: 45px;
+    margin-bottom: 15px;
     &:hover {
         background-color: #01402E;
     }
 `;
+
+export const LogoBox = styled.div`
+    display: inline-flex;
+    width: 20%;
+    justify-content: space-around;
+    
+    .kakaologo {
+        height: 40px;
+    }
+`
