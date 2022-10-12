@@ -8,6 +8,7 @@ const cors = require("cors");
 // const { errorMiddleware } = require("./middlewares/errorMiddleware");
 const userAuthRouter = require("./routers/userRouter");
 // router를 만들면 추가하기
+const reviewRouter = require("./routers/reviewRouter");
 
 const app = express();
 // CORS 에러 방지
@@ -26,6 +27,8 @@ app.get("/", (req, res) => {
 
 // router, service 구현 (userAuthRouter는 맨 위에 있어야 함.)
 app.use(userAuthRouter);
+app.use(reviewRouter);
+   
 // app.use(connection);
 // app.use(userList);
 
