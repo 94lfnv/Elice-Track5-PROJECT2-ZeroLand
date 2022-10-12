@@ -1,7 +1,7 @@
 import React from "react"
 
 import Location from "../Map/Location";
-import StoreInfo from "../Map/StoreInfo";
+import StoreCard from "../Common/StoreCard";
 
 function Map() {
   return (
@@ -11,7 +11,7 @@ function Map() {
           <div>
           <h3>내 주변의 제로웨이스트샵</h3>
             <Location />
-            <StoreInfo />
+            <StoreCard />
           </div>
         </div>
       </section>

@@ -18,7 +18,7 @@ const Register = lazy(() => import("./components/Pages/Register"));
 
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
-import UiErrorFallback from "./components/UiErrorFallback";
+import UiErrorFallback from "./components/Common/UiErrorFallback";
 import Layout from "./components/common/Layout";
 
 function App() {
