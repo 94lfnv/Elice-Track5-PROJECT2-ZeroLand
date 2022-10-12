@@ -8,6 +8,7 @@ const cors = require("cors");
 // const { errorMiddleware } = require("./middlewares/errorMiddleware");
 const userAuthRouter = require("./routers/userRouter");
 // router를 만들면 추가하기
+const storesRouter = require("./routers/storesRouter");
 
 const app = express();
 // CORS 에러 방지
@@ -28,6 +29,8 @@ app.get("/", (req, res) => {
 app.use(userAuthRouter);
 // app.use(connection);
 // app.use(userList);
+
+app.use(storesRouter);
 
 // 순서 중요 (router 에서 next() 시 아래의 에러 핸들링  middleware로 전달됨)
 // app.use(errorMiddleware);
