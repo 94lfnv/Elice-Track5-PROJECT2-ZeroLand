@@ -1,7 +1,7 @@
 .app-layout-wrapper {
   width: 100%;
   height: 100vh;
-  background-image: url("./testbackground.jpg");
+  background-image: url("img/background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: top center;
@@ -37,7 +37,7 @@
 .main {
   position: absolute;
   top: 8rem;
-  left: 13rem;
+  left: 15rem;
   animation: transY 2s ease-in-out;
   font-size: 40px;
 }
