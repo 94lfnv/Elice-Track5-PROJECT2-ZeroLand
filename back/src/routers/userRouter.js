@@ -1,14 +1,15 @@
 // const { Router, app } = require("express");
 const express = require("express");
 const { pool, connection } = require("../db/database");
-const { list } = require("../db/models/User");
+// const { list } = require("../db/models/User");
 // const { login_required } = require("../middlewares/login_required");
-const { userAuthService, getUsers } = require("../services/userService");
+// const { userAuthService, getUsers } = require("../services/userService");
 // const { upload } = require("../middlewares/imageUpload");
 // 회원가입관련 - 폴더 분리시 분리 필요
 // const is = require("@sindresorhus/is");
 const bcrypt = require("bcrypt");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+
 // 시작!
 const userAuthRouter = express.Router();
 // const app = express();
@@ -75,11 +76,6 @@ userAuthRouter.post("/user/login", async function (req, res, next) {
     const email = req.body.email;
     const password = req.body.password;
 
-    // 위 데이터를 이용하여 유저 db에서 유저 찾기
-    // const user = await userAuthService.getUser({ email, password });
-    // email 확인
-    // const newUser = JSON.stringify(res_save, ["insertId"]);
-    // console.log(newUser);
     const [res_logID, fld_logID, err_logID] = await pool.query({
       sql: "SELECT * FROM users WHERE `email` = ? ",
       values: [email],
@@ -91,10 +87,11 @@ userAuthRouter.post("/user/login", async function (req, res, next) {
       console.log(errorMessage);
       res.status(200).send(errorMessage);
     }
-    console.log(JSON.stringify(res_logID, ["password"]));
 
     // 비밀번호 일치 여부 확인
-    const correctPasswordHash = JSON.stringify(res_logID, ["password"]);
+    const res_logID_array = JSON.stringify(res_logID, ["password"]);
+    const res_logID_pw = res_logID_array.split(`"`);
+    const correctPasswordHash = res_logID_pw[3];
     const isPasswordCorrect = await bcrypt.compare(
       password,
       correctPasswordHash
@@ -102,15 +99,35 @@ userAuthRouter.post("/user/login", async function (req, res, next) {
     if (!isPasswordCorrect) {
       const errorMessage =
         "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
-      return { errorMessage };
+      // return { errorMessage };
+      console.log(errorMessage);
+      res.status(200).send(errorMessage);
     }
+    // console.log("비밀번호가 일치합니다.");
 
-    /////////
-    // if (user.errorMessage) {
-    //   throw new Error(user.errorMessage);
-    // }
+    ///////////
+    if (isPasswordCorrect && JSON.stringify(res_logID) !== "[]") {
+      // 로그인 성공 -> JWT 웹 토큰 생성
+      const res_logID_arrayId = JSON.stringify(res_logID, ["user_id"]);
+      const res_logID_Id = res_logID_arrayId.replace(/[^0-9]/g, "");
+      // console.log(res_logID_Id);
 
-    // res.status(200).send(user);
+      const secretKey = process.env.JWT_SECRET_KEY || "jwt-secret-key";
+      const token = jwt.sign({ user_id: res_logID_Id }, secretKey);
+      // console.log(token);
+
+      const [res_logID_tk, fld_logID_tk, err_logID_tk] = await pool.query({
+        sql: "SELECT * FROM users WHERE `email` = ? ",
+        values: [email],
+      });
+      if (err_logID_tk) throw err_logID_tk;
+
+      const userWToken = Object.assign({ token: token }, res_logID_tk[0]);
+      delete userWToken.password;
+      // console.log(userWithToken);
+      // console.log(JSON.stringify(res_logID_tk));
+      res.status(200).json(userWToken);
+    }
   } catch (error) {
     next(error);
   }
