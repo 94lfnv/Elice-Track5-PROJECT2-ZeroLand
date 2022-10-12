@@ -3,7 +3,7 @@ const express = require("express");
 const { pool, connection } = require("../db/database");
 const { list } = require("../db/models/User");
 // const { login_required } = require("../middlewares/login_required");
-const { userAuthService } = require("../services/userService");
+const { userAuthService, getUsers } = require("../services/userService");
 // const { upload } = require("../middlewares/imageUpload");
 // 회원가입관련 - 폴더 분리시 분리 필요
 // const is = require("@sindresorhus/is");
@@ -24,7 +24,6 @@ userAuthRouter.get("/userlist", async (req, res, next) => {
     next(err);
   }
 });
-
 // 회원가입 기능
 userAuthRouter.post("/user/register", async (req, res, next) => {
   try {
@@ -63,13 +62,39 @@ userAuthRouter.post("/user/register", async (req, res, next) => {
     if (err_save) throw err_save;
     const newUser = JSON.stringify(res_save, ["insertId"]);
     console.log(newUser);
-    // }
-
-    res.status(200).send(newUser);
+    const [res_new, fld_new, err_new] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [email],
+    });
+    // if (err_new) throw err_new;
+    console.log(JSON.stringify(res_new));
+    res.status(200).json(res_new);
+    // res.status(200).send(res_new);
   } catch (err) {
     next(err);
   }
 });
+
+// // 로그인 기능
+// userAuthRouter.post("/user/login", async function (req, res, next) {
+//   try {
+//     // req (request) 에서 데이터 가져오기
+//     const email = req.body.email;
+//     const password = req.body.password;
+
+//     // 위 데이터를 이용하여 유저 db에서 유저 찾기
+//     const user = await userAuthService.getUser({ email, password });
+
+//     if (user.errorMessage) {
+//       throw new Error(user.errorMessage);
+//     }
+
+//     res.status(200).send(user);
+//   } catch (error) {
+//     next(error);
+//   }
+// });
+
 module.exports = userAuthRouter;
 
 // /////
