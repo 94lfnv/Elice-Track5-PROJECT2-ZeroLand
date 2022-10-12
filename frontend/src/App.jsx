@@ -15,6 +15,7 @@ const Login = lazy(() => import("./components/Pages/Login"));
 const Landing = lazy(() => import("./components/Pages/Landing"));
 const Map = lazy(() => import("./components/Pages/Map"));
 const Register = lazy(() => import("./components/Pages/Register"));
+const Mypage = lazy(() => import("./components/Pages/Mypage"));
 
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
