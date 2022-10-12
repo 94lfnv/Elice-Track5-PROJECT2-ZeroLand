@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, {useState} from "react"
 import StarRate from "./StarRate.jsx"
 
 function ReviewCard() {

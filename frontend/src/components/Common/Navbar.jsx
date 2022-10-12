@@ -15,7 +15,11 @@ function Header () {
                 <Nav.Item id="my-nav-item" className="ms-4">
                     <Nav.Link href="/map">Map</Nav.Link>
                 </Nav.Item>
-                <div className="justify-content-end ms-3">
+
+                <Nav.Item id="my-nav-item" className="ms-4">
+                    <Nav.Link href="/mypage">Mypage</Nav.Link>
+                </Nav.Item>
+                <div class="justify-content-end" className="ms-3">
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav activeKey={location.pathname} className="ms-auto">

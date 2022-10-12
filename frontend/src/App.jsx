@@ -35,6 +35,9 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="/" element={<Landing />} />
                 <Route path="map" element={<Map />} />
+                {/* 실험코드 */}
+                <Route path="mypage" element={<Mypage />} />
+                {/* 실험코드 */}
                 <Route path="register" element={<Register />} />
               </Routes>
             </Router>
