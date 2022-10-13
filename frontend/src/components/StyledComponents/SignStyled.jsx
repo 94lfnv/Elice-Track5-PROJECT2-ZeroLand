@@ -69,7 +69,7 @@ export const InputTitle = styled.div`
 export const InputText = styled.input`
     font-size: 15px;
     &::placeholder {
-        font-size: 14px;
+        font-size: 13px;
     }
     &:hover {
         cursor: pointer;

@@ -15,6 +15,7 @@ const Login = lazy(() => import("./components/Pages/Login"));
 const Landing = lazy(() => import("./components/Pages/Landing"));
 const Map = lazy(() => import("./components/Pages/Map"));
 const Register = lazy(() => import("./components/Pages/Register"));
+const Mypage = lazy(() => import("./components/Pages/Mypage"));
 
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
@@ -35,9 +36,7 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="/" element={<Landing />} />
                 <Route path="map" element={<Map />} />
-                {/* 실험코드 */}
                 <Route path="mypage" element={<Mypage />} />
-                {/* 실험코드 */}
                 <Route path="register" element={<Register />} />
               </Routes>
             </Router>

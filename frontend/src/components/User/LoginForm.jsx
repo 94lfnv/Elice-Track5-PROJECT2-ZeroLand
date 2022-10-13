@@ -6,7 +6,7 @@ import NaverLogin from "./NaverLogin";
 
 function LoginForm () {
     const navigate = useNavigate();
-    //const dispatch = useContext(); -> 이게 왜 필요한지는 알겠음. 일단 더 공부해보자. 레퍼런스 좀 더 찾아보기.
+    // const dispatch = useContext();
 
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");

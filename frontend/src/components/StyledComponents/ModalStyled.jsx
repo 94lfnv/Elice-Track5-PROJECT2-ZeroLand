@@ -22,20 +22,19 @@ export const ModalButton = styled.div`
 
 export const ModalForm = styled.div`
     width: 450px;
-    height: 430px;
+    height: 440px;
     background-color: #f2f2f2;
     border: 2px solid #01402E;
-    font-size: 15px;
 
     /* 모달창 중앙, 맨 앞 위치 */
     z-index: 999;
     position: absolute;
-    top: 43%;
+    top: 44%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     h1 {
-        font-size: 18px;
+        font-size: 20px;
         color: #734838;
         padding: 20px;
         font-weight: bolder;
@@ -43,7 +42,7 @@ export const ModalForm = styled.div`
     }
 
     p {
-        padding: 15px 20px;
+        padding: 14px 20px;
         font-size: 14px;
         text-align: left;
         word-spacing: -3px;
@@ -52,8 +51,24 @@ export const ModalForm = styled.div`
     button {
         border: 1px solid #01402E;
         color: #01402E;
-        width: 120px;
+        width: 130px;
         height: 35px;
         font-size: 15px;
+        line-height: 32px;
+        box-shadow: inset 0 0 0;
+        margin-top: 12px;
+    
+    &:hover {
+       background-color: #a7c5ba;
+    }
+    &.left-btn {
+        background-color: #dcdcdc;
+        border: 1px solid #dcdcdc;
+        color: gray;
+        font-weight: 400;
+    }
+    &.left-btn:hover {
+        background-color: #cacaca;
+    }
     }
 `;
