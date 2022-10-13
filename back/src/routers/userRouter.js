@@ -1,21 +1,12 @@
-// const { Router, app } = require("express");
 const express = require("express");
 const { pool, connection } = require("../db/database");
-const { list } = require("../db/models/User");
-// const { login_required } = require("../middlewares/login_required");
-const { userAuthService } = require("../services/userService");
-// const { upload } = require("../middlewares/imageUpload");
-// 회원가입관련 - 폴더 분리시 분리 필요
-// const is = require("@sindresorhus/is");
 const bcrypt = require("bcrypt");
-// const jwt = require("jsonwebtoken");
-// 시작!
-const userAuthRouter = express.Router();
-// const app = express();
-// app.use();
+const jwt = require("jsonwebtoken");
 
-// // 유저리스트 확인 기능
-userAuthRouter.get("/userlist", async (req, res, next) => {
+const userAuthRouter = express.Router();
+
+// 유저리스트 확인 기능
+const userList = async (req, res, next) => {
   try {
     const [results, fields, error] = await pool.query("SELECT * FROM users");
     if (error) throw error;
@@ -23,118 +14,104 @@ userAuthRouter.get("/userlist", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
-
+};
 // 회원가입 기능
-userAuthRouter.post("/user/register", async (req, res, next) => {
+const userRegister = async (req, res, next) => {
   try {
-    // if (is.emptyObject(req.body)) {
-    //   throw new Error(
-    //     "headers의 Content-Type을 application/json으로 설정해주세요"
-    //   );
-    // }
-    // // 이메일 중복 확인
-    // const [results, fields, error] = await pool.query(
-    //   `SELECT email FROM users WHERE 'email = ${req.body.email}'`
-    // );
-    // if (error) throw error;
-    // else if (results) {
-    //   // const errorMessage =
-    //   // "이 이메일은 현재 사용중입니다. 다른 이메일을 입력해 주세요.";
-    //   console.log(results);
-    //   // return { errorMessage };
-    // }
-    // // req (request) 에서 데이터 가져오기
     const email = req.body.email;
     const password = req.body.password;
     const nickname = req.body.nickname;
 
-    // // 위 데이터를 유저 db에 추가하기
-
+    // 이메일 중복 확인
+    const [res_checkID, fld_checkID, err_checkID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [email],
+    });
+    if (err_checkID) throw err_checkID;
+    else if (JSON.stringify(res_checkID) !== "[]") {
+      const errorMessage =
+        "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.";
+      console.log(errorMessage);
+      res.status(200).send(errorMessage);
+    }
     // 비밀번호 해쉬화
     const hashedPassword = await bcrypt.hash(password, 10);
     // db에 저장
     const [res_save, fld_save, err_save] = await pool.query({
       sql: "INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)",
-      // timeout: 4000, // 40s
       values: [email, hashedPassword, nickname],
     });
-    // function (error, results, fields) {
     if (err_save) throw err_save;
-    const newUser = JSON.stringify(res_save, ["insertId"]);
-    console.log(newUser);
-    // }
-
-    res.status(200).send(newUser);
+    const [res_new, fld_new, err_new] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [email],
+    });
+    if (err_new) throw err_new;
+    res.status(200).json(res_new[0]);
   } catch (err) {
     next(err);
   }
-});
+};
+
+// 로그인 기능
+const userLogin = async function (req, res, next) {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const [res_logID, fld_logID, err_logID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [email],
+    });
+    if (err_logID) throw err_logID;
+    else if (JSON.stringify(res_logID) === "[]") {
+      const errorMessage =
+        "일치하는 email이 없습니다. 다시 한 번 확인해 주세요.";
+      console.log(errorMessage);
+      res.status(200).send(errorMessage);
+    }
+
+    // 비밀번호 일치 여부 확인
+    const res_logID_array = JSON.stringify(res_logID, ["password"]);
+    const res_logID_pw = res_logID_array.split(`"`);
+    const correctPasswordHash = res_logID_pw[3];
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      correctPasswordHash
+    );
+    if (!isPasswordCorrect) {
+      const errorMessage =
+        "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
+      console.log(errorMessage);
+      res.status(200).send(errorMessage);
+    }
+    if (isPasswordCorrect && JSON.stringify(res_logID) !== "[]") {
+      // 로그인 성공 -> JWT 웹 토큰 생성
+      const res_logID_arrayId = JSON.stringify(res_logID, ["user_id"]);
+      const res_logID_Id = res_logID_arrayId.replace(/[^0-9]/g, "");
+
+      const secretKey = process.env.JWT_SECRET_KEY || "jwt-secret-key";
+      const token = jwt.sign({ user_id: res_logID_Id }, secretKey);
+      const [res_logID_tk, fld_logID_tk, err_logID_tk] = await pool.query({
+        sql: "SELECT * FROM users WHERE `email` = ? ",
+        values: [email],
+      });
+      if (err_logID_tk) throw err_logID_tk;
+
+      const userWToken = Object.assign({ token: token }, res_logID_tk[0]);
+      delete userWToken.password;
+      res.status(200).json(userWToken);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+// api index
+userAuthRouter.get("/userlist", userList);
+userAuthRouter.post("/user/register", userRegister);
+userAuthRouter.post("/user/login", userLogin);
+
 module.exports = userAuthRouter;
-
-// /////
-// const createdNewUser = await User.create({ newUser });
-// createdNewUser.errorMessage = null; // 문제 없이 db 저장 완료되었으므로 에러가 없음.
-
-// return createdNewUser;
-
-// console.log(results);
-// console.log(fields);
-
-// res.status(200).json(results);
-// const newUser = await userAuthService.addUser({
-//   email,
-//   password,
-//   nickname,
-// });
-
-// if (newUser.errorMessage) {
-//   throw new Error(newUser.errorMessage);
-// }
-
-// res.status(201).json(newUser);
-// } catch (error) {
-// next(error);
-//   }
-// });
-
-//--------//
-// const single = (req, res) =>
-//   User.list({ id: req.params.id })
-//     .then((response) => res.json(response))
-//     .catch((e) => res.json({ e }));
-
-// const register = (req, res) => {
-//   const newUser = ({ email, passowrd, nickname } = req.doby);
-//   return User.create(newUser)
-//     .then((response) => res.json(response))
-//     .catch((e) => res.json(e));
-// };
-
-// const update = (req, res) => {
-//   const user = ({
-//     user_id,
-//     email,
-//     passowrd,
-//     nickname,
-//     profile_photo,
-//     created_time,
-//     updated_time,
-//     current_latitude,
-//     current_longitude,
-//   } = req.doby);
-//   return User.update(req.params.id, user)
-//     .then((response) => res.json(response))
-//     .catch((e) => res.json(e));
-// };
-
-// userAuthRouter.get("/userlist", userList);
-// userAuthRouter.get("/:id", single);
-// userAuthRouter.post("/register", register);
-// userAuthRouter.put("/:id", update);
-
-// export { userAuthRouter };
-// module.exports = userAuthRouter;
 
 //-------------options-start--------------//
 
