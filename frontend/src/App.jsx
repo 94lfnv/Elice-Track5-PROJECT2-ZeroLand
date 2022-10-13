@@ -1,14 +1,8 @@
 import React, { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
 
 // const _sleep = async () =>
 //   await new Promise((resolve) => setTimeout(() => resolve(), 3000));
-
-// import Introduction from "./components/Pages/Introduction";
-// import Login from "./components/Pages/Login";
-// import Landing from "./components/Pages/Landing";
-// import Map from "./components/Pages/Map";
-// import Register from "./components/Pages/Register";
 
 const Introduction = lazy(() => import("./components/Pages/Introduction"));
 const Login = lazy(() => import("./components/Pages/Login"));
@@ -36,9 +30,7 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="/" element={<Landing />} />
                 <Route path="map" element={<Map />} />
-                {/* 실험코드 */}
                 <Route path="mypage" element={<Mypage />} />
-                {/* 실험코드 */}
                 <Route path="register" element={<Register />} />
               </Routes>
             </Router>
