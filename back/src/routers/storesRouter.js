@@ -17,7 +17,7 @@ storesRouter.get("/stores/:storeId", async (req, res, next) => {
   }
 });
 
-// 새로운 가게 정보 등록
+// 새로운 가게 정보 등록 post
 storesRouter.post("/stores/add", async (req, res, next) => {
   try {
     const {
@@ -33,7 +33,7 @@ storesRouter.post("/stores/add", async (req, res, next) => {
       address_detail,
     } = req.body;
 
-    // // 위 데이터를 유저 db에 추가하기
+    // 위 데이터를 유저 db에 추가하기
     const [res_save, fld_save, err_save] = await pool.query({
       sql: "INSERT INTO stores (name, description, tag, url, phone, open_time, close_time, latitude, longitude, address_detail) VALUES (?,?,?,?,?,?,?,?,?,?)",
       values: [
@@ -60,4 +60,49 @@ storesRouter.post("/stores/add", async (req, res, next) => {
     next(err);
   }
 });
+
+//가게정보 수정 put
+storesRouter.put("/stores/:storeId", async (req, res, next) => {
+  try {
+    const storeId = req.params.storeId;
+    const {
+      name,
+      description,
+      tag,
+      url,
+      phone,
+      open_time,
+      close_time,
+      latitude,
+      longitude,
+      address_detail,
+    } = req.body;
+
+    const [results, fields, error] = await pool.query({
+      sql: `update stores SET name="${name}", description="${description}", tag="${tag}", url="${url}", phone="${phone}", 
+      open_time="${open_time}", close_time="${close_time}", latitude="${latitude}", longitude="${longitude}",
+      address_detail="${address_detail}" WHERE store_id="${storeId}"`,
+    });
+
+    if (error) throw error;
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//가게정보 삭제
+storesRouter.delete("/stores/:storeId", async (req, res, next) => {
+  try {
+    const storeId = req.params.storeId;
+    const [results, fields, error] = await pool.query(
+      `delete from stores where store_id=${storeId};`
+    );
+    if (error) throw error;
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = storesRouter;
