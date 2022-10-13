@@ -1,6 +1,6 @@
 import React from "react";
-
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
+
 
 function Header () {
   return (
@@ -15,7 +15,6 @@ function Header () {
                 <Nav.Item id="my-nav-item" className="ms-4">
                     <Nav.Link href="/map">Map</Nav.Link>
                 </Nav.Item>
-
                 <Nav.Item id="my-nav-item" className="ms-4">
                     <Nav.Link href="/mypage">Mypage</Nav.Link>
                 </Nav.Item>

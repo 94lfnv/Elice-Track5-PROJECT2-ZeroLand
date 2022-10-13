@@ -2,7 +2,6 @@ import React, {useState} from "react"
 import StarRate from "./StarRate.jsx"
 
 function StoreCard() {
-
   return(
     <div className="card mb-3">
         <div className="row g-0">
@@ -17,7 +16,7 @@ function StoreCard() {
                         <div className="col text-secondary">🧡x6</div>
                         <div className="col"><StarRate /></div>
                     </div>
-                    <p className="card-text text-secondary">매장 정보 This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p className="card-text text-secondary">매장 정보</p>
                 </div>
             </div>
         </div>
