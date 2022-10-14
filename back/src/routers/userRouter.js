@@ -2,7 +2,8 @@ const express = require("express");
 const { pool, connection } = require("../db/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const asyncHandler = require("../util/asyncHandler");
+// const asyncHandler = require("../util/asyncHandler");
+const asyncHandler = require("express-async-handler");
 const login_required = require("../middlewares/login_required");
 
 const userAuthRouter = express.Router();
@@ -12,6 +13,10 @@ const userList = async (req, res, next) => {
   try {
     const [results, fields, error] = await pool.query("SELECT * FROM users");
     if (error) throw error;
+    console.log(results.length);
+    for (let i = 0; i < results.length; i++) {
+      delete results[i].password;
+    }
     res.status(200).json(results);
   } catch (err) {
     next(err);
@@ -110,7 +115,6 @@ const userLogin = async function (req, res, next) {
 };
 
 // GET: 현재 로그인된 유저 정보
-
 const userCurrent = async function (req, res, next) {
   try {
     // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
@@ -121,10 +125,7 @@ const userCurrent = async function (req, res, next) {
         values: [email],
       });
     if (err_currentEmail) throw err_currentEmail;
-    // console.log(res_currentEmail);
     delete res_currentEmail[0].password;
-    console.log(res_currentEmail[0]);
-
     res.status(200).json(res_currentEmail[0]);
   } catch (error) {
     next(error);
@@ -135,8 +136,11 @@ const userCurrent = async function (req, res, next) {
 userAuthRouter.get("/userlist", asyncHandler(userList));
 userAuthRouter.post("/user/register", asyncHandler(userRegister));
 userAuthRouter.post("/user/login", asyncHandler(userLogin));
-userAuthRouter.get("/user", asyncHandler(userCurrent));
-// userAuthRouter.get("/user", userCurrent);
+userAuthRouter.get(
+  "/user",
+  asyncHandler(login_required),
+  asyncHandler(userCurrent)
+);
 
 module.exports = userAuthRouter;
 
