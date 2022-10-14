@@ -53,6 +53,9 @@ function RegisterForm () {
 
   const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isNicknameValid && isAccepted;
 
+  //1차 때 보면 백엔드에서 오류 처리를 내주면 그 오류 처리를 대신해서 얘가 창에 띄워 주는 시스템인 것 같은데?
+  // 정보를 res = get으로 가져오고 res.data에 있나 없나로 보면 될 듯?
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -62,7 +65,11 @@ function RegisterForm () {
       });
       navigate("/login");
     } catch (err) {
-      console.log(err.message);
+      setPwdMsg("이미 등록된 메일입니다.");
+      //if/else if 문 넣어서 이거면 이거 넣어주고 저거면 저거 넣어주고 이런 식으로 되나? 
+      //const 데이터 이름 = 받아올 데이터 
+      // 받아온 데이터랑 이메일/닉네임 같아? ㅇㅇ 그럼 ㄴㄴ 이런 식... 
+      // 버튼을 넣어서 그걸 누르면 확인해주는 걸로 할까?
     }
   };
 
@@ -103,6 +110,7 @@ function RegisterForm () {
     }, [password])
 
     //닉네임
+    //이것도 중복이면 안 됨.
     const onChangeNickname = useCallback((e) => {
       const currNickname = e.target.value;
       setNickname(currNickname);

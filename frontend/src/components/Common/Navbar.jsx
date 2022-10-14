@@ -3,6 +3,9 @@ import React from "react";
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
 
 function Header () {
+
+    //여기에 로그인 상태인 거 명시하고 로그인 했을 때만 보여주기
+
   return (
         <Navbar expand="lg">
             <Container className="my-2" id="my-nav-container">

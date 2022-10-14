@@ -4,6 +4,9 @@ import * as LoginStyled from "../StyledComponents/SignStyled";
 import { KaKaoButton } from "./KakaoLogin";
 import NaverLogin from "./NaverLogin";
 
+//가입한 정보가 없으면 없다고 말해줘야 함...
+//비밀번호 틀렸으면 틀렸다고 말해줘야 함...
+
 function LoginForm () {
     const navigate = useNavigate();
     // const dispatch = useContext();

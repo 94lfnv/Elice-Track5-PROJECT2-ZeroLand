@@ -19,6 +19,7 @@ export const LoginInputBox = styled.div`
     width: 50vw;
     height: 55vh;
     max-width: 500px;
+    min-width: 350px;
     margin: 0 auto;
     border-radius: 35px;
     animation: ${boxFade} 1.5s ease-in-out;
@@ -29,9 +30,10 @@ export const LoginInputBox = styled.div`
 `;
 
 export const FormBox = styled.div`
-    padding-top: 18px;
+    padding-top: 25px;
     width: 100%;
-    height: 84.5vh;
+    height: 85vh;
+    min-width: 400px;
     margin: 0 auto;
     background-color: rgba(0, 0, 0, 0.5);
 `;
@@ -43,6 +45,7 @@ export const InputBox = styled.div`
     width: 50vw;
     height: 80vh;
     max-width: 500px;
+    min-width: 350px;
     margin: 0 auto;
     border-radius: 35px;
     animation: ${boxFade} 1.5s ease-in-out;

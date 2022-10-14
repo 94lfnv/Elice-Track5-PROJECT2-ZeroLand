@@ -37,13 +37,11 @@ const put = async (endpoint, data) => {
     });
 }
 
-const del = async (endpoint, data) => {
-    const bodyData = JSON.stringify(data);
-    console.log(bodyData);
-    return axios.delete(BASE_URL + endpoint, {
-        data: bodyData,
+const del = async (endpoint, params="") => {
+    // const bodyData = JSON.stringify(data);
+    // console.log(bodyData);
+    return axios.delete(BASE_URL + endpoint + "/" + params, {
         headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${sessionStorage.getItem("userWToken")}`,
         },
     });
