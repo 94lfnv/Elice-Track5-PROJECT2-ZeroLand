@@ -11,6 +11,8 @@ const Map = lazy(() => import("./components/Pages/Map"));
 const Register = lazy(() => import("./components/Pages/Register"));
 const Mypage = lazy(() => import("./components/Pages/Mypage"));
 
+import StorePage from "./components/Map/StorePage";
+
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
 import UiErrorFallback from "./components/Common/UiErrorFallback";
@@ -32,6 +34,7 @@ function App() {
                 <Route path="map" element={<Map />} />
                 <Route path="mypage" element={<Mypage />} />
                 <Route path="register" element={<Register />} />
+                <Route path="storepage" element={<StorePage />} />
               </Routes>
             </Router>
           </Layout>
