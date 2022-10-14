@@ -17,6 +17,19 @@ storesRouter.get("/stores/:storeId", async (req, res, next) => {
   }
 });
 
+//get요청 /stores 전체 가게 리스트를 보여줌
+storesRouter.get("/stores", async (req, res, next) => {
+  try {
+    const [results, fields, error] = await pool.query(
+      `select * from stores where store_id;`
+    );
+    if (error) throw error;
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
 // 새로운 가게 정보 등록 post
 storesRouter.post("/stores/add", async (req, res, next) => {
   try {
@@ -97,6 +110,20 @@ storesRouter.delete("/stores/:storeId", async (req, res, next) => {
     const storeId = req.params.storeId;
     const [results, fields, error] = await pool.query(
       `delete from stores where store_id=${storeId};`
+    );
+    if (error) throw error;
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//get요청 서울시 ㅇㅇ구 ㅇㅇ동에 있는 가게정보 가져오기
+storesRouter.get("/stores/address/:addressId", async (req, res, next) => {
+  try {
+    const addressId = req.params.addressId;
+    const [results, fields, error] = await pool.query(
+      `select * from stores inner join address on stores.address_id = address.address_id where address.address_id =${addressId};`
     );
     if (error) throw error;
     res.status(200).json(results);
