@@ -2,6 +2,8 @@ const express = require("express");
 const { pool, connection } = require("../db/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const asyncHandler = require("../util/asyncHandler");
+const login_required = require("../middlewares/login_required");
 
 const userAuthRouter = express.Router();
 
@@ -106,10 +108,35 @@ const userLogin = async function (req, res, next) {
     next(error);
   }
 };
+
+// GET: 현재 로그인된 유저 정보
+
+const userCurrent = async function (req, res, next) {
+  try {
+    // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
+    const email = req.body.email;
+    const [res_currentEmail, fld_currentEmail, err_currentEmail] =
+      await pool.query({
+        sql: "SELECT * FROM users WHERE `email` = ? ",
+        values: [email],
+      });
+    if (err_currentEmail) throw err_currentEmail;
+    // console.log(res_currentEmail);
+    delete res_currentEmail[0].password;
+    console.log(res_currentEmail[0]);
+
+    res.status(200).json(res_currentEmail[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // api index
-userAuthRouter.get("/userlist", userList);
-userAuthRouter.post("/user/register", userRegister);
-userAuthRouter.post("/user/login", userLogin);
+userAuthRouter.get("/userlist", asyncHandler(userList));
+userAuthRouter.post("/user/register", asyncHandler(userRegister));
+userAuthRouter.post("/user/login", asyncHandler(userLogin));
+userAuthRouter.get("/user", asyncHandler(userCurrent));
+// userAuthRouter.get("/user", userCurrent);
 
 module.exports = userAuthRouter;
 
