@@ -1,5 +1,5 @@
 
-export const loginReducer (state, action) => {
+export const loginReducer = (state, action) => {
     switch (action.type) {
         //action type이 "LOGIN"
         case "LOGIN":

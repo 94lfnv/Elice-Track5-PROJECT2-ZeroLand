@@ -1,10 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import { DispatchContext, UserStateContext } from "../../App";
 
 function Header () {
+    const navigate = useNavigate();
 
-    //여기에 로그인 상태인 거 명시하고 로그인 했을 때만 보여주기
+    //useLocation <- 현재 url 정보를 가져오는 함수
+    const location = useLocation();
+    // console.log(location);
+
+    const state = useContext(UserStateContext);
+    const dispatch = useContext(DispatchContext);
+
+    const isLogin = !!state.user;
+
+    // 로그아웃은 type을 바꿔 주면 됨
+    const isLogout = () => {
+        sessionStorage.removeItem("userWToken");
+        dispatch({ type: "LOGOUT" });
+        navigate("/");
+    } 
 
   return (
         <Navbar expand="lg">
@@ -19,19 +36,22 @@ function Header () {
                     <Nav.Link href="/map">Map</Nav.Link>
                 </Nav.Item>
 
-                <Nav.Item id="my-nav-item" className="ms-4">
+                {isLogin && (<Nav.Item id="my-nav-item" className="ms-4">
                     <Nav.Link href="/mypage">Mypage</Nav.Link>
-                </Nav.Item>
+                </Nav.Item>)}
                 <div class="justify-content-end" className="ms-3">
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav activeKey={location.pathname} className="ms-auto">
-                        <Nav.Item id="my-nav-item" className="mx-1 px-1">
+                        {!isLogin && (<Nav.Item id="my-nav-item" className="mx-1 px-1">
                             <Nav.Link href="/login">Login</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item id="my-nav-item" className="mx-1 px-1">
+                        </Nav.Item>)}
+                        {!isLogin && (<Nav.Item id="my-nav-item" className="mx-1 px-1">
                             <Nav.Link href="/register">Sign In</Nav.Link>
-                        </Nav.Item>
+                        </Nav.Item>)}
+                        {isLogin && (<Nav.Item id="my-nav-item" className="mx-1 px-1">
+                            <Nav.Link href="/" onClick={isLogout}>Log out</Nav.Link>
+                        </Nav.Item>)}
                         </Nav>
                     </Navbar.Collapse>
                 </div>

@@ -8,7 +8,8 @@ const BASE_URL = `http://${window.location.hostname}:${backendPortNumber}/`;
 
 const post = async (endpoint, data) => {
     const bodyData = JSON.stringify(data);
-    console.log(bodyData);
+    // bodydata는 백엔에서 처리되기 전 데이터
+    // console.log(bodyData);
 
     return axios.post(BASE_URL + endpoint, bodyData, {
         headers: {
