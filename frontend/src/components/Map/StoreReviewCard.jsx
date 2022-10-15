@@ -15,12 +15,6 @@ function StoreReviewCard({
         <span>별점 currentReview.star (잘 모르겠음...)</span>
         <br />
         <span>리뷰 내용 (currentReview.description?)</span>
-            <button>
-                편집 
-            </button>
-            <button>
-                삭제
-            </button>
     </Card>
   );
 }

@@ -1,7 +1,13 @@
 import React, {useState} from "react"
 import StarRate from "./StarRate.jsx"
 
-function StoreCard(store_id, ) {
+function StoreCard({
+    currentReview,
+    isEditable,
+    setIsEditing,
+    setReview,
+    store_Id,
+}) {
   return(
     <div className="card mb-3">
         <div className="row g-0">
@@ -19,6 +25,7 @@ function StoreCard(store_id, ) {
                     <p className="card-text text-secondary">매장 정보</p>
                 </div>
             </div>
+            {isEditable}
         </div>
     </div>
   )

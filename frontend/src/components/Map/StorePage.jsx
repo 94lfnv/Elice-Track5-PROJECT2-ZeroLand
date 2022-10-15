@@ -1,38 +1,33 @@
 import React, { useState } from 'react';
-import { Card, Row, Col } from "react-bootstrap";
 
 import StoreCard from '../Common/StoreCard';
-import StoreReviewAddForm from './StoreReviewAddForm';
 import StoreReviewList from './StoreReviewList';
 
-function StorePage ({ store_Id }) {
-    const [isAddable, setIsAddable] = useState(true); // 로그인 상태에 따라 true/false (지금은 테스트한다고 true)
-    const [isAdding, setIsAdding] = useState(false); // 로그인한 상태에만 true
+function StorePage ({
+  store_Id,
+  isEditable, // 로그인한 상태 && 그 리뷰를 작성한 유저인 경우에만 편집 폼이 떠야 함
+  isAddable, // 로그인한 상태에만 리뷰 작성 버튼이 떠야 함
+  review,
+  setReview,
+}) {
+    const [isEditing, setIsEditing] = useState(false);
 
     return (
-        <Card className="mb-4">
-          <Card.Body>
-            <Card.Title>가게 정보</Card.Title>
-              <StoreCard />
-              <StoreReviewList /> {/* 스토어 아이디로 작성된 전체 리뷰 불러오기 */}
-            {isAddable && (
-              <Row className="mt-3 text-center">
-                <Col sm={{ span: 20 }}>
-                  <button onClick={() => setIsAdding(true)}>
-                    리뷰 작성
-                  </button>
-                </Col>
-              </Row>
-            )}
-            {isAdding && (
-              <StoreReviewAddForm // 리뷰 작성 폼
-                setIsAdding={setIsAdding}
-              />
-            )}
-          </Card.Body>
-        </Card>
-      );
-    
+          <>
+          <StoreCard 
+            currentStore={store_Id}
+            store_Id={store_Id}
+          />
+          <StoreReviewList
+            currentStore={store_Id}
+            isEditable={isEditable}
+            isAddable={true} // 원래 기본 상태 isAddable={isAddable} 인데 테스트용으로 보이게 함
+            setIsEditing={setIsEditing}
+            setReview={setReview}
+            store_Id={store_Id}
+           />
+      </>
+  );
 }
 
 export default StorePage;

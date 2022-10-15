@@ -59,3 +59,5 @@ function StoreReviewEditForm({
         </Form>
     );
 }
+
+export default StoreReviewEditForm;

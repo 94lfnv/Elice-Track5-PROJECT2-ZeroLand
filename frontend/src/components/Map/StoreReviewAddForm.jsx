@@ -16,13 +16,10 @@ function StoreReviewAddForm({
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const reviewStore = store_Id;
-
         // 리뷰 정보 api에서 post, get
         await Api.post(`/stores/${store_id}/review`, {
             star,
             description,
-            photo,
         });
 
         const res = await Api.get(`/stores/${store_id}/reviews`); // 해당 스토어 전체 리뷰 가져오기
