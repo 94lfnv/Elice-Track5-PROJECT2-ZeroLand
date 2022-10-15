@@ -20,6 +20,22 @@ import { loginReducer } from "./utils/reducer";
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
 
+const mapPathToComponent = {
+  introduction: () => <Introduction />,
+  login: () => <Login />,
+  "/": () => <Landing />,
+  map: () => <Map />,
+  mypage: () => <Mypage />,
+  register: () => <Register />,
+  storepage: () => <StorePage />,
+};
+
+const setRoute = () => {
+  return Object.keys(mapPathToComponent).map((path) => (
+    <Route key={path} path={path} element={mapPathToComponent[path]()} />
+  ));
+};
+
 function App() {
 
   //useReducer(첫 번째 파라미터에는 리듀서 함수, 두 번째 파라미터에는 리듀서의 기본 값을 넣는다.)
@@ -68,15 +84,7 @@ function App() {
         >
             <Router>
               <Layout>
-              <Routes>
-                <Route path="introduction" element={<Introduction />} />
-                <Route path="login" element={<Login />} />
-                <Route path="/" element={<Landing />} />
-                <Route path="map" element={<Map />} />
-                <Route path="mypage" element={<Mypage />} />
-                <Route path="register" element={<Register />} />
-                <Route path="storepage" element={<StorePage />} />
-              </Routes>
+                <Routes>{ setRoute() }</Routes>
               </Layout>
             </Router>
         </Suspense>
