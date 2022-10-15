@@ -52,7 +52,7 @@ function LoginForm () {
         const jwtToken = user.token;
 
         // 토큰 저장
-        sessionStorage.setItem("userWToken", jwtToken);
+        sessionStorage.setItem("userToken", jwtToken);
 
         dispatch({
           type: "LOGIN",

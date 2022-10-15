@@ -14,7 +14,7 @@ const post = async (endpoint, data) => {
     return axios.post(BASE_URL + endpoint, bodyData, {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("userWToken")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
         },
     });
 }
@@ -22,18 +22,18 @@ const post = async (endpoint, data) => {
 const get = async (endpoint, params="") => {
     return axios.get(BASE_URL + endpoint + "/" + params, {
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("userWToken")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
         },
     });
 }
 
 const put = async (endpoint, data) => {
     const bodyData = JSON.stringify(data);
-    console.log("token", `Bearer ${sessionStorage.getItem("userWToken")}`);
+    console.log("token", `Bearer ${sessionStorage.getItem("userToken")}`);
     return axios.put(BASE_URL + endpoint, bodyData, {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${sessionStorage.getItem("userWToken")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
         },
     });
 }
@@ -43,7 +43,7 @@ const del = async (endpoint, params="") => {
     // console.log(bodyData);
     return axios.delete(BASE_URL + endpoint + "/" + params, {
         headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("userWToken")}`,
+            Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
         },
     });
 }

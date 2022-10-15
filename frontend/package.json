@@ -24,7 +24,7 @@
     "recoil": "^0.7.6",
     "styled-components": "^5.3.6",
     "swiper": "^8.4.4",
-    "styled-reset": "^4.4.2",
+    "styled-reset": "^4.4.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",

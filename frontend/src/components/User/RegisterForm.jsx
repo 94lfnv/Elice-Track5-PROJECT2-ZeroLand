@@ -65,7 +65,7 @@ function RegisterForm () {
     } catch (err) {
       setEmailMsg("이미 등록된 메일입니다.");
       // const res = api.get("userlist");
-      // console.log(res.user_id);
+      // console.log(res.data.email);
       //if/else if 문 넣어서 이거면 이거 넣어주고 저거면 저거 넣어주고 이런 식으로 되나? 
       //const 데이터 이름 = 받아올 데이터 
       // 받아온 데이터랑 이메일/닉네임 같아? ㅇㅇ 그럼 ㄴㄴ 이런 식... 

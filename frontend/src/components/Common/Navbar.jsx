@@ -18,7 +18,7 @@ function Header () {
 
     // 로그아웃은 type을 바꿔 주면 됨
     const isLogout = () => {
-        sessionStorage.removeItem("userWToken");
+        sessionStorage.removeItem("userToken");
         dispatch({ type: "LOGOUT" });
         navigate("/");
     } 
