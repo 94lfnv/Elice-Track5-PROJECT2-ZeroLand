@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import StarRate from "./StarRate.jsx"
 
-function StoreCard() {
+function StoreCard(store_id, ) {
   return(
     <div className="card mb-3">
         <div className="row g-0">

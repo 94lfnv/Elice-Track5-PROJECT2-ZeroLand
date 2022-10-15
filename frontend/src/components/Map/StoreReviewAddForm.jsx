@@ -1,6 +1,9 @@
 // 리뷰 작성 창
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
+import styled from 'styled-components';
+
+import Rating from "./Rating";
 
 function StoreReviewAddForm({
     store_Id,
@@ -16,28 +19,25 @@ function StoreReviewAddForm({
         const reviewStore = store_Id;
 
         // 리뷰 정보 api에서 post, get
-        await Api.post(`/stores/{store_id}/review`, {
-            reviewStore, // 이게 있어야 하나...??
+        await Api.post(`/stores/${store_id}/review`, {
             star,
             description,
             photo,
         });
 
-        const res = await Api.get(`/stores/{store_id}/reviews`); // 해당 스토어 전체 리뷰 가져오기
+        const res = await Api.get(`/stores/${store_id}/reviews`); // 해당 스토어 전체 리뷰 가져오기
         setReview(res.data);
         setIsAdding(false);
     };
 
     return (
+        <>
+        <AddformTitle>리뷰 작성하기</AddformTitle>
         <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="reviewAddStar">
-                <Form.Control
-                    type="number"
-                    placeholder="별점을 평가해주세요. (1~5)"
-                    value={star}
-                    onChange={(e) => setStar.apply(e.target.value)}
-                />
-            </Form.Group>
+            <Rating
+                value={star}
+                onChange={(e) => setStar.apply(e.target.value)}
+            />
             <Form.Group controlId="reviewAddDescription">
                 <Form.Control
                     type="text"
@@ -62,7 +62,15 @@ function StoreReviewAddForm({
                 </button>
             </Form.Group>
         </Form>
+        </>
     );
 }
 
 export default StoreReviewAddForm;
+
+const AddformTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
+  color: black;
+`;

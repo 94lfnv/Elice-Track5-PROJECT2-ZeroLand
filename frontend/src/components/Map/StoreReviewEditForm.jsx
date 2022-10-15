@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import StoreReviewList from "./StoreReviewList";
 
+import Rating from "./Rating";
+
 function StoreReviewEditForm({
     setIsEditing,
     store_id
@@ -14,12 +16,12 @@ function StoreReviewEditForm({
         e.preventDefault();
         e.stopPropagation();
 
-        await Api.put(`review/{review_id}`, {
+        await Api.put(`review/${review_id}`, {
             star,
             description,
         });
 
-        const res = await Api.get(`/stores/{store_id}/reviews`);
+        const res = await Api.get(`/stores/${store_id}/reviews`);
         const UpdateReview = res.data;
         // UpdateReview로 기존 리뷰 대체... setReview(UpdateReview) ?
         setIsEditing(false);
@@ -27,14 +29,10 @@ function StoreReviewEditForm({
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="reviewAddStar">
-                <Form.Control
-                    type="int"
-                    placeholder="별점을 평가해주세요. (1~5)"
-                    value={star}
-                    onChange={(e) => setStar.apply(e.target.value)}
-                />
-            </Form.Group>
+            <Rating
+                value={star}
+                onChange={(e) => setStar.apply(e.target.value)}
+            />
             <Form.Group controlId="reviewAddDescription">
                 <Form.Control
                     type="text"
