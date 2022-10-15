@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-
 import { Nav, Navbar, Container, NavDropdown } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DispatchContext, UserStateContext } from "../../App";
+
 
 function Header () {
     const navigate = useNavigate();
@@ -35,7 +35,6 @@ function Header () {
                 <Nav.Item id="my-nav-item" className="ms-4">
                     <Nav.Link href="/map">Map</Nav.Link>
                 </Nav.Item>
-
                 <div class="justify-content-end" className="ms-3">
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
