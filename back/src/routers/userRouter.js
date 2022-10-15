@@ -57,7 +57,7 @@ const userRegister = async (req, res, next) => {
     //   sql: "SELECT * FROM users WHERE `email` = ? ",
     //   values: [email],
     // });
-    if (err_new) throw err_new;
+    // if (err_new) throw err_new;
     // res.status(200).json(res_new[0]);
     const res_success = "회원가입이 성공적으로 이뤄졌습니다.";
     res.status(200).send(res_success);
@@ -164,6 +164,7 @@ const userUpdate = async function (req, res, next) {
       const errorMessage =
         "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
       console.log(errorMessage);
+      console.log("isPasswordCorrect: ", isPasswordCorrect);
       res.status(200).send(errorMessage);
     }
 
@@ -202,6 +203,46 @@ const profileUpload = async function (req, res, next) {
   }
 };
 
+// DELETE: 유저 삭제
+const userDelete = async function (req, res, next) {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+    const [res_userDelete_check, fld_userDelete_check, err_userDelete_check] =
+      await pool.query({
+        sql: "SELECT * FROM users WHERE `email` = ? ",
+        values: [email],
+      });
+    if (err_userDelete_check) throw err_userDelete_check;
+
+    // 비밀번호 일치 여부 확인
+    const res_logID_array = JSON.stringify(res_userDelete_check, ["password"]);
+    const res_logID_pw = res_logID_array.split(`"`);
+    const correctPasswordHash = res_logID_pw[3];
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      correctPasswordHash
+    );
+    if (!isPasswordCorrect) {
+      const errorMessage =
+        "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
+      res.status(200).send(errorMessage);
+    } else {
+      // DB에서 유저 정보 삭제
+      const [res_userDelete, fld_userDelete, err_userDelete] = await pool.query(
+        {
+          sql: "DELETE FROM users WHERE `email` = ? ",
+          values: [email],
+        }
+      );
+      if (err_userDelete) throw err_userDelete;
+      res.status(200).send("유저 정보가 삭제 되었습니다.");
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
 // api index
 userAuthRouter.get("/userlist", asyncHandler(userList));
 userAuthRouter.post("/user/register", asyncHandler(userRegister));
@@ -221,6 +262,11 @@ userAuthRouter.post(
   // asyncHandler(login_required),
   asyncHandler(upload.single("file")),
   asyncHandler(profileUpload)
+);
+userAuthRouter.delete(
+  "/user/delete",
+  asyncHandler(login_required),
+  asyncHandler(userDelete)
 );
 
 module.exports = userAuthRouter;
