@@ -8,8 +8,8 @@ import "swiper/css/pagination";
 function Introduction() {
   return (
     <article id="main">
-      <section class="wrapper style5">
-        <div class="inner">
+      <section className="wrapper style5">
+        <div className="inner">
         <Swiper
           Swiper
           slidesPerView={1}
@@ -40,7 +40,7 @@ function Introduction() {
             <div>
               <h2>제로 웨이스트란?</h2>
               <div>
-                <span class="image right"><img src="img/zerowaste.jpeg" alt="제로 웨이스트 소개 이미지" /></span>
+                <span className="image right"><img src="img/zerowaste.jpeg" alt="제로 웨이스트 소개 이미지" /></span>
                 <b>제로 웨이스트(Zero Waste)</b>는 모든 제품이 재사용될 수 있도록 장려하며 폐기물을 방지하는데 초점을 맞춘 원칙입니다. <br />
                 <br />
                 제로 웨이스트는 제품의 흐름을 크게 바꾸어 <b>낭비가 없는 사회를 목표</b>로 합니다.<br />
@@ -54,8 +54,6 @@ function Introduction() {
             <div>
               <h2>왜 2030 소비자인가?</h2>
               <div>
-                <span class="image left"><img src="img/graph2.png" alt="그래프" /></span>
-                <br />
                 ZeroLand는 20대, 30대 소비자의 <b>환경관심정도</b>가 다른 연령대의 소비자들보다 낮다는 점에 주목했습니다.<br />
                 <br />
                 근소한 차이라고도 볼 수 있지만, 친환경에 대한 관심을 촉구하는 것은 계속해서 환경을 사용해야 하는 젊은 세대에게 무엇보다 중요합니다.<br />
@@ -69,7 +67,7 @@ function Introduction() {
             <div>
               <h2>왜 서울 지역의 소비자인가?</h2>
               <div>
-                <span class="image left"><img src="img/introduction_zeromap.png" /></span>
+                <span className="image left"><img src="img/introduction_zeromap.png" /></span>
                 현재 국내에 있는 제로 웨이스트 샵의 대부분은 <b>서울과 수도권</b>에 위치하고 있습니다. <br />
                 <br />
                 또한 앞서 타겟으로 삼은 <b>20대, 30대 청년 인구가 서울 지역에 가장 많이 살고 있다는 점</b> 역시 고려하여 ZeroLand의 첫 번째 서비스 타겟을 서울 지역의 20대, 30대 소비자로 선정하였습니다. <br />
