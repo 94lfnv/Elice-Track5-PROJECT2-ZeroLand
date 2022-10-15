@@ -8,6 +8,7 @@ const login_required = require("../middlewares/login_required");
 // const moment1 = require("moment");
 const moment = require("moment-timezone");
 moment.tz.setDefault("Asia/Seoul");
+const upload = require("../middlewares/image_upload");
 
 const userAuthRouter = express.Router();
 
@@ -181,6 +182,26 @@ const userUpdate = async function (req, res, next) {
   }
 };
 
+// POST: 프로필사진 업로드
+const profileUpload = async function (req, res, next) {
+  try {
+    const email = req.body.email;
+    const new_filename = req.file.filename;
+    const updated_time = moment().format("YYYY-MM-DD HH:mm:ss");
+    const [res_profileUpload, fld_profileUpload, err_profileUpload] =
+      await pool.query({
+        sql: "UPDATE users SET `profile_photo`=?, `updated_time`=? WHERE `email` = ? ",
+        values: [new_filename, updated_time, email],
+      });
+    if (err_profileUpload) throw err_profileUpload;
+    res.status(200).send("프로필사진이 성공적으로 업로드 되었습니다.");
+    // const profileImageFilename = req.file.filename;
+    // res.status(200).json(profileImageFilename);
+  } catch (e) {
+    next(e);
+  }
+};
+
 // api index
 userAuthRouter.get("/userlist", asyncHandler(userList));
 userAuthRouter.post("/user/register", asyncHandler(userRegister));
@@ -194,6 +215,12 @@ userAuthRouter.put(
   "/user/update",
   asyncHandler(login_required),
   asyncHandler(userUpdate)
+);
+userAuthRouter.post(
+  "/user/update",
+  // asyncHandler(login_required),
+  asyncHandler(upload.single("file")),
+  asyncHandler(profileUpload)
 );
 
 module.exports = userAuthRouter;
