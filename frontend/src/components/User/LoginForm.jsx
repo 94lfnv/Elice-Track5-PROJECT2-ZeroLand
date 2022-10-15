@@ -41,7 +41,6 @@ function LoginForm () {
       const onSubmit = async (e) => {
         e.preventDefault();
 
-        //try, catch문 써서 api로 정보 받아오기.
         //여기서 비밀번호나 아이디 틀렸으면 걸러주면 되겠다. 대충 얼럿으로 하셈...
 
       try {

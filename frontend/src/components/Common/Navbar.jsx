@@ -36,9 +36,6 @@ function Header () {
                     <Nav.Link href="/map">Map</Nav.Link>
                 </Nav.Item>
 
-                {isLogin && (<Nav.Item id="my-nav-item" className="ms-4">
-                    <Nav.Link href="/mypage">Mypage</Nav.Link>
-                </Nav.Item>)}
                 <div class="justify-content-end" className="ms-3">
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
@@ -49,6 +46,9 @@ function Header () {
                         {!isLogin && (<Nav.Item id="my-nav-item" className="mx-1 px-1">
                             <Nav.Link href="/register">Sign In</Nav.Link>
                         </Nav.Item>)}
+                        {isLogin && (<Nav.Item id="my-nav-item" className="mx-1 px-1">
+                         <Nav.Link href="/mypage">Mypage</Nav.Link>
+                         </Nav.Item>)}
                         {isLogin && (<Nav.Item id="my-nav-item" className="mx-1 px-1">
                             <Nav.Link href="/" onClick={isLogout}>Log out</Nav.Link>
                         </Nav.Item>)}
