@@ -4,9 +4,9 @@ import * as ResisterStyled from "../StyledComponents/SignStyled";
 import NaverLogin from "./NaverLogin";
 import { KaKaoButton } from "./KakaoLogin";
 import CheckModal from "./CheckModal";
+import * as api from "../../utils/Api";
 
 // 중복 이메일 찾아야 하고 
-// 체크 박스는 맨 마지막에 allvalid면 나오는 걸로 (칸이 작아서)
 // 인증 메일 보내야 함. 링크 보내서 누르면 true 되고 -> 인증되게끔
 
 function RegisterForm () {
@@ -14,7 +14,7 @@ function RegisterForm () {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [nickname, setNickname] = useState("");
 
@@ -34,8 +34,8 @@ function RegisterForm () {
       .match(/([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/);
   };
 
-  const validatePwd = (pwd) => {
-    return pwd
+  const validatePwd = (password) => {
+    return password
       .toLowerCase()
       .match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{10,25}$/);
   }
@@ -47,27 +47,39 @@ function RegisterForm () {
   }
 
   const isEmailValid = validateEmail(email);
-  const isPwdValid = validatePwd(pwd);
-  const isConfirmPwd = pwd === confirmPwd;
+  const isPwdValid = validatePwd(password);
+  const isConfirmPwd = password === confirmPwd;
   const isNicknameValid = validateNickname(nickname);
 
   const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isNicknameValid && isAccepted;
 
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
-      console.log("안녕");
-    //navigate("/login")
-  }
+    try {
+      await api.post("user/register", {
+        email, password, nickname,
+      });
+      navigate("/login");
+    } catch (err) {
+      setEmailMsg("이미 등록된 메일입니다.");
+      // const res = api.get("userlist");
+      // console.log(res.user_id);
+      //if/else if 문 넣어서 이거면 이거 넣어주고 저거면 저거 넣어주고 이런 식으로 되나? 
+      //const 데이터 이름 = 받아올 데이터 
+      // 받아온 데이터랑 이메일/닉네임 같아? ㅇㅇ 그럼 ㄴㄴ 이런 식... 
+    }
+  };
 
   //이메일 
-  // 중복 메일이면 그것도 넣어줘야 함... 어떻게 넣어야 할까? userService 부분 보기.
-  const onChangeEmail = useCallback((e) => {
+  const onChangeEmail = useCallback( async (e) => {
     const currEmail = e.target.value;
     setEmail(currEmail);
 
     if (!validateEmail(currEmail)) {
-      setEmailMsg("이메일 형식이 올바르지 않습니다.")} else {
+      setEmailMsg("이메일 형식이 올바르지 않습니다.")
+    } else {
         setEmailMsg("올바른 이메일입니다.")
       }
     })
@@ -75,7 +87,7 @@ function RegisterForm () {
     //비밀번호
     const onChangePwd = useCallback((e) =>{
       const currPwd = e.target.value;
-      setPwd(currPwd);
+      setPassword(currPwd);
 
       if (!validatePwd(currPwd)) {
         setPwdMsg("영문, 숫자, 특수기호 조합으로 10자리 이상 입력해주세요.")
@@ -89,14 +101,15 @@ function RegisterForm () {
       const currConfirmPwd = e.target.value;
       setConfirmPwd(currConfirmPwd);
 
-      if (currConfirmPwd !== pwd) {
+      if (currConfirmPwd !== password) {
         setConfirmPwdMsg("비밀번호가 일치하지 않습니다.")
       } else {
         setConfirmPwdMsg("올바른 비밀번호입니다.")
       }
-    }, [pwd])
+    }, [password])
 
     //닉네임
+    //이것도 중복이면 안 됨.
     const onChangeNickname = useCallback((e) => {
       const currNickname = e.target.value;
       setNickname(currNickname);
@@ -115,7 +128,7 @@ function RegisterForm () {
 
   return (
     <ResisterStyled.FormBox>
-        <ResisterStyled.InputBox onSubmit={onSubmit}>
+        <ResisterStyled.InputBox>
         <ResisterStyled.FormTitle>회원가입</ResisterStyled.FormTitle>
 
         <ResisterStyled.InputTitle>이메일 주소 *</ResisterStyled.InputTitle>
@@ -150,10 +163,10 @@ function RegisterForm () {
                 onChange={onChangeNickname}/>
                 <ResisterStyled.OutputText className={isNicknameValid ? 'success' : 'error'}>{nicknameMsg}</ResisterStyled.OutputText> 
 
-                <CheckModal isAccepted={isAccepted} onCheckAccept={handleCheckAccept} />
+                <CheckModal isAccepted={isAccepted} setIsAccpted={setIsAccpted} onCheckAccept={handleCheckAccept} />
 
         <ResisterStyled.FootBtnBox>
-          <ResisterStyled.FootButton type="submit" disabled={!isAllValid}>
+          <ResisterStyled.FootButton onClick={onSubmit} type="submit" disabled={!isAllValid}>
         가입하기
           </ResisterStyled.FootButton>
         </ResisterStyled.FootBtnBox>

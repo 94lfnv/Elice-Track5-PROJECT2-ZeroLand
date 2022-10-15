@@ -5,10 +5,6 @@ const pageBaseStyle = {};
 const Layout = ({ children }) => {
   return (
     <div
-      onClick={(e) => {
-        console.log("::: clicked BG");
-        // e.stopPropagation();
-      }}
       className={"app-layout-wrapper"}
       style={pageBaseStyle}
     >
