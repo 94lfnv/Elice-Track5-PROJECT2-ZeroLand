@@ -10,8 +10,8 @@ const userAuthRouter = require("./routers/userRouter");
 // router를 만들면 추가하기
 const storesRouter = require("./routers/storesRouter");
 
-const storesRouter = require("./routers/storesRouter");
 const reviewRouter = require("./routers/reviewRouter");
+const myPageRouter = require("./routers/myPageRouter");
 
 
 const app = express();
