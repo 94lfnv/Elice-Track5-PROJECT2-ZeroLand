@@ -35,6 +35,7 @@ reviewRouter.post("/stores/:store_id/review", async (req, res, next) => {
 reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
   try {
     const store_id = req.params.store_id;
+
     // console.log(store_id)
     const [results, fields, error] = await pool.query(
       `SELECT review_id, star, description, photo, created_time, updated_time FROM reviews WHERE store_id = ${store_id}`
