@@ -1,8 +1,16 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
+import * as Api from "../../utils/Api";
+
 function StarRate() {
-    const AVR_RATE = 73;
+    const AVR_RATE = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        await Api.get(`user/reviewList`, star);
+    };
+     
     const STAR_IDX_ARR = ['first', 'second', 'third', 'fourth', 'last'];
     const [ratesResArr, setRatesResArr] = useState([0, 0, 0, 0, 0]);
     const calcStarRates = () => {

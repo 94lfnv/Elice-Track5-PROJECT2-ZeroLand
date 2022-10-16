@@ -22,6 +22,8 @@ function StoreReviewAddForm({
             description,
         });
 
+        console.log(star);
+
         const res = await Api.get(`/stores/${store_id}/reviews`); // 해당 스토어 전체 리뷰 가져오기
         setReview(res.data);
         setIsAdding(false);
