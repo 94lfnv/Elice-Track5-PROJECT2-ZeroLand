@@ -13,19 +13,19 @@ function Location() {
           var map = new window.kakao.maps.Map(kakaoMap, mapOption);
           var positions = [
             {
-                content: `<div class="inner">카카오</div>`, 
+                content: `<div className="inner">카카오</div>`, 
                 latlng: new kakao.maps.LatLng(33.450705, 126.570677)
             },
             {
-                content: `<div class="inner">생태연못</div>`, 
+                content: `<div className="inner">생태연못</div>`, 
                 latlng: new kakao.maps.LatLng(33.450936, 126.569477)
             },
             {
-                content: `<div class="inner">텃밭</div>`, 
+                content: `<div className="inner">텃밭</div>`, 
                 latlng: new kakao.maps.LatLng(33.450879, 126.569940)
             },
             {
-                content: `<div class="inner">근린공원</div>`,
+                content: `<div className="inner">근린공원</div>`,
                 latlng: new kakao.maps.LatLng(33.451393, 126.570738)
             }
         ];

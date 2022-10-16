@@ -6,8 +6,8 @@ import StoreList from "../Map/StoreList";
 function Map() {
   return (
     <article id="main">
-      <section class="wrapper style5">
-        <div class="inner">
+      <section className="wrapper style5">
+        <div className="inner">
           <div>
           <h3>내 주변의 제로웨이스트샵</h3>
             <Location /> {/* 카카오맵 api */}
