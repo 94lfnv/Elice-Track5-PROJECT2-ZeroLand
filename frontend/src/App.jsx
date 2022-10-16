@@ -13,7 +13,7 @@ import StorePage from "./components/Map/StorePage";
 import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
 import UiErrorFallback from "./components/Common/UiErrorFallback";
-import Layout from "./components/common/Layout";
+import LayOut from "./components/common/LayOut";
 import * as api from "./utils/Api";
 import { loginReducer } from "./utils/reducer";
 
@@ -83,9 +83,9 @@ function App() {
           fallback={<div style={{ fontSize: "12px", textAlign: 'center'}}>Loading...</div>}
         >
             <Router>
-              <Layout>
+              <LayOut>
                 <Routes>{ setRoute() }</Routes>
-              </Layout>
+              </LayOut>
             </Router>
         </Suspense>
       </ErrorBoundary>
