@@ -63,7 +63,11 @@ function RegisterForm () {
       });
       navigate("/login");
     } catch (err) {
-      setEmailMsg("이미 등록된 메일입니다.");
+      const res = api.get("userlist");
+      if (res === setEmail(e.target.value)) {
+        setEmailMsg("이미 등록된 메일입니다.");
+      }
+
       // const res = api.get("userlist");
       // console.log(res.data.email);
       //if/else if 문 넣어서 이거면 이거 넣어주고 저거면 저거 넣어주고 이런 식으로 되나? 
