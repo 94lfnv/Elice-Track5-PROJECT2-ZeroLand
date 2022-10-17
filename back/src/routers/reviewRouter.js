@@ -5,12 +5,12 @@ const login_required = require("../middlewares/login_required")
 
 const reviewRouter = express.Router();
 
-//스토어 댓글 달기
-reviewRouter.post("/stores/:store_id/review", async (req, res, next) => {
+//스토어 리뷰 달기
+reviewRouter.post("/stores/:store_id/review", login_required, async (req, res, next) => {
   try {
     //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
-    // const user_id = req.currentUserId;
-    const user_id = 3;
+    const user_id = req.user_id;
+    // const user_id = 3;
     const { star, description, photo } = req.body;
     const store_id = req.params.store_id;
     
@@ -37,7 +37,11 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
     const store_id = req.params.store_id;
 
     const [results, fields, error] = await pool.query(
-      `SELECT review_id, user_id, star, description, photo, created_time, updated_time FROM reviews WHERE store_id = ${store_id}`
+      `SELECT review_id, star, description, photo, R.created_time, R.updated_time, U.nickname 
+      FROM reviews R 
+      INNER JOIN users U 
+      ON R.user_id = U.user_id 
+      WHERE store_id = ${store_id}`
     );
     
     if (error) throw error;
@@ -46,10 +50,18 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
       let k = results[i].review_id
       //그 리뷰를 좋아하는 사람 목록
       let [reviewLikeList] = await pool.query(
-        `SELECT like_review_id, created_time, user_id FROM like_reviews WHERE like_reviews.review_id = ${k} and tag="like"`)
+        `SELECT LR.like_review_id, LR.created_time, U.nickname 
+        FROM like_reviews LR 
+        INNER JOIN users U 
+        ON LR.user_id = U.user_id
+        WHERE LR.review_id = ${k} and tag="like"`)
       //그 리뷰를 싫어하는 사람 목록
       let [reviewDislikeList] = await pool.query(
-        `SELECT like_review_id, created_time, user_id FROM like_reviews WHERE like_reviews.review_id = ${k} and tag="dislike"`)
+        `SELECT LR.like_review_id, LR.created_time, U.nickname 
+        FROM like_reviews LR INNER 
+        JOIN users U 
+        ON LR.user_id = U.user_id 
+        WHERE LR.review_id = ${k} and tag="dislike"`)
       results[i].like_reviews = reviewLikeList
       results[i].disLike_reviews = reviewDislikeList
     }
