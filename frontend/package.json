@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.6",
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
     "chart.js": "^3.9.1",
@@ -24,6 +25,7 @@
     "react-router-dom": "^6.4.2",
     "react-theme-toggle-button": "^1.1.0",
     "recoil": "^0.7.6",
+    "redux-persist": "^6.0.0",
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.2",
     "swiper": "^8.4.4"

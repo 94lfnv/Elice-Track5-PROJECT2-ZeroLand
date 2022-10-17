@@ -11,10 +11,10 @@ function Header () {
     const location = useLocation();
     // console.log(location);
 
-    const state = useContext(UserStateContext);
+    const userState = useContext(UserStateContext);
     const dispatch = useContext(DispatchContext);
 
-    const isLogin = !!state.user;
+    const isLogin = !!userState.user;
 
     // 로그아웃은 type을 바꿔 주면 됨
     const isLogout = () => {

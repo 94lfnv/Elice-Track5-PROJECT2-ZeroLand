@@ -1,18 +1,18 @@
 
-export const loginReducer = (state, action) => {
+export const loginReducer = (userState, action) => {
     switch (action.type) {
         //action type이 "LOGIN"
         case "LOGIN":
             return {
-                ...state,
+                ...userState,
                 user: action.payload,
             };
         case "LOGOUT":
             return {
-                ...state,
+                ...userState,
                 user: null,
             }
         default:
-            return state;
+            return userState;
     }
 }
