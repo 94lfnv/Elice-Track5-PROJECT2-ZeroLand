@@ -7,9 +7,8 @@ import StoreReviewEditForm from './StoreReviewEditForm';
 
 function StoreReviewList ({
     store_id,
-    // isEditable, 로그인 상태일 때 & 본인이 작성한 리뷰 카드에서만 isEditable = true이여야 함 < 이 로직 짜야 함
 }) {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false); // 리뷰 편집 중인지 아닌지 체크
     const [isEditable, setIsEditable] = useState(true); // 임시
     return (
         <>
@@ -23,14 +22,12 @@ function StoreReviewList ({
                     <Card.Title>리뷰 목록</Card.Title>
                     {/* 
                     <StoreReviewCard
-                        review={review}
-                        setStar={setStar}
-                        setDescription={setDescription}
-                        user_id={user_id}
-                        isEditable={isEditable}
+                        currentReview={review}
+                        isEditable={reviewOwnerId === 현재 로그인 중인 유저id}
                     />
                      리뷰 카드 쪽 연결 안 해서 임시 */}
                     <StoreReviewCard
+                        // currentReview={review}
                         isEditable={setIsEditable}
                         setIsEditing={setIsEditing}
                     /> {/* 자리 배치, 편집폼 연결 보려고 임시 */}

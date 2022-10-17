@@ -28,6 +28,7 @@
     "recoil": "^0.7.6",
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.2",
+    "sweetalert": "^2.1.2",
     "swiper": "^8.4.4"
   },
   "devDependencies": {

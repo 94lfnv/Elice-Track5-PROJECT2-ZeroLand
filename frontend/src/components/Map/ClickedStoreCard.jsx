@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import StarRate from "./StarRate.jsx"
+import React, {useState} from "react"
+import StarRate from "../Common/StarRate";
 
 const testStoreData = {
     "store_id": 1,
@@ -9,18 +9,16 @@ const testStoreData = {
     "star_avg": 3.75
 };
 
-function StoreCard({ // StoreList에서 넘겨준 거 다 들고 와야 함
+function ClickedStoreCard({
+    store_id, // 클릭된 가게 id로 정보 get
 }) {
   return(
     <div className="card mb-3">
         <div className="row g-0">
-            <div className="col-md-4">
-                {/* <img src="..." class="img-fluid rounded-start" alt="..."> */}
-            </div>
             <div className="col-md-8">
                 <div className="card-body">
                     <div className="row">
-                        <h4 className="col card-title text-dark"><a href="/storepage">{testStoreData.name}</a></h4>
+                        <h4 className="col card-title text-dark">{testStoreData.name}</h4>
                         <h5 className="col text-secondary">{testStoreData.address_detail}</h5>
                         <div className="col"><StarRate /></div>
                     </div>
@@ -32,4 +30,4 @@ function StoreCard({ // StoreList에서 넘겨준 거 다 들고 와야 함
   )
 }
 
-export default StoreCard;
+export default ClickedStoreCard;

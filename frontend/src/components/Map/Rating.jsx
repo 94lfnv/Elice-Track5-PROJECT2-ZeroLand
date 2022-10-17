@@ -21,7 +21,6 @@ function Rating() {
 
   const sendReview = () => {
     let score = clicked.filter(Boolean).length; // 사용자가 매긴 별점, 이 값을 보내야 함
-    console.log(score);
   };
 
   return (
