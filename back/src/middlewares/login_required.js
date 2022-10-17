@@ -18,32 +18,10 @@ const login_required = async function (req, res, next) {
     const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
     const jwtDecoded = jwt.verify(userToken, secretKey);
     const user_id = jwtDecoded.user_id;
-    const user_email = req.body.email;
-
-    const [res_user_email, fld_user_email, err_user_email] = await pool.query({
-      sql: "SELECT user_id FROM users WHERE `email` = ? ",
-      values: [user_email],
-    });
-    if (err_user_email) throw err_user_email;
-    const res_userID_array = JSON.stringify(res_user_email);
-    const res_userId_only = res_userID_array.replace(/[^0-9]/g, "");
-    if (res_userId_only == user_id) {
-      console.log("정상적인 토큰입니다. 인증에 성공하였습니다.");
-    } else {
-      res
-        .status(400)
-        .send(
-          "정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요. - 디코드는 가능하지만 일치하지 않는 토큰"
-        );
-    }
-
+    req.user_id = user_id;
     next();
   } catch (error) {
-    res
-      .status(400)
-      .send(
-        "정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요. - 디코드가 불가능한 토큰"
-      );
+    res.status(400).send("정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요.");
   }
 };
 

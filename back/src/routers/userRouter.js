@@ -124,15 +124,16 @@ const userLogin = async function (req, res, next) {
 const userCurrent = async function (req, res, next) {
   try {
     // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
-    const email = req.body.email;
-    const [res_currentEmail, fld_currentEmail, err_currentEmail] =
+    const user_id = req.user_id;
+    const [res_currentUser, fld_currentUser, err_currentUser] =
       await pool.query({
-        sql: "SELECT * FROM users WHERE `email` = ? ",
-        values: [email],
+        sql: "SELECT * FROM users WHERE `user_id` = ? ",
+        values: [user_id],
       });
-    if (err_currentEmail) throw err_currentEmail;
-    delete res_currentEmail[0].password;
-    res.status(200).json(res_currentEmail[0]);
+    if (err_currentUser) throw err_currentUser;
+    delete res_currentUser[0].password;
+    delete res_currentUser[0].user_id;
+    res.status(200).json(res_currentUser[0]);
   } catch (error) {
     next(error);
   }
