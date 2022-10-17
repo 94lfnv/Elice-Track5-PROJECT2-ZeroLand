@@ -17,7 +17,7 @@ const userList = async (req, res, next) => {
   try {
     const [results, fields, error] = await pool.query("SELECT * FROM users");
     if (error) throw error;
-    console.log(results.length);
+    // console.log(results.length);
     for (let i = 0; i < results.length; i++) {
       delete results[i].password;
     }
@@ -40,10 +40,12 @@ const userRegister = async (req, res, next) => {
     });
     if (err_checkID) throw err_checkID;
     else if (JSON.stringify(res_checkID) !== "[]") {
-      const errorMessage =
-        "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.";
-      console.log(errorMessage);
-      res.status(200).send(errorMessage);
+      res.status(204).json({
+        result: false,
+        errorMessage:
+          "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "email",
+      });
     }
     // 비밀번호 해쉬화
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -78,10 +80,11 @@ const userLogin = async function (req, res, next) {
     });
     if (err_logID) throw err_logID;
     else if (JSON.stringify(res_logID) === "[]") {
-      const errorMessage =
-        "일치하는 email이 없습니다. 다시 한 번 확인해 주세요.";
-      console.log(errorMessage);
-      res.status(200).send(errorMessage);
+      res.status(204).json({
+        result: false,
+        errorMessage: "일치하는 email이 없습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "email",
+      });
     }
 
     // 비밀번호 일치 여부 확인
@@ -93,10 +96,11 @@ const userLogin = async function (req, res, next) {
       correctPasswordHash
     );
     if (!isPasswordCorrect) {
-      const errorMessage =
-        "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
-      console.log(errorMessage);
-      res.status(200).send(errorMessage);
+      res.status(204).json({
+        result: false,
+        errorMessage: "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "password",
+      });
     }
     if (isPasswordCorrect && JSON.stringify(res_logID) !== "[]") {
       // 로그인 성공 -> JWT 웹 토큰 생성
@@ -204,11 +208,11 @@ const userUpdate = async function (req, res, next) {
       correctPasswordHash
     );
     if (!isPasswordCorrect) {
-      const errorMessage =
-        "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
-      console.log(errorMessage);
-      console.log("isPasswordCorrect: ", isPasswordCorrect);
-      res.status(200).send(errorMessage);
+      res.status(204).json({
+        result: false,
+        errorMessage: "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "password",
+      });
     }
 
     // 비밀번호 해쉬화
@@ -267,9 +271,11 @@ const userDelete = async function (req, res, next) {
       correctPasswordHash
     );
     if (!isPasswordCorrect) {
-      const errorMessage =
-        "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.";
-      res.status(200).send(errorMessage);
+      res.status(204).json({
+        result: false,
+        errorMessage: "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "password",
+      });
     } else {
       // DB에서 유저 정보 삭제
       const [res_userDelete, fld_userDelete, err_userDelete] = await pool.query(
