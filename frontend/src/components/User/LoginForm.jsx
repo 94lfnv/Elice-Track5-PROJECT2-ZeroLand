@@ -48,7 +48,7 @@ function LoginForm () {
         })
 
         const user = res.data;
-        console.log(user)
+        // console.log(user);
         const jwtToken = user.token;
 
         // 토큰 저장
