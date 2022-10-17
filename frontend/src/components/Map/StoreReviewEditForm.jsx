@@ -1,9 +1,11 @@
 // 리뷰 수정 창
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
-import StoreReviewList from "./StoreReviewList";
+import styled from 'styled-components';
 
 import Rating from "./Rating";
+
+import * as Api from "../../utils/Api";
 
 function StoreReviewEditForm({
     setIsEditing,
@@ -28,12 +30,14 @@ function StoreReviewEditForm({
     };
 
     return (
+        <>
+        <EditformTitle>리뷰 수정하기</EditformTitle>
         <Form onSubmit={handleSubmit}>
             <Rating
                 value={star}
                 onChange={(e) => setStar.apply(e.target.value)}
             />
-            <Form.Group controlId="reviewAddDescription">
+            <Form.Group controlId="reviewEditDescription">
                 <Form.Control
                     type="text"
                     placeholder="내용을 작성해주세요."
@@ -51,13 +55,21 @@ function StoreReviewEditForm({
                 </button>
                 <button
                     size="sm"
-                    onClick={() => setIsAdding(false)}
+                    onClick={() => setIsEditing(false)}
                 >
                     취소
                 </button>
             </Form.Group>
         </Form>
+        </>
     );
 }
 
 export default StoreReviewEditForm;
+
+const EditformTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
+  color: black;
+`;

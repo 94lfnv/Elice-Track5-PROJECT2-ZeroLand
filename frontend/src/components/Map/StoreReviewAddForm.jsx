@@ -5,6 +5,8 @@ import styled from 'styled-components';
 
 import Rating from "./Rating";
 
+import * as Api from "../../utils/Api";
+
 function StoreReviewAddForm({
     store_Id,
     setReview,

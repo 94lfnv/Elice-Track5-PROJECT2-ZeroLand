@@ -32,7 +32,7 @@ const data = [
     }
   ];
 
-  const Bar = () => {
+const Bar = () => {
     return (
       <ResponsiveBar
         data={data}
