@@ -3,8 +3,8 @@ const { pool, connection } = require("../db/database");
 
 const storesRouter = express.Router();
 
-//get요청 /stores/:storeId  (storeId는 1부터 순차적으로 자동 부여됨) 입력시 요청한 한개의 가게를 보여줌
-storesRouter.get("/stores/:storeId", async (req, res, next) => {
+//get요청 /store/:storeId  (storeId는 1부터 순차적으로 자동 부여됨) 입력시 요청한 한개의 가게를 보여줌
+storesRouter.get("/store/:storeId", async (req, res, next) => {
   try {
     const storeId = req.params.storeId;
     const [results, fields, error] = await pool.query(
@@ -17,8 +17,8 @@ storesRouter.get("/stores/:storeId", async (req, res, next) => {
   }
 });
 
-//get요청 /stores 전체 가게 리스트를 보여줌
-storesRouter.get("/stores", async (req, res, next) => {
+//get요청 /store 전체 가게 리스트를 보여줌
+storesRouter.get("/store", async (req, res, next) => {
   try {
     const [results, fields, error] = await pool.query(
       `select * from stores where store_id;`
@@ -75,7 +75,7 @@ storesRouter.post("/stores/add", async (req, res, next) => {
 });
 
 //가게정보 수정 put
-storesRouter.put("/stores/:storeId", async (req, res, next) => {
+storesRouter.put("/store/:storeId", async (req, res, next) => {
   try {
     const storeId = req.params.storeId;
     const {
@@ -105,7 +105,7 @@ storesRouter.put("/stores/:storeId", async (req, res, next) => {
 });
 
 //가게정보 삭제
-storesRouter.delete("/stores/:storeId", async (req, res, next) => {
+storesRouter.delete("/store/:storeId", async (req, res, next) => {
   try {
     const storeId = req.params.storeId;
     const [results, fields, error] = await pool.query(
@@ -119,7 +119,7 @@ storesRouter.delete("/stores/:storeId", async (req, res, next) => {
 });
 
 //get요청 서울시 ㅇㅇ구 ㅇㅇ동에 있는 가게정보 가져오기
-storesRouter.get("/stores/address/:addressId", async (req, res, next) => {
+storesRouter.get("/store/address/:addressId", async (req, res, next) => {
   try {
     const addressId = req.params.addressId;
     const [results, fields, error] = await pool.query(
