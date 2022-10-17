@@ -14,9 +14,6 @@ function StoreCard({ // StoreList에서 넘겨준 거 다 들고 와야 함
   return(
     <div className="card mb-3">
         <div className="row g-0">
-            <div className="col-md-4">
-                {/* <img src="..." class="img-fluid rounded-start" alt="..."> */}
-            </div>
             <div className="col-md-8">
                 <div className="card-body">
                     <div className="row">

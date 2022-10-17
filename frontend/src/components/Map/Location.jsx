@@ -1,13 +1,25 @@
 /*global kakao*/
 import { useEffect } from "react";
 
+// const currentLocation = 현재 사용자 위도, 경도
+// map 페이지 접속할 때 현재 사용자 위도 경도 불러오기 Geolocation
+
+navigator.geolocation.getCurrentPosition(function(pos) {
+  console.log(pos);
+  var latitude = pos.coords.latitude;
+  var longitude = pos.coords.longitude;
+  console.log("현재 위치는 : " + latitude + ", "+ longitude);
+}); // latitude, longtitude 저거 center로 어떻게 집어넣는지
+
+console.log();
+
 function Location() {
     const loadKakaoMap = () => {
       if ("kakao" in window) {
         window.kakao.maps.load(() => {
           const kakaoMap = document.getElementById("kakao-map");
           const mapOption = {
-            center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+            center: new window.kakao.maps.LatLng(33.450705, 126.570677),
             level: 3,
           };
           var map = new window.kakao.maps.Map(kakaoMap, mapOption);
@@ -27,7 +39,11 @@ function Location() {
             {
                 content: `<div className="inner">근린공원</div>`,
                 latlng: new kakao.maps.LatLng(33.451393, 126.570738)
-            }
+            },
+            {
+              content: `<div className="inner">한라산</div>`,
+              latlng: new kakao.maps.LatLng(33.3617, 126.5292)
+          }
         ];
 
         var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";

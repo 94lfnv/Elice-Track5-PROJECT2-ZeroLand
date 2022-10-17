@@ -8,7 +8,7 @@ import swal from "sweetalert";
 
 const testReviewData = {
     "review_id": 11,
-    "star": 70,
+    "star": 4,
     "description": "이거 샀는데 짱임"
 };
 
