@@ -40,11 +40,27 @@ const userRegister = async (req, res, next) => {
     });
     if (err_checkID) throw err_checkID;
     else if (JSON.stringify(res_checkID) !== "[]") {
-      res.status(204).json({
+      res.status(200).json({
         result: false,
         errorMessage:
           "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.",
         errorCause: "email",
+      });
+    }
+
+    // 닉네임 중복 확인
+    const [res_checkNickname, fld_checkNickname, err_checkNickname] =
+      await pool.query({
+        sql: "SELECT * FROM users WHERE `nickname` = ? ",
+        values: [nickname],
+      });
+    if (err_checkNickname) throw err_checkNickname;
+    else if (JSON.stringify(res_checkNickname) !== "[]") {
+      res.status(200).json({
+        result: false,
+        errorMessage:
+          "입력하신 닉네임으로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "nickname",
       });
     }
     // 비밀번호 해쉬화
@@ -80,7 +96,7 @@ const userLogin = async function (req, res, next) {
     });
     if (err_logID) throw err_logID;
     else if (JSON.stringify(res_logID) === "[]") {
-      res.status(204).json({
+      res.status(200).json({
         result: false,
         errorMessage: "일치하는 email이 없습니다. 다시 한 번 확인해 주세요.",
         errorCause: "email",
@@ -96,7 +112,7 @@ const userLogin = async function (req, res, next) {
       correctPasswordHash
     );
     if (!isPasswordCorrect) {
-      res.status(204).json({
+      res.status(200).json({
         result: false,
         errorMessage: "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.",
         errorCause: "password",
@@ -208,7 +224,7 @@ const userUpdate = async function (req, res, next) {
       correctPasswordHash
     );
     if (!isPasswordCorrect) {
-      res.status(204).json({
+      res.status(200).json({
         result: false,
         errorMessage: "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.",
         errorCause: "password",
@@ -271,7 +287,7 @@ const userDelete = async function (req, res, next) {
       correctPasswordHash
     );
     if (!isPasswordCorrect) {
-      res.status(204).json({
+      res.status(200).json({
         result: false,
         errorMessage: "비밀번호가 일치하지 않습니다. 다시 한 번 확인해 주세요.",
         errorCause: "password",
