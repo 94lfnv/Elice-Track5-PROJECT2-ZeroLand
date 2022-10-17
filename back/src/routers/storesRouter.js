@@ -133,3 +133,5 @@ storesRouter.get("/store/address/:addressId", async (req, res, next) => {
 });
 
 module.exports = storesRouter;
+
+//https://data.seoul.go.kr/dataList/OA-21234/S/1/datasetView.do 데이터정보
