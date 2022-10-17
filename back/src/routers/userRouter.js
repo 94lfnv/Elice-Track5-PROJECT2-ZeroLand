@@ -139,6 +139,48 @@ const userCurrent = async function (req, res, next) {
   }
 };
 
+// GET: 현재 로그인된 유저의 마이페이지 info 정보
+const mypageInfo = async function (req, res, next) {
+  try {
+    // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
+    const user_id = req.user_id;
+    const [res_currentUser, fld_currentUser, err_currentUser] =
+      await pool.query({
+        sql: "SELECT * FROM users WHERE `user_id` = ? ",
+        values: [user_id],
+      });
+    if (err_currentUser) throw err_currentUser;
+    // 관심상점 수
+    const [res_favStore, fld_favStore, err_favStore] = await pool.query({
+      sql: "SELECT count(store_id) FROM like_store WHERE `user_id` = ? ",
+      values: [user_id],
+    });
+    if (err_favStore) throw err_favStore;
+    // 리뷰 수
+    const [res_myReview, fld_myReview, err_myReview] = await pool.query({
+      sql: "SELECT count(review_id) FROM reviews WHERE `user_id` = ? ",
+      values: [user_id],
+    });
+    if (err_myReview) throw err_myReview;
+    // 리워드 수
+    const [res_myReward, fld_myReward, err_myReward] = await pool.query({
+      sql: "SELECT count(sticker_id) FROM stickers WHERE `user_id` = ? ",
+      values: [user_id],
+    });
+    if (err_myReward) throw err_myReward;
+
+    const mypageInfo_result = Object.assign(
+      res_currentUser[0],
+      res_favStore[0],
+      res_myReview[0],
+      res_myReward[0]
+    );
+    res.status(200).json(mypageInfo_result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // PUT: 유저 정보 업데이트(pw & nickname)
 const userUpdate = async function (req, res, next) {
   try {
@@ -252,6 +294,11 @@ userAuthRouter.get(
   "/user",
   asyncHandler(login_required),
   asyncHandler(userCurrent)
+);
+userAuthRouter.get(
+  "/mypage/info",
+  asyncHandler(login_required),
+  asyncHandler(mypageInfo)
 );
 userAuthRouter.put(
   "/user/update",

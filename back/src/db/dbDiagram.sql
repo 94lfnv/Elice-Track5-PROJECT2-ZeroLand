@@ -6,8 +6,7 @@ CREATE TABLE `users` (
   `profile_photo` varchar(255) DEFAULT ('./default.jpg'),
   `created_time` timestamp,
   `updated_time` timestamp,
-  `current_latitude` varchar(255),
-  `current_longitude` varchar(255)
+  `description` varchar(255)
 );
 
 CREATE TABLE `stores` (
