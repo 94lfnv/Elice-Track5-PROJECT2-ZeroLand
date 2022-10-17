@@ -1,27 +1,19 @@
 /*global kakao*/
 import { useEffect } from "react";
-
-// const currentLocation = 현재 사용자 위도, 경도
-// map 페이지 접속할 때 현재 사용자 위도 경도 불러오기 Geolocation
-
-navigator.geolocation.getCurrentPosition(function(pos) {
-  console.log(pos);
-  var latitude = pos.coords.latitude;
-  var longitude = pos.coords.longitude;
-  console.log("현재 위치는 : " + latitude + ", "+ longitude);
-}); // latitude, longtitude 저거 center로 어떻게 집어넣는지
-
-console.log();
+import useGeolocation from "../../hooks/useGeolocation";
 
 function Location() {
+  const geo = useGeolocation();
+
     const loadKakaoMap = () => {
       if ("kakao" in window) {
         window.kakao.maps.load(() => {
           const kakaoMap = document.getElementById("kakao-map");
           const mapOption = {
-            center: new window.kakao.maps.LatLng(33.450705, 126.570677),
+            center: new window.kakao.maps.LatLng(geo.lat, geo.lon),
             level: 3,
           };
+
           var map = new window.kakao.maps.Map(kakaoMap, mapOption);
           var positions = [
             {
@@ -101,7 +93,7 @@ function Location() {
       return () => {
         kakaoMapScript.removeEventListener("load", loadKakaoMap);
       };
-    }, []);
+    }, [geo]);
     return (
       <div>
         <div id="kakao-map" style={{ width: "500px", height: "500px", float: "left" }}></div>
