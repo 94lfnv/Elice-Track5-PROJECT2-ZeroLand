@@ -5,6 +5,8 @@ import styled from 'styled-components';
 
 import Rating from "./Rating";
 
+import * as Api from "../../utils/Api";
+
 function StoreReviewAddForm({
     store_Id,
     setReview,
@@ -21,6 +23,8 @@ function StoreReviewAddForm({
             star,
             description,
         });
+
+        console.log(star);
 
         const res = await Api.get(`/stores/${store_id}/reviews`); // 해당 스토어 전체 리뷰 가져오기
         setReview(res.data);

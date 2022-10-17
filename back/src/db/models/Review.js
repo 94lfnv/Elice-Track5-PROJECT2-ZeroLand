@@ -4,8 +4,7 @@ class Review {
     static async findAll() {
       const [results, fields, error] = await pool.query(
         {
-          sql: "SELECT * FROM reviews",
-          timeout: 4000, // 40s
+          sql: "SELECT * FROM reviews"
         },
         function (error, results, fields) {
           if (error) throw error;

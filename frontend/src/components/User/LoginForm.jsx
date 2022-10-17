@@ -41,14 +41,14 @@ function LoginForm () {
       const onSubmit = async (e) => {
         e.preventDefault();
 
-        //여기서 비밀번호나 아이디 틀렸으면 걸러주면 되겠다. 대충 얼럿으로 하셈...
-
       try {
         const res = await api.post("user/login", {
           email, 
           password,
-        });
+        })
+
         const user = res.data;
+        // console.log(user);
         const jwtToken = user.token;
 
         // 토큰 저장

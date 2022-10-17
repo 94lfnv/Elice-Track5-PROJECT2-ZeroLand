@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-function StarRate() {
-    const AVR_RATE = 73;
+function StarRate({star}) {
+    const AVR_RATE = star*20;
     const STAR_IDX_ARR = ['first', 'second', 'third', 'fourth', 'last'];
     const [ratesResArr, setRatesResArr] = useState([0, 0, 0, 0, 0]);
     const calcStarRates = () => {

@@ -1,38 +1,61 @@
 // 막대 차트 그리는 코드
+import { ResponsiveBar } from '@nivo/bar'
 
-import { Doughnut } from "react-chartjs-2";
+const data = [
+    {
+      day: "Monday",
+      degress: 59
+    },
+    {
+      day: "Tuesday",
+      degress: 61
+    },
+    {
+      day: "Wednesday",
+      degress: 55
+    },
+    {
+      day: "Thursday",
+      degress: 78
+    },
+    {
+      day: "Friday",
+      degress: 71
+    },
+    {
+      day: "Saturday",
+      degress: 56
+    },
+    {
+      day: "Sunday",
+      degress: 67
+    }
+  ];
 
-function testChart() {
-    const expData = {
-        labels: ["긍정적", "부정적", "보통"],
-        datasets: [
-            {
-            labels: ["긍정적", "부정적", "보통"],
-            data: [60, 13, 27],
-            borderWidth: 2,
-            hoverBorderWidth: 3,
-            backgroundColor: [
-                "rgba(238, 102, 121, 1)",
-                "rgba(98, 181, 229, 1)",
-                "rgba(255, 198, 0, 1)"
-            ],
-            fill: true
-            }
-        ]
-    };
-
+const Bar = () => {
     return (
-        <Doughnut
-            options={{
-            legend: {
-                display: true,
-                position: "right"
-            }
-            }}
-            data={expData}
-            height={120}
-        />
+      <ResponsiveBar
+        data={data}
+        keys={["degress"]}
+        indexBy="day"
+        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        padding={0.4}
+        valueScale={{ type: "linear" }}
+        colors="#3182CE"
+        animate={true}
+        enableLabel={false}
+        axisTop={null}
+        axisRight={null}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "degrees",
+          legendPosition: "middle",
+          legendOffset: -40
+        }}
+      />
     );
-}
+  };
 
-export default testChart;
+export default Bar;

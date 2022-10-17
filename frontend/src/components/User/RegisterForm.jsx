@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAsyncError, useNavigate } from "react-router-dom";
 import * as ResisterStyled from "../StyledComponents/SignStyled";
 import NaverLogin from "./NaverLogin";
 import { KaKaoButton } from "./KakaoLogin";
@@ -26,6 +26,9 @@ function RegisterForm () {
   const [pwdMsg, setPwdMsg] = useState('');
   const [confirmPwdMsg, setConfirmPwdMsg]= useState("")
   const [nicknameMsg, setNicknameMsg] = useState("")
+
+  // const [checkOne, setCheckOne] = useState(false)
+  // const [checkError, setCheckError] = useState("")
 
   // 이메일, 비밀번호, 닉네임 유효성 검사 
   const validateEmail = (email) => {
@@ -58,19 +61,21 @@ function RegisterForm () {
     e.preventDefault();
 
     try {
-      await api.post("user/register", {
+      const result = await api.post("user/register", {
         email, password, nickname,
       });
+      console.log(result);
       navigate("/login");
     } catch (err) {
-      setEmailMsg("이미 등록된 메일입니다.");
-      // const res = api.get("userlist");
-      // console.log(res.data.email);
-      //if/else if 문 넣어서 이거면 이거 넣어주고 저거면 저거 넣어주고 이런 식으로 되나? 
-      //const 데이터 이름 = 받아올 데이터 
-      // 받아온 데이터랑 이메일/닉네임 같아? ㅇㅇ 그럼 ㄴㄴ 이런 식... 
+      console.log(err);
     }
   };
+
+  // const onCheckButton = async (e) => {
+  //   e.preventDefault();
+  //   const res = await api.get("user");
+  //   console.log(res);
+  // }
 
   //이메일 
   const onChangeEmail = useCallback( async (e) => {
@@ -137,6 +142,7 @@ function RegisterForm () {
                 type="text"
                 placeholder="ex) zeroland@zeroland.com"
                 onChange={onChangeEmail}/>
+                {/* <button onClick={onCheckButton}>중복확인</button> */}
                 <ResisterStyled.OutputText className={isEmailValid ? 'success' : 'error'}>{emailMsg}</ResisterStyled.OutputText>
 
         <ResisterStyled.InputTitle>비밀번호 *</ResisterStyled.InputTitle>

@@ -5,11 +5,16 @@ import { Pagination } from "swiper";
 import 'swiper/css';
 import "swiper/css/pagination";
 
+import Bar from "../Introduction/BarChart";
+
 const slideContentList = [
   // 1번
   <div>
     <h2>코로나 이후 쓰레기 배출량 증가</h2>
       <div>
+        <div>
+          <Bar />
+        </div>
       <b>코로나19로 인해 사람들은 외부 활동을 꺼리게 되었습니다.</b><br />
       <br />
       자주 사용하는 생필품들을 마트에 가서 사기보다는 택배로 주문하게 됐고,<br />

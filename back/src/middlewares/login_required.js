@@ -4,7 +4,6 @@ const { pool } = require("../db/database");
 const login_required = async function (req, res, next) {
   // request 헤더로부터 authorization bearer 토큰을 받음.
   const userToken = req.headers["authorization"]?.split(" ")[1] ?? "null";
-  console.log("FE에서 로그인 후 이동할 때 준 userToken: ", userToken);
   // 이 토큰은 jwt 토큰 문자열이거나, 혹은 "null" 문자열임.
   // 토큰이 "null" 일 경우, login_required 가 필요한 서비스 사용을 제한함.
   if (userToken === "null") {
@@ -18,32 +17,10 @@ const login_required = async function (req, res, next) {
     const secretKey = process.env.JWT_SECRET_KEY || "secret-key";
     const jwtDecoded = jwt.verify(userToken, secretKey);
     const user_id = jwtDecoded.user_id;
-    const user_email = req.body.email;
-
-    const [res_user_email, fld_user_email, err_user_email] = await pool.query({
-      sql: "SELECT user_id FROM users WHERE `email` = ? ",
-      values: [user_email],
-    });
-    if (err_user_email) throw err_user_email;
-    const res_userID_array = JSON.stringify(res_user_email);
-    const res_userId_only = res_userID_array.replace(/[^0-9]/g, "");
-    if (res_userId_only == user_id) {
-      console.log("정상적인 토큰입니다. 인증에 성공하였습니다.");
-    } else {
-      res
-        .status(400)
-        .send(
-          "정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요. - 디코드는 가능하지만 일치하지 않는 토큰"
-        );
-    }
-
+    req.user_id = user_id;
     next();
   } catch (error) {
-    res
-      .status(400)
-      .send(
-        "정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요. - 디코드가 불가능한 토큰"
-      );
+    res.status(400).send("정상적인 토큰이 아닙니다. 다시 한 번 확인해 주세요.");
   }
 };
 
