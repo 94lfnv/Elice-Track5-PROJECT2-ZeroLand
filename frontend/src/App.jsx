@@ -14,7 +14,7 @@ import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
 import UiErrorFallback from "./components/Common/UiErrorFallback";
 
-import Layout from "./components/Common/Layout";
+import LayOut from "./components/Common/Layout";
 import * as api from "./utils/Api";
 import { loginReducer } from "./utils/reducer";
 
