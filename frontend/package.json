@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@nivo/bar": "^0.80.0",
+    "@nivo/core": "^0.80.0",
     "@reduxjs/toolkit": "^1.8.6",
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
@@ -28,6 +30,7 @@
     "redux-persist": "^6.0.0",
     "styled-components": "^5.3.6",
     "styled-reset": "^4.4.2",
+    "sweetalert": "^2.1.2",
     "swiper": "^8.4.4"
   },
   "devDependencies": {
