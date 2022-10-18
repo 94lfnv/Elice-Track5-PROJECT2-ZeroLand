@@ -1,10 +1,11 @@
 const express = require("express");
 const { pool } = require("../db/database");
 const login_required = require("../middlewares/login_required");
-
+// const asyncHandler = require("../util/asyncHandler");
+const asyncHandler = require("express-async-handler");
 const myPageRouter = express.Router();
 
-// GET: 해당 유저 전체 댓글 불러오기
+//해당 유저 전체 댓글 불러오기
 const mypageReviewList = async function (req, res, next) {
   try {
     // const user_id = req.currentUserId;
@@ -70,6 +71,8 @@ const mypageInfo = async function (req, res, next) {
       res_myReview[0],
       { myReward: myReward }
     );
+    delete mypageInfo_result.user_id;
+    delete mypageInfo_result.password;
     res.status(200).json(mypageInfo_result);
   } catch (error) {
     next(error);
@@ -81,7 +84,6 @@ myPageRouter.get(
   asyncHandler(login_required),
   asyncHandler(mypageReviewList)
 );
-
 myPageRouter.get(
   "/mypage/info",
   asyncHandler(login_required),
