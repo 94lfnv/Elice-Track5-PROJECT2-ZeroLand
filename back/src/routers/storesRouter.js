@@ -2,6 +2,8 @@ const express = require("express");
 const { pool, connection } = require("../db/database");
 const login_required = require("../middlewares/login_required");
 const storesRouter = express.Router();
+const moment = require("moment-timezone");
+moment.tz.setDefault("Asia/Seoul");
 
 //get요청 /store/:storeId  (storeId는 1부터 순차적으로 자동 부여됨) 입력시 요청한 한개의 가게를 보여줌
 storesRouter.get("/store/:storeId", async (req, res, next) => {
@@ -142,6 +144,7 @@ storesRouter.post(
       // const user_id = req.user_id;
       const user_id = req.user_id;
       const store_id = req.params.store_id;
+      const time = moment().format("YYYY-MM-DD HH:mm:ss");
 
       // // 위 데이터를 유저 db에 추가하기
       // const [res_save, fld_save, error] = await pool.query(
@@ -155,7 +158,7 @@ storesRouter.post(
 
       // db에 저장
       const [saveStoreLike, err] = await pool.query(
-        `INSERT INTO like_store(user_id, store_id) VALUES ("${user_id}", '${store_id}');`
+        `INSERT INTO like_store(user_id, store_id, time) VALUES ("${user_id}", '${store_id}','${time}');`
       );
       if (err) throw err;
 
