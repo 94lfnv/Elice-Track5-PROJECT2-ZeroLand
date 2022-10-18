@@ -6,7 +6,7 @@ const testStoreData = {
     "name": "ㅇㅇ샵",
     "address_detail":"서울시 강남구 아차산로17길 48",
     "description": "서울시 ~",
-    "star_avg": 3.75
+    "star_avg": 3
 };
 
 function StoreCard({ // StoreList에서 넘겨준 거 다 들고 와야 함
@@ -22,7 +22,7 @@ function StoreCard({ // StoreList에서 넘겨준 거 다 들고 와야 함
                     <div className="row">
                         <h4 className="col card-title text-dark"><a href="/storepage">{testStoreData.name}</a></h4>
                         <h5 className="col text-secondary">{testStoreData.address_detail}</h5>
-                        <div className="col"><StarRate /></div>
+                        <div className="col"><StarRate star={testStoreData.star_avg} /></div>
                     </div>
                     <p className="card-text text-secondary">{testStoreData.description}</p>
                 </div>
