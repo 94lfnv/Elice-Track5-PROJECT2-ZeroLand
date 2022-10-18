@@ -26,6 +26,9 @@ function StorePage ({
     getNickname();
   }, []); // 현재 로그인 중인 유저 닉네임 받아오기
 
+  // if (currentUser != null):
+  //   setIsAddable = true;
+
   const getReviews = async () => {
     const resultReviews = await Api.get(`stores/${clickedStoreId}/reviews`);
     setReviews(resultReviews.data);
