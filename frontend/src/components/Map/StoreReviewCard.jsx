@@ -6,17 +6,14 @@ import * as Api from "../../utils/Api";
 
 import swal from "sweetalert";
 
-const testReviewData = {
-    "review_id": 11,
-    "star": 4,
-    "description": "이거 샀는데 짱임"
-};
-
 function StoreReviewCard({
     currentReview, // 현재 리뷰 카드 (review_id...?)
     isEditable,
     setIsEditing,
     setReviews,
+    review_id,
+    star,
+    description
 }) {
   const handleDelete = async (e) => { // 삭제함수
     e.preventDefault();
@@ -48,11 +45,11 @@ function StoreReviewCard({
     <Row className="mb-4">
       <Col>
         <Card.Text>
-          <span className="text-muted">{testReviewData.review_id}</span>
+          <span className="text-muted">{review_id}</span>
           <br />
-          <span className="text-muted"><StarRate star={testReviewData.star} /></span>
+          <span className="text-muted"><StarRate star={star} /></span>
           <br />
-          <span className="text-muted">{testReviewData.description}</span>
+          <span className="text-muted">{description}</span>
         </Card.Text>
       </Col>
       {isEditable && (

@@ -3,26 +3,50 @@ import React, { useState, useEffect } from "react";
 import * as Api from "../../utils/Api";
 import StoreCard from "../Common/StoreCard";
 
-function StoreList({
-  store_id,
-}) {
-  const [reviews, setReviews] = useState([]);
+import { testStoreData1 } from "./testData";
 
-  {/* useEffect(() => {
-    Api.get(`stores/{store_id}/reviews`).then((res) => { // store_id 필요함
-      setReviews(res.data)
-    });
-  }, []); */}
+function StoreList({
+
+}) {
+  const [stores, setStores] = useState([]);
+  const [currentUser, setCurrentUser] = useState();
+  
+  const getStores = async () => {
+    const resultStores = await Api.get(`store`);
+    setStores(resultStores.data);
+  };
+
+  useEffect(() => {
+    getStores();
+  }, []); // 전체 가게 리스트
+
+  // const loginUser = async () => {
+  //   const userNickname = await Api.get(`user`, "nickname");
+  //   setCurrentUser(userNickname.data);
+  // };
+
+  // useEffect(() => {
+  //   loginUser();
+  // }, []);
+    
 
   return (
     <div className="inner">
-      {/* {reviews.map((review) => (
+      {/* {stores.map((store) => (
         <StoreCard
-        // store_id = {store_id}
-        // 가게 카드에서 특정 부분 (가게 이름?) 클릭하면 해당 가게 상세 페이지 (StorePage) 로  이동
+          key={store.storeId}
+          store={store}
+          setStores={setStores}
         />
-      ))} */}
-      <StoreCard /> {/* 임시 */}
+      ))
+
+      } */}
+      <StoreCard
+        name={testStoreData1.name}
+        address_detail={testStoreData1.address_detail}
+        star={testStoreData1.star_avg}
+        description={testStoreData1.description}
+      /> {/* 임시 */}
     </div>
   );
 }

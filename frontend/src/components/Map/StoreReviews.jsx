@@ -5,11 +5,14 @@ import { Card, Button, Row, Col } from "react-bootstrap";
 import StoreReviewCard from './StoreReviewCard';
 import StoreReviewEditForm from './StoreReviewEditForm';
 
-function StoreReviewList ({
+import { testReviewData } from "./testData";
+
+function StoreReviews ({
     store_id,
 }) {
     const [isEditing, setIsEditing] = useState(false); // 리뷰 편집 중인지 아닌지 체크
     const [isEditable, setIsEditable] = useState(true); // 임시
+    const [reviews, setReviews] = useState([]);
     return (
         <>
             {isEditing ? (
@@ -21,16 +24,24 @@ function StoreReviewList ({
                 <Card.Body>
                     <Card.Title>리뷰 목록</Card.Title>
                     {/* 
-                    <StoreReviewCard
-                        currentReview={review}
-                        isEditable={reviewOwnerId === 현재 로그인 중인 유저id}
-                    />
-                     리뷰 카드 쪽 연결 안 해서 임시 */}
-                    <StoreReviewCard
+                    {reviews.map((review) => (
+                        <StoreReviewCard
+                        review_id={testReviewData.review_id}
+                        star={testReviewData.star}
+                        description={testReviewData.description}
                         // currentReview={review}
                         isEditable={setIsEditable}
                         setIsEditing={setIsEditing}
-                    /> {/* 자리 배치, 편집폼 연결 보려고 임시 */}
+                    /> 이런 식으로
+                    ))} */}
+                    <StoreReviewCard
+                        review_id={testReviewData.review_id}
+                        star={testReviewData.star}
+                        description={testReviewData.description}
+                        // currentReview={review}
+                        isEditable={setIsEditable}
+                        setIsEditing={setIsEditing}
+                    /> {/* 임시 */}
                 </Card.Body>
                 </Card>
             )}
@@ -39,4 +50,4 @@ function StoreReviewList ({
 
 }
 
-export default StoreReviewList;
+export default StoreReviews;

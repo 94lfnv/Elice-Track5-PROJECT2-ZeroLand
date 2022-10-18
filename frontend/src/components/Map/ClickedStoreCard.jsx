@@ -1,16 +1,11 @@
 import React, {useState} from "react"
 import StarRate from "../Common/StarRate";
 
-const testStoreData = {
-    "store_id": 1,
-    "name": "ㅇㅇ샵",
-    "address_detail":"서울시 강남구 아차산로17길 48",
-    "description": "서울시 ~",
-    "star_avg": 3.75
-};
-
 function ClickedStoreCard({
-    store_id, // 클릭된 가게 id로 정보 get
+    name,
+    address_detail,
+    star,
+    description, // 클릭된 가게 id로 정보 get
 }) {
   return(
     <div className="card mb-3">
@@ -18,11 +13,11 @@ function ClickedStoreCard({
             <div className="col-md-8">
                 <div className="card-body">
                     <div className="row">
-                        <h4 className="col card-title text-dark">{testStoreData.name}</h4>
-                        <h5 className="col text-secondary">{testStoreData.address_detail}</h5>
-                        <div className="col"><StarRate /></div>
+                        <h4 className="col card-title text-dark">{name}</h4>
+                        <h5 className="col text-secondary">{address_detail}</h5>
+                        <div className="col"><StarRate star={star} /></div>
                     </div>
-                    <p className="card-text text-secondary">{testStoreData.description}</p>
+                    <p className="card-text text-secondary">{description}</p>
                 </div>
             </div>
         </div>
