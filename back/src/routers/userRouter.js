@@ -222,45 +222,6 @@ const userCurrent = async function (req, res, next) {
   }
 };
 
-// GET: 현재 로그인된 유저의 마이페이지 info 정보
-const mypageInfo = async function (req, res, next) {
-  try {
-    // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
-    const user_id = req.user_id;
-    const [res_currentUser, fld_currentUser, err_currentUser] =
-      await pool.query({
-        sql: "SELECT * FROM users WHERE `user_id` = ? ",
-        values: [user_id],
-      });
-    if (err_currentUser) throw err_currentUser;
-    // 관심상점 수
-    const [res_favStore, fld_favStore, err_favStore] = await pool.query({
-      sql: "SELECT count(store_id) AS myFavStores FROM like_store WHERE `user_id` = ? ",
-      values: [user_id],
-    });
-    if (err_favStore) throw err_favStore;
-    // 리뷰 수
-    const [res_myReview, fld_myReview, err_myReview] = await pool.query({
-      sql: "SELECT count(review_id) AS myReviews FROM reviews WHERE `user_id` = ? ",
-      values: [user_id],
-    });
-    if (err_myReview) throw err_myReview;
-    // 리워드 수
-    const cntReviews = res_myReview[0].myReviews;
-    const myReward = Math.floor(cntReviews / 5);
-
-    const mypageInfo_result = Object.assign(
-      res_currentUser[0],
-      res_favStore[0],
-      res_myReview[0],
-      { myReward: myReward }
-    );
-    res.status(200).json(mypageInfo_result);
-  } catch (error) {
-    next(error);
-  }
-};
-
 // PUT: 유저 정보 업데이트(pw & nickname)
 const userUpdate = async function (req, res, next) {
   try {
@@ -268,6 +229,8 @@ const userUpdate = async function (req, res, next) {
     const current_password = req.body.current_password;
     const new_password = req.body.new_password;
     const nickname = req.body.nickname;
+    const description = req.body.description;
+    const forest_name = req.body.forest_name;
     const updated_time = moment().format("YYYY-MM-DD HH:mm:ss");
     const [res_checkID, fld_checkID, err_checkID] = await pool.query({
       sql: "SELECT * FROM users WHERE `email` = ? ",
@@ -296,8 +259,15 @@ const userUpdate = async function (req, res, next) {
 
     // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
     const [res_userUpdate, fld_userUpdate, err_userUpdate] = await pool.query({
-      sql: "UPDATE users SET `password`=?, `nickname`=?, `updated_time`=? WHERE `email` = ? ",
-      values: [hashedPassword, nickname, updated_time, email],
+      sql: "UPDATE users SET `password`=?, `nickname`=?, `description`=?, `forest_name`=?, `updated_time`=? WHERE `email` = ? ",
+      values: [
+        hashedPassword,
+        nickname,
+        description,
+        forest_name,
+        updated_time,
+        email,
+      ],
     });
     if (err_userUpdate) throw err_userUpdate;
     res.status(200).json({
@@ -389,11 +359,7 @@ userAuthRouter.get(
   asyncHandler(login_required),
   asyncHandler(userCurrent)
 );
-userAuthRouter.get(
-  "/mypage/info",
-  asyncHandler(login_required),
-  asyncHandler(mypageInfo)
-);
+
 userAuthRouter.put(
   "/user/update",
   asyncHandler(login_required),
