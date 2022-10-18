@@ -2,28 +2,38 @@ const express = require("express");
 const { pool } = require("../db/database");
 // const { reviewService } = require("../services/reviewService");
 const login_required = require("../middlewares/login_required")
+const upload = require("../middlewares/image_upload");
 
 const reviewRouter = express.Router();
 
-//스토어 댓글 달기
-reviewRouter.post("/stores/:store_id/review", async (req, res, next) => {
+
+//스토어 리뷰 달기
+reviewRouter.post("/stores/:store_id/review", login_required, upload.array("photo"), async (req, res, next) => {
   try {
     //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
-    // const user_id = req.currentUserId;
-    const user_id = 3;
-    const { star, description, photo } = req.body;
+    const user_id = req.user_id;
+    // const user_id = 3;
+    const { star, description } = req.body;
     const store_id = req.params.store_id;
+
+    //사진 저장. 사진이름 뽑기.
+    let photo1 = req.files[0]
+    let photo2 = req.files[1]
+    if (req.files[0] != undefined){
+      photo1 = req.files[0].filename}
+    if (req.files[1] != undefined){
+      photo2 = req.files[0].filename}
     
     // db에 저장
     const [results, fields, error] = await pool.query({
-      sql: "INSERT INTO reviews (user_id, star, description, photo, store_id) VALUES (?, ?, ?, ?, ?)",
-      values: [user_id, star, description, photo, store_id],
+      sql: "INSERT INTO reviews (user_id, star, description, photo, photo2, store_id) VALUES (?, ?, ?, ?, ?, ?)",
+      values: [user_id, star, description, photo1, photo2, store_id],
     });
     if (error) throw error;
 
     console.log(results);
     const review_id = results.insertId;
-    const saveData = { review_id, star, description, photo };
+    const saveData = { review_id, star, description, photo1, photo2 };
     
     res.status(201).send(saveData);
   } catch (err) {
@@ -37,7 +47,11 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
     const store_id = req.params.store_id;
 
     const [results, fields, error] = await pool.query(
-      `SELECT review_id, user_id, star, description, photo, created_time, updated_time FROM reviews WHERE store_id = ${store_id}`
+      `SELECT R.review_id, R.star, R.description, R.photo, R.photo2, R.created_time, R.updated_time, U.nickname 
+      FROM reviews R 
+      INNER JOIN users U 
+      ON R.user_id = U.user_id 
+      WHERE store_id = ${store_id}`
     );
     
     if (error) throw error;
@@ -46,10 +60,18 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
       let k = results[i].review_id
       //그 리뷰를 좋아하는 사람 목록
       let [reviewLikeList] = await pool.query(
-        `SELECT like_review_id, created_time, user_id FROM like_reviews WHERE like_reviews.review_id = ${k} and tag="like"`)
+        `SELECT LR.like_review_id, LR.created_time, U.nickname 
+        FROM like_reviews LR 
+        INNER JOIN users U 
+        ON LR.user_id = U.user_id
+        WHERE LR.review_id = ${k} and tag="like"`)
       //그 리뷰를 싫어하는 사람 목록
       let [reviewDislikeList] = await pool.query(
-        `SELECT like_review_id, created_time, user_id FROM like_reviews WHERE like_reviews.review_id = ${k} and tag="dislike"`)
+        `SELECT LR.like_review_id, LR.created_time, U.nickname 
+        FROM like_reviews LR INNER 
+        JOIN users U 
+        ON LR.user_id = U.user_id 
+        WHERE LR.review_id = ${k} and tag="dislike"`)
       results[i].like_reviews = reviewLikeList
       results[i].disLike_reviews = reviewDislikeList
     }
@@ -63,15 +85,23 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
 });
 
 //리뷰 수정하기
-reviewRouter.put("/review/:review_id", async (req, res, next) => {
+reviewRouter.put("/review/:review_id", login_required, upload.array("photo"), async (req, res, next) => {
   try {
     const review_id = req.params.review_id;
-    const { star, description, photo } = req.body;
+    const { star, description} = req.body;
+
+    //사진 저장. 사진이름 뽑기.
+    let photo1 = req.files[0]
+    let photo2 = req.files[1]
+    if (req.files[0] != undefined){
+      photo1 = req.files[0].filename}
+    if (req.files[1] != undefined){
+      photo2 = req.files[0].filename}
 
     const [results, fields, error] = await pool.query(
-      `UPDATE reviews SET star=${star}, description="${description}", photo="${photo}" WHERE review_id = ${review_id}`
+      `UPDATE reviews SET star=${star}, description="${description}", photo="${photo1}", photo2 ="${photo2}" WHERE review_id = ${review_id}`
     );
-    const putData = { review_id, star, description, photo };
+    const putData = { review_id, star, description, photo1, photo2};
 
     if (error) throw error;
     res.status(201).send(putData);
@@ -81,7 +111,7 @@ reviewRouter.put("/review/:review_id", async (req, res, next) => {
 });
 
 //리뷰 지우기
-reviewRouter.delete("/stores/:store_id/:review_id", async (req, res, next) => {
+reviewRouter.delete("/stores/:store_id/:review_id", login_required, async (req, res, next) => {
   try {
     const review_id = req.params.review_id;
     const [results, fields, error] = await pool.query(
@@ -101,11 +131,11 @@ reviewRouter.delete("/stores/:store_id/:review_id", async (req, res, next) => {
 //리뷰 좋아요
 reviewRouter.post(
   "/stores/:store_id/:review_id/like",
+  login_required, 
   async (req, res, next) => {
     try {
       //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
-      // const user_id = req.currentUserId;
-      const user_id = 2;
+      const user_id = req.user_id;
       const review_id = req.params.review_id;
       const tag = 1;
 
@@ -140,11 +170,11 @@ reviewRouter.post(
 //리뷰 싫어요
 reviewRouter.post(
   "/stores/:store_id/:review_id/dislike",
+  login_required, 
   async (req, res, next) => {
     try {
       //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
-      // const user_id = req.currentUserId;
-      const user_id = 2;
+      const user_id = req.user_id;
       const review_id = req.params.review_id;
       const tag = 2;
 

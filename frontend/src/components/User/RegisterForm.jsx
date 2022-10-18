@@ -57,7 +57,7 @@ function RegisterForm () {
         password, 
         nickname,
       });
-      console.log(apiResult.data);
+      // console.log(apiResult.data);
 
       const { result } = apiResult.data;
       
@@ -74,7 +74,6 @@ function RegisterForm () {
 
     try { 
       const res = await api.post("user/register/email", {email});
-      // console.log(res.data);
 
       const { result } = res.data;
 
@@ -96,7 +95,6 @@ function RegisterForm () {
 
     try { 
       const res = await api.post("user/register/nickname", {nickname});
-      // console.log(res.data);
 
       const { result } = res.data;
 

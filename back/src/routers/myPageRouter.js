@@ -6,27 +6,38 @@ const asyncHandler = require("express-async-handler");
 const myPageRouter = express.Router();
 
 //해당 유저 전체 댓글 불러오기
-const mypageReviewList = async function (req, res, next) {
-  try {
-    // const user_id = req.currentUserId;
-    const user_id = 1;
-
+myPageRouter.get("/mypage/reviews", login_required, async (req, res, next) => {
+    try {
+      const user_id = req.user_id;
+      // const user_id = 1
+  
     let [results, fields, error] = await pool.query(
-      `SELECT review_id, star, description, photo, created_time, updated_time FROM reviews WHERE reviews.user_id = ${user_id}`
+      `SELECT R.review_id, R.star, R.description, R.photo, R.photo2, R.created_time, R.updated_time, S.name as store_name 
+      FROM reviews R
+      INNER JOIN stores S
+      ON R.store_id = S.store_id
+      WHERE R.user_id = ${user_id}`
     );
 
     for (var i = 0; i < results.length; i++) {
       let k = results[i].review_id;
       //그 리뷰를 좋아하는 사람 목록
       let [reviewLikeList] = await pool.query(
-        `SELECT like_review_id, created_time, user_id FROM like_reviews WHERE like_reviews.review_id = ${k} and tag="like"`
-      );
+        `SELECT LR.like_review_id, LR.created_time, U.nickname 
+        FROM like_reviews LR 
+        INNER JOIN users U 
+        ON LR.user_id = U.user_id
+        WHERE LR.review_id = ${k} and tag="like"`)
       //그 리뷰를 싫어하는 사람 목록
       let [reviewDislikeList] = await pool.query(
-        `SELECT like_review_id, created_time, user_id FROM like_reviews WHERE like_reviews.review_id = ${k} and tag="dislike"`
-      );
-      results[i].like_reviews = reviewLikeList;
-      results[i].dike_reviews = reviewDislikeList;
+        `SELECT LR.like_review_id, LR.created_time, U.nickname 
+        FROM like_reviews LR INNER 
+        JOIN users U 
+        ON LR.user_id = U.user_id 
+        WHERE LR.review_id = ${k} and tag="dislike"`)
+      results[i].like_reviews = reviewLikeList
+      results[i].dike_reviews = reviewDislikeList
+
     }
     console.log(results);
 
@@ -36,7 +47,7 @@ const mypageReviewList = async function (req, res, next) {
   } catch (err) {
     next(err);
   }
-};
+});
 
 // GET: 현재 로그인된 유저의 마이페이지 info 정보
 const mypageInfo = async function (req, res, next) {
@@ -73,17 +84,24 @@ const mypageInfo = async function (req, res, next) {
     );
     delete mypageInfo_result.user_id;
     delete mypageInfo_result.password;
-    res.status(200).json(mypageInfo_result);
+    const resultWMessage = Object.assign(
+      {
+        result: true,
+        resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
+      },
+      mypageInfo_result
+    );
+    res.status(200).json(resultWMessage);
   } catch (error) {
     next(error);
   }
 };
 
-myPageRouter.get(
-  "/user/reviewList",
-  asyncHandler(login_required),
-  asyncHandler(mypageReviewList)
-);
+// myPageRouter.get(
+//   "/user/reviewList",
+//   asyncHandler(login_required),
+//   asyncHandler(mypageReviewList)
+// );
 myPageRouter.get(
   "/mypage/info",
   asyncHandler(login_required),
@@ -91,3 +109,4 @@ myPageRouter.get(
 );
 
 module.exports = myPageRouter;
+

@@ -194,7 +194,15 @@ const userLogin = async function (req, res, next) {
       });
       if (err_logID_tk) throw err_logID_tk;
 
-      const userWToken = Object.assign({ token: token }, res_logID_tk[0]);
+      const userWToken = Object.assign(
+        {
+          result: true,
+          resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
+        },
+        { token: token },
+        res_logID_tk[0]
+      );
+      delete userWToken.user_id;
       delete userWToken.password;
       res.status(200).json(userWToken);
     }
@@ -214,9 +222,17 @@ const userCurrent = async function (req, res, next) {
         values: [user_id],
       });
     if (err_currentUser) throw err_currentUser;
+
     delete res_currentUser[0].password;
     delete res_currentUser[0].user_id;
-    res.status(200).json(res_currentUser[0]);
+    const resultWMessage = Object.assign(
+      {
+        result: true,
+        resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
+      },
+      res_currentUser[0]
+    );
+    res.status(200).json(resultWMessage);
   } catch (error) {
     next(error);
   }
