@@ -76,6 +76,12 @@ const userRegisterNickname = async (req, res, next) => {
           "입력하신 닉네임으로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.",
         errorCause: "nickname",
       });
+    } else {
+      res.status(200).json({
+        result: true,
+        resultMessage:
+          "입력하신 nickname으로 가입된 내역이 없습니다. 사용하실 수 있습니다.",
+      });
     }
   } catch (err) {
     next(err);
@@ -131,14 +137,10 @@ const userRegister = async (req, res, next) => {
         values: [email, hashedPassword, nickname],
       });
       if (err_save) throw err_save;
-      // const [res_new, fld_new, err_new] = await pool.query({
-      //   sql: "SELECT * FROM users WHERE `email` = ? ",
-      //   values: [email],
-      // });
-      // if (err_new) throw err_new;
-      // res.status(200).json(res_new[0]);
-      const res_success = "회원가입이 성공적으로 이뤄졌습니다.";
-      res.status(200).send(res_success);
+      res.status(200).json({
+        result: true,
+        resultMessage: "회원가입이 성공적으로 이뤄졌습니다.",
+      });
     }
   } catch (err) {
     next(err);
@@ -233,28 +235,25 @@ const mypageInfo = async function (req, res, next) {
     if (err_currentUser) throw err_currentUser;
     // 관심상점 수
     const [res_favStore, fld_favStore, err_favStore] = await pool.query({
-      sql: "SELECT count(store_id) FROM like_store WHERE `user_id` = ? ",
+      sql: "SELECT count(store_id) AS myFavStores FROM like_store WHERE `user_id` = ? ",
       values: [user_id],
     });
     if (err_favStore) throw err_favStore;
     // 리뷰 수
     const [res_myReview, fld_myReview, err_myReview] = await pool.query({
-      sql: "SELECT count(review_id) FROM reviews WHERE `user_id` = ? ",
+      sql: "SELECT count(review_id) AS myReviews FROM reviews WHERE `user_id` = ? ",
       values: [user_id],
     });
     if (err_myReview) throw err_myReview;
     // 리워드 수
-    const [res_myReward, fld_myReward, err_myReward] = await pool.query({
-      sql: "SELECT count(sticker_id) FROM stickers WHERE `user_id` = ? ",
-      values: [user_id],
-    });
-    if (err_myReward) throw err_myReward;
+    const cntReviews = res_myReview[0].myReviews;
+    const myReward = Math.floor(cntReviews / 5);
 
     const mypageInfo_result = Object.assign(
       res_currentUser[0],
       res_favStore[0],
       res_myReview[0],
-      res_myReward[0]
+      { myReward: myReward }
     );
     res.status(200).json(mypageInfo_result);
   } catch (error) {
@@ -301,7 +300,10 @@ const userUpdate = async function (req, res, next) {
       values: [hashedPassword, nickname, updated_time, email],
     });
     if (err_userUpdate) throw err_userUpdate;
-    res.status(200).send("유저정보 업데이트가 성공적으로 이뤄졌습니다.");
+    res.status(200).json({
+      result: true,
+      resultMessage: "유저정보 업데이트가 성공적으로 이뤄졌습니다.",
+    });
   } catch (error) {
     next(error);
   }
@@ -319,9 +321,10 @@ const profileUpload = async function (req, res, next) {
         values: [new_filename, updated_time, email],
       });
     if (err_profileUpload) throw err_profileUpload;
-    res.status(200).send("프로필사진이 성공적으로 업로드 되었습니다.");
-    // const profileImageFilename = req.file.filename;
-    // res.status(200).json(profileImageFilename);
+    res.status(200).json({
+      result: true,
+      resultMessage: "프로필사진이 성공적으로 업로드 되었습니다.",
+    });
   } catch (e) {
     next(e);
   }
@@ -362,7 +365,10 @@ const userDelete = async function (req, res, next) {
         }
       );
       if (err_userDelete) throw err_userDelete;
-      res.status(200).send("유저 정보가 삭제 되었습니다.");
+      res.status(200).json({
+        result: true,
+        resultMessage: "유저 정보가 성공적으로 삭제 되었습니다.",
+      });
     }
   } catch (e) {
     next(e);
