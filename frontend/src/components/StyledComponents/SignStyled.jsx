@@ -69,6 +69,28 @@ export const InputTitle = styled.div`
     padding-bottom: 5px;
 `
 
+export const checkBtn = styled.button`
+    font-size: 10px;
+    background-color: #628d81;
+    color: #f2f2f2;
+    width: 80px;
+    height: 26px;
+    border: 1px solid #734838;
+    line-height: 23px;
+    float: right;
+    margin-right: 2%;
+    border-radius: 10px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #f2f2f2;
+        color: #734838;
+        font-weight: bolder;
+        line-height: 21px;
+        border: 2px solid #734838;
+    }
+`
+
 export const InputText = styled.input`
     font-size: 15px;
     &::placeholder {

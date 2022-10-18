@@ -1,13 +1,11 @@
 import React, { useCallback, useState } from "react";
-import { useAsyncError, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as ResisterStyled from "../StyledComponents/SignStyled";
 import NaverLogin from "./NaverLogin";
 import { KaKaoButton } from "./KakaoLogin";
 import CheckModal from "./CheckModal";
 import * as api from "../../utils/Api";
 
-// 중복 이메일 찾아야 하고 
-// 인증 메일 보내야 함. 링크 보내서 누르면 true 되고 -> 인증되게끔
 
 function RegisterForm () {
   //로그인 성공하면 내비게이트로 메인페이지 보내기
@@ -27,8 +25,9 @@ function RegisterForm () {
   const [confirmPwdMsg, setConfirmPwdMsg]= useState("")
   const [nicknameMsg, setNicknameMsg] = useState("")
 
-  // const [checkOne, setCheckOne] = useState(false)
-  // const [checkError, setCheckError] = useState("")
+  // 이메일, 닉네임 중복 확인
+  const [checkMail, setCheckMail] = useState(false)
+  const [checkNickname, setCheckNickname] = useState(false)
 
   // 이메일, 비밀번호, 닉네임 유효성 검사 
   const validateEmail = (email) => {
@@ -49,33 +48,78 @@ function RegisterForm () {
       .match(/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|].{1,8}$/)
   }
 
-  const isEmailValid = validateEmail(email);
-  const isPwdValid = validatePwd(password);
-  const isConfirmPwd = password === confirmPwd;
-  const isNicknameValid = validateNickname(nickname);
-
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isNicknameValid && isAccepted;
-
-
   const onSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const result = await api.post("user/register", {
-        email, password, nickname,
+      const apiResult = await api.post("user/register", {
+        email, 
+        password, 
+        nickname,
       });
-      console.log(result);
-      navigate("/login");
+      console.log(apiResult.data);
+
+      const { result } = apiResult.data;
+      
+      if (result) {
+        navigate("/login");
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  // const onCheckButton = async (e) => {
-  //   e.preventDefault();
-  //   const res = await api.get("user");
-  //   console.log(res);
-  // }
+  const onCheckEmail = async (e) => {
+    e.preventDefault();
+
+    try { 
+      const res = await api.post("user/register/email", {email});
+      // console.log(res.data);
+
+      const { result } = res.data;
+
+      if (!result) {
+          setEmailMsg("이미 등록된 메일입니다. 다시 입력해주세요.");
+          setCheckMail(false);
+      } else {
+        setEmailMsg("사용 가능한 메일입니다.😊");
+        setCheckMail(true);
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const onCheckNickname = async (e) => {
+    e.preventDefault();
+
+    try { 
+      const res = await api.post("user/register/nickname", {nickname});
+      // console.log(res.data);
+
+      const { result } = res.data;
+
+      if (!result) {
+          setNicknameMsg("이미 등록된 닉네임입니다. 다시 입력해주세요.");
+          setCheckNickname(false);
+     } else {
+        setNicknameMsg("사용 가능한 닉네임입니다.😊");
+        setCheckNickname(true);
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const isEmailValid = validateEmail(email);
+  const isPwdValid = validatePwd(password);
+  const isConfirmPwd = password === confirmPwd;
+  const isNicknameValid = validateNickname(nickname);
+
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isNicknameValid && isAccepted && checkMail && checkNickname;
+
 
   //이메일 
   const onChangeEmail = useCallback( async (e) => {
@@ -85,7 +129,7 @@ function RegisterForm () {
     if (!validateEmail(currEmail)) {
       setEmailMsg("이메일 형식이 올바르지 않습니다.")
     } else {
-        setEmailMsg("올바른 이메일입니다.")
+        setEmailMsg("올바른 이메일 형식입니다.")
       }
     })
 
@@ -109,12 +153,11 @@ function RegisterForm () {
       if (currConfirmPwd !== password) {
         setConfirmPwdMsg("비밀번호가 일치하지 않습니다.")
       } else {
-        setConfirmPwdMsg("올바른 비밀번호입니다.")
+        setConfirmPwdMsg("올바른 비밀번호 형식입니다.")
       }
     }, [password])
 
     //닉네임
-    //이것도 중복이면 안 됨.
     const onChangeNickname = useCallback((e) => {
       const currNickname = e.target.value;
       setNickname(currNickname);
@@ -122,7 +165,7 @@ function RegisterForm () {
       if (!validateNickname(currNickname)) {
         setNicknameMsg("1글자 이상 9글자 미만으로 입력해주세요.")
       } else {
-        setNicknameMsg("올바른 닉네임입니다.")
+        setNicknameMsg("올바른 닉네임 형식입니다.")
       }
     }, []);
 
@@ -136,13 +179,15 @@ function RegisterForm () {
         <ResisterStyled.InputBox>
         <ResisterStyled.FormTitle>회원가입</ResisterStyled.FormTitle>
 
+        <ResisterStyled.checkBtn onClick={onCheckEmail}>중복 확인 *</ResisterStyled.checkBtn>
+        
         <ResisterStyled.InputTitle>이메일 주소 *</ResisterStyled.InputTitle>
             <ResisterStyled.InputText 
                 name="email"
                 type="text"
                 placeholder="ex) zeroland@zeroland.com"
                 onChange={onChangeEmail}/>
-                {/* <button onClick={onCheckButton}>중복확인</button> */}
+                
                 <ResisterStyled.OutputText className={isEmailValid ? 'success' : 'error'}>{emailMsg}</ResisterStyled.OutputText>
 
         <ResisterStyled.InputTitle>비밀번호 *</ResisterStyled.InputTitle>
@@ -160,6 +205,8 @@ function RegisterForm () {
                 placeholder="**********"
                 onChange={onChangeConfirmPwd}/>
                 <ResisterStyled.OutputText className={isConfirmPwd ? 'success' : 'error'}>{confirmPwdMsg}</ResisterStyled.OutputText>
+
+                <ResisterStyled.checkBtn onClick={onCheckNickname}>중복 확인 *</ResisterStyled.checkBtn>
 
         <ResisterStyled.InputTitle>닉네임 *</ResisterStyled.InputTitle>
             <ResisterStyled.InputText 
