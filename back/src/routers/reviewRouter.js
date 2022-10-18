@@ -8,7 +8,7 @@ const reviewRouter = express.Router();
 
 
 //스토어 리뷰 달기
-reviewRouter.post("/stores/:store_id/review", upload.array("photo"), async (req, res, next) => {
+reviewRouter.post("/stores/:store_id/review", login_required, upload.array("photo"), async (req, res, next) => {
   try {
     //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
     const user_id = req.user_id;
@@ -47,7 +47,7 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
     const store_id = req.params.store_id;
 
     const [results, fields, error] = await pool.query(
-      `SELECT review_id, star, description, R.photo, R.photo2, R.created_time, R.updated_time, U.nickname 
+      `SELECT R.review_id, R.star, R.description, R.photo, R.photo2, R.created_time, R.updated_time, U.nickname 
       FROM reviews R 
       INNER JOIN users U 
       ON R.user_id = U.user_id 
@@ -85,10 +85,11 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
 });
 
 //리뷰 수정하기
-reviewRouter.put("/review/:review_id", upload.array("photo"), async (req, res, next) => {
+reviewRouter.put("/review/:review_id", login_required, upload.array("photo"), async (req, res, next) => {
   try {
     const review_id = req.params.review_id;
     const { star, description} = req.body;
+
     //사진 저장. 사진이름 뽑기.
     let photo1 = req.files[0]
     let photo2 = req.files[1]
@@ -98,9 +99,9 @@ reviewRouter.put("/review/:review_id", upload.array("photo"), async (req, res, n
       photo2 = req.files[0].filename}
 
     const [results, fields, error] = await pool.query(
-      `UPDATE reviews SET star=${star}, description="${description}", photo="${photo1}, photo2 ="${photo1}" WHERE review_id = ${review_id}`
+      `UPDATE reviews SET star=${star}, description="${description}", photo="${photo1}", photo2 ="${photo2}" WHERE review_id = ${review_id}`
     );
-    const putData = { review_id, star, description, photo };
+    const putData = { review_id, star, description, photo1, photo2};
 
     if (error) throw error;
     res.status(201).send(putData);
@@ -134,8 +135,7 @@ reviewRouter.post(
   async (req, res, next) => {
     try {
       //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
-      // const user_id = req.currentUserId;
-      const user_id = 2;
+      const user_id = req.user_id;
       const review_id = req.params.review_id;
       const tag = 1;
 
@@ -174,8 +174,7 @@ reviewRouter.post(
   async (req, res, next) => {
     try {
       //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
-      // const user_id = req.currentUserId;
-      const user_id = 2;
+      const user_id = req.user_id;
       const review_id = req.params.review_id;
       const tag = 2;
 

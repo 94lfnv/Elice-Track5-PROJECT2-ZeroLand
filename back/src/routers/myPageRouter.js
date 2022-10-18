@@ -6,7 +6,7 @@ const asyncHandler = require("express-async-handler");
 const myPageRouter = express.Router();
 
 //해당 유저 전체 댓글 불러오기
-myPageRouter.get("/mypage/myReview", login_required, async (req, res, next) => {
+myPageRouter.get("/mypage/reviews", login_required, async (req, res, next) => {
     try {
       const user_id = req.user_id;
       // const user_id = 1
@@ -97,11 +97,11 @@ const mypageInfo = async function (req, res, next) {
   }
 };
 
-myPageRouter.get(
-  "/user/reviewList",
-  asyncHandler(login_required),
-  asyncHandler(mypageReviewList)
-);
+// myPageRouter.get(
+//   "/user/reviewList",
+//   asyncHandler(login_required),
+//   asyncHandler(mypageReviewList)
+// );
 myPageRouter.get(
   "/mypage/info",
   asyncHandler(login_required),
