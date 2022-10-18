@@ -52,19 +52,15 @@ function App() {
   const fetchCurrentUser = async() => {
     try {
       const res = await api.get("user");
-      console.log("res:", res)
       const currentUser = res.data;
-      console.log("currentUser:", currentUser);
 
       dispatch({
         type: "LOGIN",
         payload: currentUser,
       });
-      console.log("세션스토리지에 토큰 있음")
     }
     catch (err) {
       console.log(err.message);
-      console.log("세션스토리지에 토큰 없음")
     }
     // fetch 과정이 끝났으므로
     setIsFetchCompleted(true);

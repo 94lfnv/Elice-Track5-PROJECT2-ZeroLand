@@ -6,8 +6,6 @@ import NaverLogin from "./NaverLogin";
 import * as api from "../../utils/Api";
 import { DispatchContext } from "../../App";
 
-//가입한 정보가 없으면 없다고 말해줘야 함...
-//비밀번호 틀렸으면 틀렸다고 말해줘야 함...
 
 function LoginForm () {
     const navigate = useNavigate();
@@ -74,7 +72,6 @@ function LoginForm () {
           setCheckEmail(true);
           setCheckPwd(true);
           navigate("/", { replace: true });
-          console.log("로그인 성공");
         }
       } catch (err) {
         setLogin(false);
@@ -126,9 +123,7 @@ function LoginForm () {
                 <LoginStyled.OutputText className={checkPwd ? 'success' : 'error'}>{pwdMsg}</LoginStyled.OutputText>
                 
                 <LoginStyled.FootBtnBox>
-                    <LoginStyled.FootButton onClick={onSubmit} type="submit" 
-                    // disabled={!isAllValid}
-                    >로그인</LoginStyled.FootButton>
+                    <LoginStyled.FootButton onClick={onSubmit} type="submit" disabled={!isAllValid}>로그인</LoginStyled.FootButton>
 
                     <a href="./register"><LoginStyled.FootButton>회원가입
                     </LoginStyled.FootButton></a>
