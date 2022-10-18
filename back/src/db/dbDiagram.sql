@@ -3,11 +3,11 @@ CREATE TABLE `users` (
   `email` varchar(255),
   `password` varchar(255),
   `nickname` varchar(255) DEFAULT (U.email),
+  `description` varchar(255),
+  `forest_name` varchar(255),
   `profile_photo` varchar(255) DEFAULT ('./default.jpg'),
   `created_time` timestamp,
-  `updated_time` timestamp,
-  `current_latitude` varchar(255),
-  `current_longitude` varchar(255)
+  `updated_time` timestamp
 );
 
 CREATE TABLE `stores` (
