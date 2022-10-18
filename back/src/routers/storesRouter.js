@@ -132,6 +132,59 @@ storesRouter.get("/store/address/:addressId", async (req, res, next) => {
   }
 });
 
+//스토어 찜하기
+storesRouter.post("/stores/:store_id/like", async (req, res, next) => {
+  try {
+    // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
+    // const user_id = req.user_id;
+    const user_id = 2;
+    const store_id = req.params.store_id;
+
+    // // 위 데이터를 유저 db에 추가하기
+    // const [res_save, fld_save, error] = await pool.query(
+    //   `DELETE FROM like_store(user_id,store_id) WHERE review_id=${user_id} and user_id=${store_id} `
+    // );
+    // if (error) throw error;
+
+    const [results, fields, error] = await pool.query(
+      `delete from like_store where store_id="${store_id}" and user_id="${user_id}" ;`
+    );
+
+    // db에 저장
+    const [saveStoreLike, err] = await pool.query(
+      `INSERT INTO like_store(user_id, store_id) VALUES ("${user_id}", '${store_id}');`
+    );
+    if (err) throw err;
+
+    //저장된 데이터
+    const [saveData, , getDataErr] = await pool.query(
+      `SELECT store_id, time FROM like_store WHERE user_id="${user_id}" and store_id="${store_id}"`
+    );
+    if (getDataErr) throw getDataErr;
+
+    console.log(saveData);
+    res.status(201).json(saveData);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//가게찜 삭제
+storesRouter.delete("/store/:store_id/like", async (req, res, next) => {
+  try {
+    // const store_id = req.params.store_id;
+    const user_id = 2;
+    const store_id = req.params.store_id;
+    const [results, fields, error] = await pool.query(
+      `delete from like_store where store_id="${store_id}" and user_id="${user_id}" ;`
+    );
+    if (error) throw error;
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = storesRouter;
 
 //https://data.seoul.go.kr/dataList/OA-21234/S/1/datasetView.do 데이터정보
