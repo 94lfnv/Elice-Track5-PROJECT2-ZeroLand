@@ -2,28 +2,38 @@ const express = require("express");
 const { pool } = require("../db/database");
 // const { reviewService } = require("../services/reviewService");
 const login_required = require("../middlewares/login_required")
+const upload = require("../middlewares/image_upload");
 
 const reviewRouter = express.Router();
 
+
 //스토어 리뷰 달기
-reviewRouter.post("/stores/:store_id/review", login_required, async (req, res, next) => {
+reviewRouter.post("/stores/:store_id/review", upload.array("photo"), async (req, res, next) => {
   try {
     //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
     const user_id = req.user_id;
     // const user_id = 3;
-    const { star, description, photo } = req.body;
+    const { star, description } = req.body;
     const store_id = req.params.store_id;
+
+    //사진 저장. 사진이름 뽑기.
+    let photo1 = req.files[0]
+    let photo2 = req.files[1]
+    if (req.files[0] != undefined){
+      photo1 = req.files[0].filename}
+    if (req.files[1] != undefined){
+      photo2 = req.files[0].filename}
     
     // db에 저장
     const [results, fields, error] = await pool.query({
-      sql: "INSERT INTO reviews (user_id, star, description, photo, store_id) VALUES (?, ?, ?, ?, ?)",
-      values: [user_id, star, description, photo, store_id],
+      sql: "INSERT INTO reviews (user_id, star, description, photo, photo2, store_id) VALUES (?, ?, ?, ?, ?, ?)",
+      values: [user_id, star, description, photo1, photo2, store_id],
     });
     if (error) throw error;
 
     console.log(results);
     const review_id = results.insertId;
-    const saveData = { review_id, star, description, photo };
+    const saveData = { review_id, star, description, photo1, photo2 };
     
     res.status(201).send(saveData);
   } catch (err) {
@@ -37,7 +47,7 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
     const store_id = req.params.store_id;
 
     const [results, fields, error] = await pool.query(
-      `SELECT review_id, star, description, photo, R.created_time, R.updated_time, U.nickname 
+      `SELECT review_id, star, description, R.photo, R.photo2, R.created_time, R.updated_time, U.nickname 
       FROM reviews R 
       INNER JOIN users U 
       ON R.user_id = U.user_id 
@@ -75,13 +85,20 @@ reviewRouter.get("/stores/:store_id/reviews", async (req, res, next) => {
 });
 
 //리뷰 수정하기
-reviewRouter.put("/review/:review_id", async (req, res, next) => {
+reviewRouter.put("/review/:review_id", upload.array("photo"), async (req, res, next) => {
   try {
     const review_id = req.params.review_id;
-    const { star, description, photo } = req.body;
+    const { star, description} = req.body;
+    //사진 저장. 사진이름 뽑기.
+    let photo1 = req.files[0]
+    let photo2 = req.files[1]
+    if (req.files[0] != undefined){
+      photo1 = req.files[0].filename}
+    if (req.files[1] != undefined){
+      photo2 = req.files[0].filename}
 
     const [results, fields, error] = await pool.query(
-      `UPDATE reviews SET star=${star}, description="${description}", photo="${photo}" WHERE review_id = ${review_id}`
+      `UPDATE reviews SET star=${star}, description="${description}", photo="${photo1}, photo2 ="${photo1}" WHERE review_id = ${review_id}`
     );
     const putData = { review_id, star, description, photo };
 
@@ -93,7 +110,7 @@ reviewRouter.put("/review/:review_id", async (req, res, next) => {
 });
 
 //리뷰 지우기
-reviewRouter.delete("/stores/:store_id/:review_id", async (req, res, next) => {
+reviewRouter.delete("/stores/:store_id/:review_id", login_required, async (req, res, next) => {
   try {
     const review_id = req.params.review_id;
     const [results, fields, error] = await pool.query(
@@ -113,6 +130,7 @@ reviewRouter.delete("/stores/:store_id/:review_id", async (req, res, next) => {
 //리뷰 좋아요
 reviewRouter.post(
   "/stores/:store_id/:review_id/like",
+  login_required, 
   async (req, res, next) => {
     try {
       //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
@@ -152,6 +170,7 @@ reviewRouter.post(
 //리뷰 싫어요
 reviewRouter.post(
   "/stores/:store_id/:review_id/dislike",
+  login_required, 
   async (req, res, next) => {
     try {
       //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
