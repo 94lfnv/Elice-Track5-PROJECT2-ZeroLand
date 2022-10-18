@@ -20,6 +20,9 @@ function LoginForm () {
     const [emailMsg, setEmailMsg] = useState("");
     const [pwdMsg, setPwdMsg] = useState('');
 
+    const [checkEamil, setCheckEmail] = useState(false);
+    const [checkPwd, setCheckPwd] = useState(false);
+
     //이메일, 비밀번호 유효성 검사
     const validateEmail = (email) => {
         return email
@@ -49,6 +52,7 @@ function LoginForm () {
 
         const user = res.data;
         const jwtToken = user.token;
+        const { result, errorCause } = res.data;
 
         // 토큰 저장
         sessionStorage.setItem("userToken", jwtToken);
@@ -58,8 +62,20 @@ function LoginForm () {
           payload: user,
         });
 
-        navigate("/", { replace: true });
-        console.log("로그인 성공");
+        if (!result) {
+          if (errorCause === "email") {
+            setEmailMsg("입력하신 이메일이 존재하지 않습니다. 다시 입력해주세요.")
+            setCheckEmail(false);
+          } else if (errorCause === "password") {
+            setPwdMsg("입력하신 비밀번호가 존재하지 않습니다. 다시 입력해주세요.")
+            setCheckPwd(false);
+          }
+        } else {
+          setCheckEmail(true);
+          setCheckPwd(true);
+          navigate("/", { replace: true });
+          console.log("로그인 성공");
+        }
       } catch (err) {
         setLogin(false);
         console.log("로그인 실패\n" , err)
@@ -92,25 +108,32 @@ function LoginForm () {
         <LoginStyled.FormBox>
             <LoginStyled.LoginInputBox>
                 <LoginStyled.FormTitle>로그인</LoginStyled.FormTitle>
+
                 <LoginStyled.InputTitle>이메일 주소 *</LoginStyled.InputTitle>
             <LoginStyled.InputText 
                 name="email"
                 type="text"
                 placeholder="ex) zeroland@zeroland.com"
                 onChange={onChangeEmail}/>
-                <LoginStyled.OutputText className={isEmailValid ? 'success' : 'error'}>{emailMsg}</LoginStyled.OutputText>
+                <LoginStyled.OutputText className={checkEamil ? 'success' : 'error'}>{emailMsg}</LoginStyled.OutputText>
+
         <LoginStyled.InputTitle>비밀번호 *</LoginStyled.InputTitle>
             <LoginStyled.InputText 
                 name="password"
                 type="password"
                 placeholder="**********"
                 onChange={onChangePwd}/>
-                <LoginStyled.OutputText className={isPwdValid ? 'success' : 'error'}>{pwdMsg}</LoginStyled.OutputText>
+                <LoginStyled.OutputText className={checkPwd ? 'success' : 'error'}>{pwdMsg}</LoginStyled.OutputText>
+                
                 <LoginStyled.FootBtnBox>
-                    <LoginStyled.FootButton onClick={onSubmit} type="submit" disabled={!isAllValid}>로그인</LoginStyled.FootButton>
+                    <LoginStyled.FootButton onClick={onSubmit} type="submit" 
+                    // disabled={!isAllValid}
+                    >로그인</LoginStyled.FootButton>
+
                     <a href="./register"><LoginStyled.FootButton>회원가입
                     </LoginStyled.FootButton></a>
                 </LoginStyled.FootBtnBox>
+
                 <LoginStyled.LogoBox>
                   <NaverLogin /> 
                   <KaKaoButton />
