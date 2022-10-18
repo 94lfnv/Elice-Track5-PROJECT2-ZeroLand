@@ -73,7 +73,14 @@ const mypageInfo = async function (req, res, next) {
     );
     delete mypageInfo_result.user_id;
     delete mypageInfo_result.password;
-    res.status(200).json(mypageInfo_result);
+    const resultWMessage = Object.assign(
+      {
+        result: true,
+        resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
+      },
+      mypageInfo_result
+    );
+    res.status(200).json(resultWMessage);
   } catch (error) {
     next(error);
   }
