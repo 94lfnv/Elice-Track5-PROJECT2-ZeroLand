@@ -12,7 +12,7 @@ myPageRouter.get("/mypage/reviews", login_required, async (req, res, next) => {
       // const user_id = 1
   
     let [results, fields, error] = await pool.query(
-      `SELECT R.review_id, R.star, R.description, R.photo, R.created_time, R.updated_time, S.name as store_name 
+      `SELECT R.review_id, R.star, R.description, R.photo, R.photo2, R.created_time, R.updated_time, S.name as store_name 
       FROM reviews R
       INNER JOIN stores S
       ON R.store_id = S.store_id
