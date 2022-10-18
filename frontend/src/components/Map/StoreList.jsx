@@ -11,7 +11,7 @@ function StoreList() {
     const resultStores = await Api.get('store');
     setStores(resultStores.data);
   };
-  console.log(stores);
+
   useEffect(() => {
     getStores();
   }, []); // 전체 가게 리스트 불러오기

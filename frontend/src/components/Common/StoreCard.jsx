@@ -1,5 +1,6 @@
 import React from "react"
 import StarRate from "./StarRate.jsx"
+import { Link } from "react-router-dom";
 
 function StoreCard({
     store_id,
@@ -14,7 +15,7 @@ function StoreCard({
             <div className="col-md-8">
                 <div className="card-body">
                     <div className="row">
-                        <h4 className="col card-title text-dark"><a href="/storepage">{name}</a></h4>
+                        <Link state={{ data: {store_id}}} to={"/storepage"}>{name}</Link>
                         <h5 className="col text-secondary">{address_detail}</h5>
                         {/* <div className="col"><StarRate star={star} /></div> */}
                     </div>

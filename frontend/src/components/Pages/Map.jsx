@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React from "react"
 
 import Location from "../Map/Location";
 import StoreList from "../Map/StoreList";

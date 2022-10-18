@@ -9,7 +9,10 @@ import * as Api from "../../utils/Api";
 
 function StoreReviewEditForm({
     setIsEditing,
-    store_id
+    reviewId,
+    clickedStoreId,
+    setReviews,
+    currentUser,
 }) {
     const [star, setStar] = useState("");
     const [description, setDescription] = useState("");
@@ -18,14 +21,14 @@ function StoreReviewEditForm({
         e.preventDefault();
         e.stopPropagation();
 
-        await Api.put(`review/${review_id}`, {
+        await Api.put(`review/${reviewId}`, {
             star,
             description,
         });
 
-        const res = await Api.get(`/stores/${store_id}/reviews`);
+        const res = await Api.get(`stores/${clickedStoreId}/reviews`);
         const UpdateReview = res.data;
-        // UpdateReview로 기존 리뷰 대체... setReview(UpdateReview) ?
+        setReviews(UpdateReview);
         setIsEditing(false);
     };
 
