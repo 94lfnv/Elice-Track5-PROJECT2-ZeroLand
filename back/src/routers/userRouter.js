@@ -45,6 +45,12 @@ const userRegisterEmail = async (req, res, next) => {
           "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.",
         errorCause: "email",
       });
+    } else {
+      res.status(200).json({
+        result: true,
+        resultMessage:
+          "입력하신 email로 가입된 내역이 없습니다. 사용하실 수 있습니다.",
+      });
     }
   } catch (err) {
     next(err);
@@ -365,8 +371,8 @@ const userDelete = async function (req, res, next) {
 
 // api index
 userAuthRouter.get("/userlist", asyncHandler(userList));
-userAuthRouter.get("/user/register/email", asyncHandler(userRegisterEmail));
-userAuthRouter.get(
+userAuthRouter.post("/user/register/email", asyncHandler(userRegisterEmail));
+userAuthRouter.post(
   "/user/register/nickname",
   asyncHandler(userRegisterNickname)
 );
