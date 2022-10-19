@@ -8,8 +8,8 @@ import Rating from "./Rating";
 import * as Api from "../../utils/Api";
 
 function StoreReviewAddForm({
-    store_Id,
-    setReview,
+    clickedStoreId,
+    setReviews,
     setIsAdding,
 }) {
     const [star, setStar] = useState("");
@@ -19,15 +19,13 @@ function StoreReviewAddForm({
         e.preventDefault();
 
         // 리뷰 정보 api에서 post, get
-        await Api.post(`/stores/${store_id}/review`, {
+        await Api.post(`stores/${clickedStoreId}/review`, {
             star,
             description,
         });
 
-        console.log(star);
-
-        const res = await Api.get(`/stores/${store_id}/reviews`); // 해당 스토어 전체 리뷰 가져오기
-        setReview(res.data);
+        const res = await Api.get(`stores/${clickedStoreId}/reviews`); // 해당 스토어 전체 리뷰 가져오기
+        setReviews(res.data);
         setIsAdding(false);
     };
 

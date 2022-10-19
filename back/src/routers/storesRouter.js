@@ -1,10 +1,12 @@
 const express = require("express");
 const { pool, connection } = require("../db/database");
-
+const login_required = require("../middlewares/login_required");
 const storesRouter = express.Router();
+const moment = require("moment-timezone");
+moment.tz.setDefault("Asia/Seoul");
 
-//get요청 /stores/:storeId  (storeId는 1부터 순차적으로 자동 부여됨) 입력시 요청한 한개의 가게를 보여줌
-storesRouter.get("/stores/:storeId", async (req, res, next) => {
+//get요청 /store/:storeId  (storeId는 1부터 순차적으로 자동 부여됨) 입력시 요청한 한개의 가게를 보여줌
+storesRouter.get("/store/:storeId", async (req, res, next) => {
   try {
     const storeId = req.params.storeId;
     const [results, fields, error] = await pool.query(
@@ -17,8 +19,8 @@ storesRouter.get("/stores/:storeId", async (req, res, next) => {
   }
 });
 
-//get요청 /stores 전체 가게 리스트를 보여줌
-storesRouter.get("/stores", async (req, res, next) => {
+//get요청 /store 전체 가게 리스트를 보여줌
+storesRouter.get("/store", async (req, res, next) => {
   try {
     const [results, fields, error] = await pool.query(
       `select * from stores where store_id;`
@@ -75,7 +77,7 @@ storesRouter.post("/stores/add", async (req, res, next) => {
 });
 
 //가게정보 수정 put
-storesRouter.put("/stores/:storeId", async (req, res, next) => {
+storesRouter.put("/store/:storeId", async (req, res, next) => {
   try {
     const storeId = req.params.storeId;
     const {
@@ -105,7 +107,7 @@ storesRouter.put("/stores/:storeId", async (req, res, next) => {
 });
 
 //가게정보 삭제
-storesRouter.delete("/stores/:storeId", async (req, res, next) => {
+storesRouter.delete("/store/:storeId", async (req, res, next) => {
   try {
     const storeId = req.params.storeId;
     const [results, fields, error] = await pool.query(
@@ -119,7 +121,7 @@ storesRouter.delete("/stores/:storeId", async (req, res, next) => {
 });
 
 //get요청 서울시 ㅇㅇ구 ㅇㅇ동에 있는 가게정보 가져오기
-storesRouter.get("/stores/address/:addressId", async (req, res, next) => {
+storesRouter.get("/store/address/:addressId", async (req, res, next) => {
   try {
     const addressId = req.params.addressId;
     const [results, fields, error] = await pool.query(
@@ -132,4 +134,69 @@ storesRouter.get("/stores/address/:addressId", async (req, res, next) => {
   }
 });
 
+//스토어 찜하기
+storesRouter.post(
+  "/stores/:store_id/like",
+  login_required,
+  async (req, res, next) => {
+    try {
+      // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
+      // const user_id = req.user_id;
+      const user_id = req.user_id;
+      const store_id = req.params.store_id;
+      const time = moment().format("YYYY-MM-DD HH:mm:ss");
+
+      // // 위 데이터를 유저 db에 추가하기
+      // const [res_save, fld_save, error] = await pool.query(
+      //   `DELETE FROM like_store(user_id,store_id) WHERE review_id=${user_id} and user_id=${store_id} `
+      // );
+      // if (error) throw error;
+
+      const [results, fields, error] = await pool.query(
+        `delete from like_store where store_id="${store_id}" and user_id="${user_id}" ;`
+      );
+
+      // db에 저장
+      const [saveStoreLike, err] = await pool.query(
+        `INSERT INTO like_store(user_id, store_id, time) VALUES ("${user_id}", '${store_id}','${time}');`
+      );
+      if (err) throw err;
+
+      //저장된 데이터
+      const [saveData, , getDataErr] = await pool.query(
+        `SELECT store_id, time FROM like_store WHERE user_id="${user_id}" and store_id="${store_id}"`
+      );
+      if (getDataErr) throw getDataErr;
+
+      console.log(saveData);
+      res.status(201).json(saveData);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+//가게찜 삭제
+storesRouter.delete(
+  "/store/:store_id/like",
+  login_required,
+  async (req, res, next) => {
+    try {
+      const user_id = req.user_id;
+      // const store_id = req.params.store_id;
+      // const user_id = 2;
+      const store_id = req.params.store_id;
+      const [results, fields, error] = await pool.query(
+        `delete from like_store where store_id="${store_id}" and user_id="${user_id}" ;`
+      );
+      if (error) throw error;
+      res.status(200).json(results);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 module.exports = storesRouter;
+
+//https://data.seoul.go.kr/dataList/OA-21234/S/1/datasetView.do 데이터정보

@@ -1,30 +1,26 @@
-import React, { useState } from "react"
+import React from "react"
 import StarRate from "./StarRate.jsx"
+import { Link } from "react-router-dom";
 
-const testStoreData = {
-    "store_id": 1,
-    "name": "ㅇㅇ샵",
-    "address_detail":"서울시 강남구 아차산로17길 48",
-    "description": "서울시 ~",
-    "star_avg": 3
-};
-
-function StoreCard({ // StoreList에서 넘겨준 거 다 들고 와야 함
+function StoreCard({
+    store_id,
+    name,
+    address_detail,
+    description, // StoreList에서 넘겨준 거 다 들고 와야 함
+    star_avg
 }) {
+
   return(
     <div className="card mb-3">
         <div className="row g-0">
-            <div className="col-md-4">
-                {/* <img src="..." class="img-fluid rounded-start" alt="..."> */}
-            </div>
             <div className="col-md-8">
                 <div className="card-body">
                     <div className="row">
-                        <h4 className="col card-title text-dark"><a href="/storepage">{testStoreData.name}</a></h4>
-                        <h5 className="col text-secondary">{testStoreData.address_detail}</h5>
-                        <div className="col"><StarRate star={testStoreData.star_avg} /></div>
+                        <Link state={{ data: {store_id}}} to={"/storepage"}>{name}</Link>
+                        <h5 className="col text-secondary">{address_detail}</h5>
+                        {/* <div className="col"><StarRate star={star} /></div> */}
                     </div>
-                    <p className="card-text text-secondary">{testStoreData.description}</p>
+                    <p className="card-text text-secondary">{description}</p>
                 </div>
             </div>
         </div>

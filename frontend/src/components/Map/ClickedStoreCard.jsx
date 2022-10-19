@@ -1,32 +1,35 @@
-import React, {useState} from "react"
+import React, { useState, useEffect } from "react"
 import StarRate from "../Common/StarRate";
-
-const testStoreData = {
-    "store_id": 1,
-    "name": "ㅇㅇ샵",
-    "address_detail":"서울시 강남구 아차산로17길 48",
-    "description": "서울시 ~",
-    "star_avg": 3.75
-};
+import * as Api from "../../utils/Api";
 
 function ClickedStoreCard({
-    store_id, // 클릭된 가게 id로 정보 get
+    clickedStoreId
 }) {
-  return(
-    <div className="card mb-3">
-        <div className="row g-0">
-            <div className="col-md-8">
-                <div className="card-body">
-                    <div className="row">
-                        <h4 className="col card-title text-dark">{testStoreData.name}</h4>
-                        <h5 className="col text-secondary">{testStoreData.address_detail}</h5>
-                        <div className="col"><StarRate /></div>
+    const [thisStore, setThisStore] = useState([]);
+
+    const getThisStore = async () => {
+        const resultThisStore = await Api.get(`store/${clickedStoreId}`);
+        setThisStore(resultThisStore.data);
+    };
+    useEffect(() => {
+        getThisStore();
+    }, []); // 클릭한 가게 정보만 불러오기
+
+    return(
+        <div className="card mb-3">
+            <div className="row g-0">
+                <div className="col-md-8">
+                    <div className="card-body">
+                        <div className="row">
+                            <h4 className="col card-title text-dark">{thisStore[0]?.name}</h4>
+                            <h5 className="col text-secondary">{thisStore[0]?.address_detail}</h5>
+                            <div className="col"><StarRate /></div>
+                        </div>
+                        <p className="card-text text-secondary">{thisStore[0]?.description}</p>
                     </div>
-                    <p className="card-text text-secondary">{testStoreData.description}</p>
                 </div>
             </div>
         </div>
-    </div>
   )
 }
 

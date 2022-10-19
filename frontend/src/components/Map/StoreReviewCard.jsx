@@ -6,17 +6,16 @@ import * as Api from "../../utils/Api";
 
 import swal from "sweetalert";
 
-const testReviewData = {
-    "review_id": 11,
-    "star": 70,
-    "description": "이거 샀는데 짱임"
-};
-
 function StoreReviewCard({
-    currentReview, // 현재 리뷰 카드 (review_id...?)
-    isEditable,
-    setIsEditing,
-    setReviews,
+  nickname,
+  description,
+  star,
+  clickedStoreId,
+  currentUser,
+  isEditable,
+  setIsEditing,
+  reviewId,
+  setReviews,
 }) {
   const handleDelete = async (e) => { // 삭제함수
     e.preventDefault();
@@ -31,9 +30,9 @@ function StoreReviewCard({
         dangerMode: true,
       }).then(async (willDelete) => {
         if (willDelete) {
-          // await Api.delete(`stores/{store_id}/{review_id}`);
-          // const res = await Api.get(`stores/{store_id}/reviews`);
-          // setReviews(res.data);
+          await Api.delete(`stores/${clickedStoreId}/${reviewId}`);
+          const res = await Api.get(`stores/${clickedStoreId}/reviews`);
+          setReviews(res.data);
           swal("삭제 완료", "리뷰가 삭제되었습니다.", "success");
         } else {
           swal("삭제 취소", "리뷰가 삭제되지 않았습니다.", "info");
@@ -48,11 +47,11 @@ function StoreReviewCard({
     <Row className="mb-4">
       <Col>
         <Card.Text>
-          <span className="text-muted">{testReviewData.review_id}</span>
+          <span className="text-muted">{nickname}</span>
           <br />
-          <span className="text-muted"><StarRate star={testReviewData.star} /></span>
+          <span className="text-muted"><StarRate star={star} /></span>
           <br />
-          <span className="text-muted">{testReviewData.description}</span>
+          <span className="text-muted">{description}</span>
         </Card.Text>
       </Col>
       {isEditable && (

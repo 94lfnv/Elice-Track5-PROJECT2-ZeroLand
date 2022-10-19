@@ -1,37 +1,52 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
-
 import * as Api from "../../utils/Api";
 
 import ClickedStoreCard from './ClickedStoreCard';
-import StoreReviewList from './StoreReviewList';
-import StoreReviewAddForm from './StoreReviewAddForm';
+import StoreReviews from "./StoreReviews";
+import StoreReviewAddForm from "./StoreReviewAddForm";
+import { useLocation } from "react-router-dom";
 
-function StorePage ({ store_id }) {
-    const [reviewOwner, setReviewOwner] = useState(null); // 리뷰 수정 여부 파악하기 위한 리뷰 오너 아이디
-    const [reviews, setReviews] = useState([]);
-    const [isAddable, setIsAddable] = useState(true); // 로그인 상태에서만 작성 가능 (원래 기본은 false / 지금은 테스트용)
-    const [isAdding, setIsAdding] = useState(false);
 
-    useEffect(() => {
-      Api.get(`stores/{store_id}/reviews`).then((res) => 
-        setReviews(res.data)
-      );
-    }, [store_id]);
+function StorePage ({
+}) {
+  const [currentUser, setCurrentUser] = useState(""); // 리뷰 수정 여부 체크 위한 현재 로그인 중인 유저 닉네임
+  const [reviews, setReviews] = useState([]); // 해당 가게 전체 리뷰
+  const [isAddable, setIsAddable] = useState(true); // 로그인 상태에서만 작성 가능
+  const [isAdding, setIsAdding] = useState(false);
+  
+  const clickedStore = useLocation();
+  const clickedStoreId = clickedStore.state.data.store_id; // 선택한 가게 store_id
 
-    return (
-      <Card className="mb-4">
+  const getNickname = async () => {
+    const resultNickname = await Api.get('user');
+    setCurrentUser(resultNickname.data.nickname);
+  };
+  useEffect(() => {
+    getNickname();
+  }, []); // 현재 로그인 중인 유저 닉네임 받아오기
+
+  const getReviews = async () => {
+    const resultReviews = await Api.get(`stores/${clickedStoreId}/reviews`);
+    setReviews(resultReviews.data);
+  };
+  useEffect(() => {
+    getReviews();
+  }, []) // 해당 가게 전체 리뷰 불러오기
+
+  return (
+    <Card className="mb-4">
       <Card.Body>
         <Card.Title>가게 정보</Card.Title>
-        <ClickedStoreCard />
-        <StoreReviewList /> {/* 임시 */}
-        {/* {reviews.map((review) => (
-          <StoreReviewList
-            review={review}
-            setReviews={setReviews}
-            reviewOwner={reviewOwner}
-          />
-        ))} */}
+        <ClickedStoreCard
+          clickedStoreId={clickedStoreId}
+        />
+        <StoreReviews
+          clickedStoreId={clickedStoreId}
+          currentUser={currentUser}
+          reviews={reviews}
+          setReviews={setReviews}
+        />
         {isAddable && (
           <Row className="mt-3 text-center">
             <Col sm={{ span: 20 }}>
@@ -43,7 +58,7 @@ function StorePage ({ store_id }) {
         )}
         {isAdding && (
           <StoreReviewAddForm
-            reviewOwner={reviewOwner}
+            clickedStoreId={clickedStoreId}
             setReviews={setReviews}
             setIsAdding={setIsAdding}
           />
