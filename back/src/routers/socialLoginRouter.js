@@ -1,6 +1,11 @@
 const express = require("express");
 const axios = require("axios");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const moment = require("moment-timezone");
+moment.tz.setDefault("Asia/Seoul");
 const asyncHandler = require("../util/asyncHandler");
+const { pool } = require("../db/database");
 // const kakaoService = require("../services/kakaoService.js");
 // const naverService = require("../services/naverService.js");
 const request = require("request");
@@ -98,8 +103,114 @@ const naverReqToken = async (req, res, next) => {
 ////////////////////////////////////////
 /////////////  카  카  오  ///////////////
 ////////////////////////////////////////
-//////// 토큰 받는 것 까지 정상 작동//////////
+// POST: kakao api 회원가입
 const kakaoSignin = async (req, res, next) => {
+  const code = req.body.code;
+  const REST_API_KEY = "9fd6d9d615c25ff01b60a3a988e942bc";
+  const REDIRECT_URI = "http://127.0.0.1:5173/login/oauth2/code/kakao";
+  try {
+    let kakaoToken = "";
+    await axios({
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+      url: "https://kauth.kakao.com/oauth/token",
+      data: makeFormData({
+        grant_type: "authorization_code",
+        client_id: REST_API_KEY,
+        redirect_uri: REDIRECT_URI,
+        code: code,
+      }),
+    })
+      .then((res) => {
+        kakaoToken = res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    ///////정보 받아오기///////
+    let kakaoUser = "";
+    const access_token = JSON.stringify(kakaoToken.access_token);
+    await axios({
+      method: "GET",
+      headers: {
+        Authorization: `bearer ${access_token}`,
+      },
+      url: "https://kapi.kakao.com/v1/oidc/userinfo",
+    })
+      .then((res) => {
+        console.log("res_raw: ", res);
+        kakaoUser = res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("before_JSON.stringify: ", kakaoUser.email);
+    const kakaoUserEmail = JSON.stringify(kakaoUser.email);
+
+    // 이메일 중복 확인
+    const [res_checkID, fld_checkID, err_checkID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [kakaoUserEmail],
+    });
+    if (err_checkID) throw err_checkID;
+    else if (JSON.stringify(res_checkID) !== "[]") {
+      res.status(200).json({
+        result: false,
+        errorMessage:
+          "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "email",
+      });
+    }
+
+    // db에 저장
+    const nickname = "kakao_" + kakaoUserEmail;
+    const [res_save, fld_save, err_save] = await pool.query({
+      sql: "INSERT INTO users (email, password, nickname, provider) VALUES (?, ?, ?, ?)",
+      values: [kakaoUserEmail, access_token, nickname, "kakao"],
+    });
+    if (err_save) throw err_save;
+
+    //
+    console.log("JWT 웹 토큰 생성 전");
+    //
+
+    //  JWT 웹 토큰 생성
+    const [res_logID, fld_logID, err_logID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [kakaoUserEmail],
+    });
+    if (err_logID) throw err_logID;
+    const res_logID_arrayId = JSON.stringify(res_logID, ["user_id"]);
+    const res_logID_Id = res_logID_arrayId.replace(/[^0-9]/g, "");
+    const secretKey = process.env.JWT_SECRET_KEY || "jwt-secret-key";
+    const token = jwt.sign({ user_id: res_logID_Id }, secretKey);
+    const [res_logID_tk, fld_logID_tk, err_logID_tk] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [kakaoUserEmail],
+    });
+    if (err_logID_tk) throw err_logID_tk;
+    const userWToken = Object.assign(
+      {
+        result: true,
+        resultMessage: "kakao api를 이용한 회원가입이 성공적으로 이뤄졌습니다.",
+        provider: "kakao",
+        token: token,
+      },
+      res_logID_tk[0]
+    );
+    delete userWToken.user_id;
+    delete userWToken.password;
+    res.status(200).json(userWToken);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// POST: kakao api 로그인
+const kakaoLogin = async (req, res, next) => {
   const code = req.body.code;
   const REST_API_KEY = "9fd6d9d615c25ff01b60a3a988e942bc";
   const REDIRECT_URI = "http://127.0.0.1:5173/login/oauth2/code/kakao";
@@ -147,15 +258,14 @@ const kakaoSignin = async (req, res, next) => {
 
     // 이메일 중복 확인
     const [res_checkID, fld_checkID, err_checkID] = await pool.query({
-      sql: "SELECT * FROM users WHERE `email` = ? ",
+      sql: "SELECT * FROM users WHERE `email` = ? AND 'povider' = 'kakao'",
       values: [kakaoUserEmail],
     });
     if (err_checkID) throw err_checkID;
-    else if (JSON.stringify(res_checkID) !== "[]") {
+    else if (JSON.stringify(res_checkID) === "[]") {
       res.status(200).json({
         result: false,
-        errorMessage:
-          "입력하신 email로 가입된 내역이 있습니다. 다시 한 번 확인해 주세요.",
+        errorMessage: "일치하는 email이 없습니다. 다시 한 번 확인해 주세요.",
         errorCause: "email",
       });
     }
@@ -173,62 +283,6 @@ const kakaoSignin = async (req, res, next) => {
       resultMessage: "kakao api를 이용한 회원가입이 성공적으로 이뤄졌습니다.",
       provider: kakao,
       hashedToken: hashedToken,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const kakaoLogin = async (req, res, next) => {
-  const access_token = req.body.access_token;
-  //   const code = "q9oXFfantmUUdYBKTI70kT2jRAH57gIojFcSPIGNGQs8pgUj0utB9JTHkW205aOJmuw_TQopb9UAAAGD7rfq3g";
-  const REST_API_KEY = "9fd6d9d615c25ff01b60a3a988e942bc";
-  //   const REDIRECT_URI = encodeURI("127.0.0.1:5173/login/oauth2/code/kakao");
-  const REDIRECT_URI = "http://127.0.0.1:5173/login/oauth2/code/kakao";
-  try {
-    const makeFormData = (params) => {
-      const searchParams = new URLSearchParams();
-      Object.keys(params).forEach((key) => {
-        searchParams.append(key, params[key]);
-      });
-      return searchParams;
-    };
-
-    // const [testData, setTestData] = useState([]);
-    // return await axios({
-    await axios({
-      method: "POST",
-      headers: {
-        "content-type": "application/x-www-form-urlencoded;charset=utf-8",
-        Authorization: `bearer ${access_token}`,
-      },
-      url: "https://kauth.kakao.com/v2/user/me",
-      data: makeFormData({
-        grant_type: "authorization_code",
-        secure_resource: false,
-        property_keys: ["kakao_account.email"],
-        // property_keys: ["account_email"],
-      }),
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    ///////
-
-    // console.log("getToken을 전역변수로: ", testData);
-    // res.status(200).json({
-    //   result: true,
-    //   resultMessage: "kakao token이 발급되었습니다.",
-    //   result: kakaoToken,
-    // });
-    res.status(200).json({
-      result: true,
-      resultMessage: "kakao token이 발급되었습니다.",
-      result: res,
     });
   } catch (error) {
     next(error);
