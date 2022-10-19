@@ -141,20 +141,14 @@ const kakaoSignin = async (req, res, next) => {
       url: "https://kapi.kakao.com/v1/oidc/userinfo",
     })
       .then((res) => {
-        console.log("res_raw: ", res);
         kakaoUser = res;
       })
       .catch((err) => {
         console.log(err);
       });
-    // console.log("before_JSON.stringify: ", kakaoUser.email);
-    // console.log("before_JSON.stringify 타입: ", typeof kakaoUser.email);
-    // const kakaoUserEmail = JSON.stringify(kakaoUser.email);
-    const kakaoUserEmail = kakaoUser.email;
-    // console.log("kakaoUserEmail: ", kakaoUserEmail);
-    // console.log("kakaoUserEmail 타입: ", typeof kakaoUserEmail);
 
     // 이메일 중복 확인
+    const kakaoUserEmail = kakaoUser.email;
     const [res_checkID, fld_checkID, err_checkID] = await pool.query({
       sql: "SELECT * FROM users WHERE `email` = ? ",
       values: [kakaoUserEmail],
@@ -245,8 +239,8 @@ const kakaoLogin = async (req, res, next) => {
         console.log(err);
       });
 
-    let kakaoUser = "";
     ///////정보 받아오기///////
+    let kakaoUser = "";
     const access_token = JSON.stringify(kakaoToken.access_token);
     await axios({
       method: "GET",
@@ -256,18 +250,16 @@ const kakaoLogin = async (req, res, next) => {
       url: "https://kapi.kakao.com/v1/oidc/userinfo",
     })
       .then((res) => {
-        console.log("res_raw: ", res);
         kakaoUser = res;
       })
       .catch((err) => {
         console.log(err);
       });
-    console.log("before_JSON.stringify: ", kakaoUser.email);
-    const kakaoUserEmail = JSON.stringify(kakaoUser.email);
 
     // 이메일 중복 확인
+    const kakaoUserEmail = kakaoUser.email;
     const [res_checkID, fld_checkID, err_checkID] = await pool.query({
-      sql: "SELECT * FROM users WHERE `email` = ? AND 'povider' = 'kakao'",
+      sql: "SELECT * FROM users WHERE `email` = ?",
       values: [kakaoUserEmail],
     });
     if (err_checkID) throw err_checkID;
