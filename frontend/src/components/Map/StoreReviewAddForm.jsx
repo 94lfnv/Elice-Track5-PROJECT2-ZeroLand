@@ -29,13 +29,16 @@ function StoreReviewAddForm({
         setIsAdding(false);
     };
 
+    const handleChangeScore = (score) => {
+        setStar(score);
+    };
+
     return (
         <>
         <AddformTitle>리뷰 작성하기</AddformTitle>
         <Form onSubmit={handleSubmit}>
             <Rating
-                value={star}
-                onChange={(e) => setStar.apply(e.target.value)}
+                onChangeScore={handleChangeScore}
             />
             <Form.Group controlId="reviewAddDescription">
                 <Form.Control
