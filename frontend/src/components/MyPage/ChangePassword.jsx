@@ -5,7 +5,8 @@ import Info from "./Info.jsx";
 import { MyPageContext } from "../Pages/Mypage.jsx";
 
 function ChangePassword() {
-  const { changeMenu, setInfo, info } = useContext(MyPageContext);
+  
+  const {changeMenu} = useContext(MyPageContext);
   // 비밀번호 변경 성공하면 메인페이지로 이동?
   const navigate = useNavigate();
   const [pwd, setPwd] = useState("");
@@ -56,8 +57,30 @@ function ChangePassword() {
     setIsAccpted(true);
   }, []);
 
+  // 여기까지 유효성 검사
+
+  // 여기서 부터 put
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setErrMsg("");
+    try {
+      // "awards/수상 id" 엔드포인트로 PUT 요청함.
+      await Api.put(`/user/updatePW`, {
+        current_password:pwd,
+        new_password:confirmPwd,
+      });
+      changeMenu("info");
+      //myPage초기 화면으로 이동 해야함.
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
-    <div>
+    <div onSubmit={handleSubmit}>
       <div className="container my-5 pe-5">
         <div className="row">
           <p className="col text-secondary">이전 비밀번호</p>

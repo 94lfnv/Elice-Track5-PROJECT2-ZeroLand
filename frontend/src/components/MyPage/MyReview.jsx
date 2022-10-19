@@ -20,6 +20,7 @@ function MyReview( ) {
 
   const fetchData = async () =>{  
     const response = await Api.get('mypage/reviews');
+    console.log(response)
     setReviews(response.data);
   };  // GET 요청 함수화
 

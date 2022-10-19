@@ -1,8 +1,9 @@
 import React from "react"
 import StarRate from "./StarRate.jsx"
 
-function ReviewCard(review) {
-
+function ReviewCard({...props}) {
+    const {review}= props  //
+    console.log(review)
   return(
     <div className="card mb-3">
         <div className="row g-0">
@@ -27,7 +28,7 @@ function ReviewCard(review) {
                         {"description" in review ? review.description : ""}
                         </p>
                         <div className="col text-secondary">🧡x
-                        {"like_reviews" in review ? review.like_reviews : 0}
+                        {/* {"like_reviews" in review ? review.like_reviews : 0} */}
                         </div>
                     </div>
                 </div>

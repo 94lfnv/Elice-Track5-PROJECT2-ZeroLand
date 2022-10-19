@@ -1,35 +1,25 @@
 import React, { useContext, useState } from "react";
 import { MyPageContext } from "../Pages/Mypage.jsx";
 import Info from "./Info.jsx";
+import * as Api from "../../utils/Api";
+import { UserStateContext } from "../../App.jsx";
 
 // { name, nickname, introduction, changeMenu }
 function ChangeInfo() {
-  const { changeMenu, setInfo, info } = useContext(MyPageContext);
+
+  const {changeMenu} = useContext(MyPageContext);
   const [changeName, setChangeName] = useState();
-  const [changeNickname, setChangeNickname] = useState();
+  const [changeNickName, setChangeNickName] = useState();
   const [changeIntroduction, setChangeIntroduction] = useState();
+  const {user}=useContext(UserStateContext)
+  console.log(user)
   const [errMsg, setErrMsg] = useState("");
-
-  function changeimg() {}
-
-  //* 변경완료 버튼 클릭 이벤트
-  const handleClickChangeInfo = () => {
-    setInfo({
-      // name: changeName,
-      nickname: changeNickname,
-      introduction: changeIntroduction,
-    });
-    changeMenu("info");
-  };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // currentAward의 user_id를 user_id 변수에 할당함.
-    const user_id = currentAward.user_id;
-
-    if (!changeNickname) {
+    if (!changeNickName) {
       setErrMsg("사용자 이름을 입력해 주세요.");
       return;
     }
@@ -37,11 +27,11 @@ function ChangeInfo() {
     setErrMsg("");
     try {
       // "awards/수상 id" 엔드포인트로 PUT 요청함.
-      await Api.put(`/user/update`, {
-        changeName,
-        description,
+      await Api.put(`/user/updateInfo`, {
+        nickname,  
+        description: changeIntroduction
       });
-
+      changeMenu("info");
       //myPage초기 화면으로 이동 해야함.
     } catch (err) {
       console.log(err);
@@ -49,7 +39,7 @@ function ChangeInfo() {
   };
 
   return (
-    <div onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div className="row">
         {/* <img className="col" onClick={changeimg}></img> */}
         <h4 className="col text-dark">
@@ -71,9 +61,9 @@ function ChangeInfo() {
         <input
           className="col"
           type="text"
-          // placeholder={info.nickname}
-          value={changeNickname}
-          onChange={(e) => setChangeNickname(e.target.value)}
+          // placeholder={info.nickName}
+          value={changeNickName}
+          onChange={(e) => setChangeNickName(e.target.value)}
         />
       </div>
       <div className="row">
@@ -95,7 +85,7 @@ function ChangeInfo() {
         <div>
           <button
             variant="primary"
-            onClick={handleClickChangeInfo}
+            // onClick={handleClickChangeInfo}
             type="submit"
             className="me-3"
           >
@@ -111,7 +101,7 @@ function ChangeInfo() {
           </button>
         </div>
       </div>
-    </div>);
+    </form>);
 }
 
 export default ChangeInfo;
