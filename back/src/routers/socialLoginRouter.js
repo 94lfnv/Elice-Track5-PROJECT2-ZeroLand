@@ -147,8 +147,12 @@ const kakaoSignin = async (req, res, next) => {
       .catch((err) => {
         console.log(err);
       });
-    console.log("before_JSON.stringify: ", kakaoUser.email);
-    const kakaoUserEmail = JSON.stringify(kakaoUser.email);
+    // console.log("before_JSON.stringify: ", kakaoUser.email);
+    // console.log("before_JSON.stringify 타입: ", typeof kakaoUser.email);
+    // const kakaoUserEmail = JSON.stringify(kakaoUser.email);
+    const kakaoUserEmail = kakaoUser.email;
+    // console.log("kakaoUserEmail: ", kakaoUserEmail);
+    // console.log("kakaoUserEmail 타입: ", typeof kakaoUserEmail);
 
     // 이메일 중복 확인
     const [res_checkID, fld_checkID, err_checkID] = await pool.query({
@@ -167,15 +171,20 @@ const kakaoSignin = async (req, res, next) => {
 
     // db에 저장
     const nickname = "kakao_" + kakaoUserEmail;
+    const created_time = moment().format("YYYY-MM-DD HH:mm:ss");
+    const updated_time = moment().format("YYYY-MM-DD HH:mm:ss");
     const [res_save, fld_save, err_save] = await pool.query({
-      sql: "INSERT INTO users (email, password, nickname, provider) VALUES (?, ?, ?, ?)",
-      values: [kakaoUserEmail, access_token, nickname, "kakao"],
+      sql: "INSERT INTO users (email, password, nickname, provider, created_time, updated_time) VALUES (?, ?, ?, ?, ?, ?)",
+      values: [
+        kakaoUserEmail,
+        access_token,
+        nickname,
+        "kakao",
+        created_time,
+        updated_time,
+      ],
     });
     if (err_save) throw err_save;
-
-    //
-    console.log("JWT 웹 토큰 생성 전");
-    //
 
     //  JWT 웹 토큰 생성
     const [res_logID, fld_logID, err_logID] = await pool.query({
@@ -269,25 +278,39 @@ const kakaoLogin = async (req, res, next) => {
         errorCause: "email",
       });
     }
-    // access token 해쉬화
-    const hashedToken = await bcrypt.hash(access_token, 10);
-    const nickname = "kakao_" + kakaoUserEmail;
-    // db에 저장
-    const [res_save, fld_save, err_save] = await pool.query({
-      sql: "INSERT INTO users (email, password, nickname, provider) VALUES (?, ?, ?)",
-      values: [kakaoUserEmail, access_token, nickname, kakao],
+
+    //  JWT 웹 토큰 생성
+    const [res_logID, fld_logID, err_logID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [kakaoUserEmail],
     });
-    if (err_save) throw err_save;
-    res.status(200).json({
-      result: true,
-      resultMessage: "kakao api를 이용한 회원가입이 성공적으로 이뤄졌습니다.",
-      provider: kakao,
-      hashedToken: hashedToken,
+    if (err_logID) throw err_logID;
+    const res_logID_arrayId = JSON.stringify(res_logID, ["user_id"]);
+    const res_logID_Id = res_logID_arrayId.replace(/[^0-9]/g, "");
+    const secretKey = process.env.JWT_SECRET_KEY || "jwt-secret-key";
+    const token = jwt.sign({ user_id: res_logID_Id }, secretKey);
+    const [res_logID_tk, fld_logID_tk, err_logID_tk] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [kakaoUserEmail],
     });
+    if (err_logID_tk) throw err_logID_tk;
+    const userWToken = Object.assign(
+      {
+        result: true,
+        resultMessage: "kakao api를 이용한 로그인이 성공적으로 이뤄졌습니다.",
+        provider: "kakao",
+        token: token,
+      },
+      res_logID_tk[0]
+    );
+    delete userWToken.user_id;
+    delete userWToken.password;
+    res.status(200).json(userWToken);
   } catch (error) {
     next(error);
   }
 };
+
 socialLoginRouter.post("/naverReqToken", asyncHandler(naverReqToken));
 socialLoginRouter.post("/kakaoSignin", asyncHandler(kakaoSignin));
 socialLoginRouter.post("/kakaoLogin", asyncHandler(kakaoLogin));
