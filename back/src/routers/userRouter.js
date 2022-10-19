@@ -238,15 +238,12 @@ const userCurrent = async function (req, res, next) {
   }
 };
 
-// PUT: 유저 정보 업데이트(pw & nickname)
-const userUpdate = async function (req, res, next) {
+// PUT: 유저 정보 업데이트(pw)
+const userUpdatePW = async function (req, res, next) {
   try {
     const email = req.body.email;
     const current_password = req.body.current_password;
     const new_password = req.body.new_password;
-    const nickname = req.body.nickname;
-    const description = req.body.description;
-    const forest_name = req.body.forest_name;
     const updated_time = moment().format("YYYY-MM-DD HH:mm:ss");
     const [res_checkID, fld_checkID, err_checkID] = await pool.query({
       sql: "SELECT * FROM users WHERE `email` = ? ",
@@ -275,15 +272,35 @@ const userUpdate = async function (req, res, next) {
 
     // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
     const [res_userUpdate, fld_userUpdate, err_userUpdate] = await pool.query({
-      sql: "UPDATE users SET `password`=?, `nickname`=?, `description`=?, `forest_name`=?, `updated_time`=? WHERE `email` = ? ",
-      values: [
-        hashedPassword,
-        nickname,
-        description,
-        forest_name,
-        updated_time,
-        email,
-      ],
+      sql: "UPDATE users SET `password`=?, `updated_time`=? WHERE `email` = ? ",
+      values: [hashedPassword, updated_time, email],
+    });
+    if (err_userUpdate) throw err_userUpdate;
+    res.status(200).json({
+      result: true,
+      resultMessage: "비밀번호 업데이트가 성공적으로 이뤄졌습니다.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+// PUT: 유저 정보 업데이트(Info)
+const userUpdateInfo = async function (req, res, next) {
+  try {
+    const email = req.body.email;
+    const nickname = req.body.nickname;
+    const description = req.body.description;
+    const updated_time = moment().format("YYYY-MM-DD HH:mm:ss");
+    const [res_checkID, fld_checkID, err_checkID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [email],
+    });
+    if (err_checkID) throw err_checkID;
+
+    // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
+    const [res_userUpdate, fld_userUpdate, err_userUpdate] = await pool.query({
+      sql: "UPDATE users SET `nickname`=?, `description`=?, `updated_time`=? WHERE `email` = ? ",
+      values: [nickname, description, updated_time, email],
     });
     if (err_userUpdate) throw err_userUpdate;
     res.status(200).json({
@@ -377,9 +394,14 @@ userAuthRouter.get(
 );
 
 userAuthRouter.put(
-  "/user/update",
+  "/user/updatePW",
   asyncHandler(login_required),
-  asyncHandler(userUpdate)
+  asyncHandler(userUpdatePW)
+);
+userAuthRouter.put(
+  "/user/updateInfo",
+  asyncHandler(login_required),
+  asyncHandler(userUpdateInfo)
 );
 userAuthRouter.post(
   "/user/update",
