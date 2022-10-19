@@ -1,14 +1,13 @@
 import React, { useContext, useState } from "react";
 import { MyPageContext } from "../Pages/Mypage.jsx";
 import Info from "./Info.jsx";
+
 // { name, nickname, introduction, changeMenu }
 function ChangeInfo() {
-  const { info, setInfo } = useContext(MyPageContext);
-  const [changeName, setChangeName] = useState(info.name);
-  const [changeNickname, setChangeNickname] = useState(info.nickname);
-  const [changeIntroduction, setChangeIntroduction] = useState(
-    info.introduction
-  );
+  const { changeMenu, setInfo, info } = useContext(MyPageContext);
+  const [changeName, setChangeName] = useState();
+  const [changeNickname, setChangeNickname] = useState();
+  const [changeIntroduction, setChangeIntroduction] = useState();
   const [errMsg, setErrMsg] = useState("");
 
   function changeimg() {}
@@ -16,10 +15,11 @@ function ChangeInfo() {
   //* 변경완료 버튼 클릭 이벤트
   const handleClickChangeInfo = () => {
     setInfo({
-      name: changeName,
+      // name: changeName,
       nickname: changeNickname,
       introduction: changeIntroduction,
     });
+    changeMenu("info");
   };
 
   const handleSubmit = async (e) => {
@@ -51,10 +51,12 @@ function ChangeInfo() {
   return (
     <div onSubmit={handleSubmit}>
       <div className="row">
-        <img className="col" onClick={changeimg}></img>
-        <h4 className="col">{info.nickname}</h4>
+        {/* <img className="col" onClick={changeimg}></img> */}
+        <h4 className="col text-dark">
+          프로필 편집
+        </h4>
       </div>
-      <div className="row">
+      {/* <div className="row">
         <h4 className="col text-dark">이름</h4>
         <input
           className="col"
@@ -63,13 +65,13 @@ function ChangeInfo() {
           value={changeName}
           onChange={(e) => setChangeName(e.target.value)}
         />
-      </div>
+      </div> */}
       <div className="row">
         <h4 className="col text-dark">사용자 이름</h4>
         <input
           className="col"
           type="text"
-          placeholder={info.nickname}
+          // placeholder={info.nickname}
           value={changeNickname}
           onChange={(e) => setChangeNickname(e.target.value)}
         />
@@ -79,13 +81,13 @@ function ChangeInfo() {
         <input
           className="col"
           type="text"
-          placeholder={info.introduction}
+          // placeholder={info.introduction}
           value={changeIntroduction}
           onChange={(e) => setChangeIntroduction(e.target.value)}
         />
       </div>
       <div className="col">
-        <div className="alert alert-info" role="alert">
+        <div className="alert alert-info text-dark" role="alert">
           {errMsg}
         </div>
       </div>
@@ -102,27 +104,14 @@ function ChangeInfo() {
           <button
             variant="secondary"
             onClick={() => {
-              //   changeMenu(<Info changeMenu={changeMenu} />);
+                changeMenu("info");
             }}
           >
             취소
           </button>
         </div>
       </div>
-      {/* 
-
-            <Form.Group as={Row} className="mt-3 text-center mb-4">
-                <Col sm={{ span: 20 }}>
-                <Button variant="primary" type="submit" className="me-3">
-                    확인
-                </Button>
-                <Button variant="secondary" onClick={() => setIsEditing(false)}>
-                    취소
-                </Button>
-                </Col>
-            </Form.Group> */}
-    </div>
-  );
+    </div>);
 }
 
 export default ChangeInfo;

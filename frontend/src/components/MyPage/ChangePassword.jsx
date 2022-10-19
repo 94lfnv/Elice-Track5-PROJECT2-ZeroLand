@@ -2,9 +2,10 @@ import React, { useContext, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import * as ResisterStyled from "../StyledComponents/SignStyled";
 import Info from "./Info.jsx";
+import { MyPageContext } from "../Pages/Mypage.jsx";
 
-function ChangePassword({ changeMenu }) {
-  // const { changeMenu, setInfo, info } = useContext(MyPageContext);
+function ChangePassword() {
+  const { changeMenu, setInfo, info } = useContext(MyPageContext);
   // 비밀번호 변경 성공하면 메인페이지로 이동?
   const navigate = useNavigate();
   const [pwd, setPwd] = useState("");
@@ -125,11 +126,6 @@ function ChangePassword({ changeMenu }) {
             변경하기
           </button>
         </div>
-        <ResisterStyled.FootBtnBox>
-          <ResisterStyled.FootButton type="submit" disabled={!isAllValid}>
-            가입하기
-          </ResisterStyled.FootButton>
-        </ResisterStyled.FootBtnBox>
       </div>
     </div>
   );

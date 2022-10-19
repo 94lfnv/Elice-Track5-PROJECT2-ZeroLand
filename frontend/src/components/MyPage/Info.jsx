@@ -1,33 +1,26 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import ChangePassword from "./ChangePassword.jsx";
 import { MyPageContext } from "../Pages/Mypage.jsx";
+import * as Api from "../../utils/Api";
 
 
-// const info = {
-//   nickname: "사용자 이름",
-//   url: "rabbilt@elice.com",
-//   phone: "010-1010-2020",
-//   introduction: "소개", 
-//   count(store_id): 4,
-//   count(review_id): 8,
-//   count(sticker_id): 6
+// const userInfo = {
+  // nickname: "닉네임",
+  // email: "rabbilt@elice.com",
+  // phone: "010-1010-2020",
+  // introduction: "소개부분", 
+  // myFavStores: 4,
+  // myReviews: 5,
+  // myReward: 8
 // };
 
 function Info() {
   const { changeMenu, setInfo, info } = useContext(MyPageContext);
-  // const [info, setInfo] = useState({
-  //   name: "이름",
-  //   nickname: "사용자 이름",
-  //   url: "rabbilt@elice.com",
-  //   phone: "010-1010-2020",
-  //   introduction: "소개",
-  //   close_time: "오후 10시",
-  //   reviews: "리뷰",
-  //   star_avg: 4.8,
-  // });
+  console.log(info)
 
   const fetchData = async () =>{
-    const response = await axios.get('/user');
+    const response = await Api.get('mypage/info');
+    console.log(response.data)
     setInfo(response.data);
   };
 
@@ -56,7 +49,7 @@ function Info() {
         </svg>
 
         <div className="row">
-          <h2 className="col text-dark">{info.nickname}</h2>
+          <h2 className="col text-dark">{"nickname" in info ? info.nickname : "닉네임"}</h2>
           <button
             className="col btn btn-secondary"
             onClick={() => {
@@ -67,9 +60,9 @@ function Info() {
           </button>
         </div>
 
-        <p>{info.email}</p>
-        <h4>{info.name}</h4>
-        <p>{info.introduction}</p>
+        <p>{"email" in info ? info.email : "이메일"}</p>
+        <h4>{"name" in info ? info.name : "이름"}</h4>
+        <p>{"introduction" in info ? info.introduction : "소개"}</p>
       </div>
       <hr className="ms-3 me-5" style={{ backgroundColor: "gray" }} />
       {/* -------------------------------------------------- */}
@@ -84,8 +77,11 @@ function Info() {
               focusable="false"
             >
               <rect width="100%" height="100%" fill="#777" />
-              <text x="20" y="50%" fill="white" dy=".5em">
-                myFavNum
+              <text x="20" y="50%" fill="white" dy=".5em" onClick={() => {
+              changeMenu("myfav");
+            }}>
+                {/* {userInfo.myFavStores} */}
+                {"myFavStores" in info ? info.myFavStores : 0}
               </text>
             </svg>
             <h2 className="text-dark text-center">관심 상점</h2>
@@ -99,8 +95,11 @@ function Info() {
               focusable="false"
             >
               <rect width="100%" height="100%" fill="#777" />
-              <text x="20" y="50%" fill="white" dy=".5em">
-                myReviewNum
+              <text x="20" y="50%" fill="white" dy=".5em" onClick={() => {
+              changeMenu("myreview");
+            }}>
+                {/* {userInfo.myReviews} */}
+                {"myReviews" in info ? info.myReviews : 0}
               </text>
             </svg>
             <h2 className="text-dark text-center">게시글</h2>
@@ -114,8 +113,11 @@ function Info() {
               focusable="false"
             >
               <rect width="100%" height="100%" fill="#777" />
-              <text x="20" y="50%" fill="white" dy=".5em">
-                myRewardNum
+              <text x="20" y="50%" fill="white" dy=".5em" onClick={() => {
+              changeMenu("reward");
+            }}>
+                {/* {userInfo.myReward} */}
+                {"myReward" in info ? info.myReward : 0}
               </text>
             </svg>
             <h2 className="text-dark text-center">활동 배지</h2>

@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ReviewCard from "../Common/ReviewCard.jsx";
-
+import * as Api from "../../utils/Api";
+import { MyPageContext } from "../Pages/Mypage.jsx";
 
 function MyReview( ) {
 
-  // 실험 코드
-  // const review=[{
-  //   review_id: 1,
-  //   star: 4.8,
-  //   description: "대구시 달서구",
-  //   photo: null,
-  //   created_time:'2022.10.15',
-  //   updated_time:'2022.10.16',
-  //   user_id: 'kyuzii',
-  //   store_id: '두남자찜닭',
-  //   like_reviews: 6
-  // }]
-
-
-  const [review,setReview] = useState(null);
+  const { setReviews, reviews } = useContext(MyPageContext);
+  // const [reviews,setReviews] = useState([{
+  //   review_id: 0,
+  //   star: 0,
+  //   description: "",
+  //   // photo: null,
+  //   created_time:"",
+  //   updated_time:"",
+  //   user_id: "",
+  //   store_id: "",
+  //   like_reviews: 0
+  // }]);
 
   const fetchData = async () =>{  
-    const response = await axios.get('/user/reviewList');
-    setReview(response.data);
+    const response = await Api.get('mypage/reviews');
+    setReviews(response.data);
   };  // GET 요청 함수화
 
   useEffect(()=>{  //무한루프 실행을 피하기 위해 useEffect를 이용. server의 값을 받아옴.
@@ -31,17 +29,20 @@ function MyReview( ) {
 
   return(
     <>
-      {review?.map((review) =>( // map 할 값이 없을 때 에러를  피하기 위해 .map 앞에 '?'를 추가
+      {reviews?.map((review) =>( // map 할 값이 없을 때 에러를  피하기 위해 .map 앞에 '?'를 추가
         <ReviewCard
-          review_id={review.review_id}
-          star={review.star}
-          description={review.description}
-          photo={review.photo}
-          created_time={review.created_time}
-          updated_time={review.updated_time}
-          user_id={review.user_id}
-          store_id={review.store_id}
-          like_reviews={review.like_reviews}
+          review={review}
+          // review_id={review.review_id}
+          // star={review.star}
+          // description={review.description}
+          // photo={review.photo}
+          // photo2={review.photo2}
+          // created_time={review.created_time}
+          // updated_time={review.updated_time}
+          // user_id={review.user_id}
+          // store_name={review.store_name}
+          // like_reviews={review.like_reviews}
+          // dike_reviews={review.dike_reviews}
         />
       ))}
     </>
