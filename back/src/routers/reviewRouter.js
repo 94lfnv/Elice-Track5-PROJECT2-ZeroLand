@@ -16,6 +16,7 @@ reviewRouter.post("/stores/:store_id/review", login_required, upload.array("phot
     // const user_id = 3;
     const { star, description } = req.body;
     const store_id = req.params.store_id;
+    
     let photo1;
     let photo2;
     //사진 저장. 사진이름 뽑기.
@@ -96,12 +97,17 @@ reviewRouter.put("/review/:review_id", login_required, upload.array("photo"), as
     const { star, description} = req.body;
 
     //사진 저장. 사진이름 뽑기.
-    let photo1 = req.files[0]
-    let photo2 = req.files[1]
-    if (req.files[0] != undefined){
-      photo1 = req.files[0].filename}
-    if (req.files[1] != undefined){
-      photo2 = req.files[0].filename}
+    if (req.files) {
+      photo1 = req.files[0]||""
+      photo2 = req.files[1]||""
+      if (req.files[0] != undefined){
+        photo1 = req.files[0].filename}
+      if (req.files[1] != undefined){
+        photo2 = req.files[0].filename}
+    } else {
+      photo1 = "";
+      photo2= "";
+    };
 
     const [results, fields, error] = await pool.query(
       `UPDATE reviews SET star=${star}, description="${description}", photo="${photo1}", photo2 ="${photo2}" WHERE review_id = ${review_id}`

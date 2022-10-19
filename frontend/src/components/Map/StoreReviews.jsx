@@ -21,7 +21,7 @@ function StoreReviews ({
             {isEditing ? (
                 <StoreReviewEditForm
                     setIsEditing={setIsEditing}
-                    reviewId={reviews.review_id}
+                    reviewId={reviews[0].review_id}
                     clickedStoreId={clickedStoreId}
                     setReviews={setReviews}
                     currentUser={currentUser}

@@ -20,8 +20,6 @@ function StoreReviewAddForm({
         e.preventDefault();
         e.stopPropagation();
 
-        console.log({star, description, photo});
-
         // 리뷰 등록
         await Api.post(`stores/${clickedStoreId}/review`, {
             star,
