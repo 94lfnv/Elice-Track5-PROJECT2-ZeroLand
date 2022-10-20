@@ -97,6 +97,36 @@ const mypageInfo = async function (req, res, next) {
   }
 };
 
+//좋아요 상점 목록 불러오기
+myPageRouter.get("/mypage/stores", login_required, async (req, res, next) => {
+  try {
+    const user_id = req.user_id;
+
+  let [results, fields, error] = await pool.query(
+    `select LS.like_store_id, S.* from like_store LS 
+    inner join stores S
+    on S.store_id = LS.store_id 
+    where user_id = ${user_id}`
+  );
+  
+  for (var i = 0; i < results.length; i++) {
+    let k = results[i].store_id;
+    const [avg_star] = await pool.query(
+      `select avg(star) as avg_star from reviews where store_id = ${k}`
+    )
+    results[i].avg_star = avg_star[0].avg_star
+  }
+
+  console.log(results);
+
+  if (error) throw error;
+
+  res.status(201).json(results);
+} catch (err) {
+  next(err);
+}
+});
+
 // myPageRouter.get(
 //   "/user/reviewList",
 //   asyncHandler(login_required),
