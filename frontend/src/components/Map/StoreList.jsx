@@ -1,31 +1,22 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import * as Api from "../../utils/Api";
+import React from "react";
 
 import MapStoreCard from "./MapStoreCard";
 
-function StoreList() {
-  const [stores, setStores] = useState([]);
-
-  const getStores = async () => {
-    const resultStores = await Api.get('store');
-    setStores(resultStores.data);
-  };
-
-  useEffect(() => {
-    getStores();
-  }, []); // 전체 가게 리스트 불러오기
+function StoreList({
+  store_id,
+  name,
+  address_detail,
+  description,
+}) {
 
   return (
     <div className="inner">
-      {stores.map((stores) => (
         <MapStoreCard
-          store_id={stores.store_id}
-          name={stores.name}
-          address_detail={stores.address_detail}
-          description={stores.description}
+          store_id={store_id}
+          name={name}
+          address_detail={address_detail}
+          description={description}
         />
-      ))}
     </div>
   );
 }

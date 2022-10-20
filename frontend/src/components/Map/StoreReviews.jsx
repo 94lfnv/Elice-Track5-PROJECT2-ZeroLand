@@ -12,10 +12,7 @@ function StoreReviews ({
     setReviews,
 }) {
     const [isEditing, setIsEditing] = useState(false); // 리뷰 편집 중인지 아닌지 체크
-
-    // if currentUser == reviews.nickname:
-    //     setIsEditable=true;
-
+    
     return (
         <>
             {isEditing ? (
