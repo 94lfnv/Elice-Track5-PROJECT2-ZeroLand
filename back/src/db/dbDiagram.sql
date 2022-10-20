@@ -27,9 +27,12 @@ CREATE TABLE `stores` (
 
 CREATE TABLE `address` (
   `address_id` int PRIMARY KEY AUTO_INCREMENT,
-  `si_do` varchar(255),
-  `gu` varchar(255),
-  `dong` varchar(255)
+  `si_code` INT,
+  `si` varchar(50),
+  `gu_code` INT,
+  `gu` varchar(50),
+  `dong_code` INT,
+  `dong` varchar(50)
 );
 
 CREATE TABLE `like_store` (
