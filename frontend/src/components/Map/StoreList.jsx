@@ -7,6 +7,7 @@ function StoreList({
   name,
   address_detail,
   description,
+  star,
 }) {
 
   return (
@@ -16,6 +17,7 @@ function StoreList({
           name={name}
           address_detail={address_detail}
           description={description}
+          star={star}
         />
     </div>
   );

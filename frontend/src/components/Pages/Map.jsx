@@ -33,6 +33,7 @@ function Map() {
                 name={stores.name}
                 address_detail={stores.address_detail}
                 description={stores.description}
+                star={stores.avg_star}
               />
             ))}
           </div>
