@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const ARRAY = [0, 1, 2, 3, 4];
 
-function Rating() {
+function Rating({ onChangeScore }) {
   const [clicked, setClicked] = useState([false, false, false, false, false]);
 
   const handleStarClick = index => {
@@ -12,15 +12,9 @@ function Rating() {
     for (let i = 0; i < 5; i++) {
       clickStates[i] = i <= index ? true : false;
     }
+    const score = clickStates.filter((val) => val).length;
+    onChangeScore(score);
     setClicked(clickStates);
-  };
-
-  useEffect(() => {
-    sendReview();
-  }, [clicked]);
-
-  const sendReview = () => {
-    let score = clicked.filter(Boolean).length; // 사용자가 매긴 별점, 이 값을 보내야 함
   };
 
   return (

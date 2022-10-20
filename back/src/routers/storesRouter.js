@@ -10,9 +10,16 @@ storesRouter.get("/store/:storeId", async (req, res, next) => {
   try {
     const storeId = req.params.storeId;
     const [results, fields, error] = await pool.query(
-      `select * from stores where store_id=${storeId};`
+      `select * from stores S where store_id=${storeId};`
     );
     if (error) throw error;
+
+    const [avg_star] = await pool.query(
+      `select avg(star) as avg_star from reviews where store_id = ${storeId}`
+    )
+    results[0].avg_star = avg_star[0].avg_star
+    console.log(results)
+
     res.status(200).json(results);
   } catch (err) {
     next(err);
@@ -23,9 +30,18 @@ storesRouter.get("/store/:storeId", async (req, res, next) => {
 storesRouter.get("/store", async (req, res, next) => {
   try {
     const [results, fields, error] = await pool.query(
-      `select * from stores where store_id;`
+      `select * from stores where store_id ;`
     );
     if (error) throw error;
+
+    for (var i = 0; i < results.length; i++) {
+      let k = results[i].store_id;
+      const [avg_star] = await pool.query(
+        `select avg(star) as avg_star from reviews where store_id = ${k}`
+      )
+      results[i].avg_star = avg_star[0].avg_star
+    }
+    
     res.status(200).json(results);
   } catch (err) {
     next(err);
@@ -141,11 +157,9 @@ storesRouter.post(
   async (req, res, next) => {
     try {
       // jwt토큰에서 추출된 사용자 id를 가지고 db에서 사용자 정보를 찾음.
-      // const user_id = req.user_id;
       const user_id = req.user_id;
       const store_id = req.params.store_id;
-      const time = moment().format("YYYY-MM-DD HH:mm:ss");
-
+      
       // // 위 데이터를 유저 db에 추가하기
       // const [res_save, fld_save, error] = await pool.query(
       //   `DELETE FROM like_store(user_id,store_id) WHERE review_id=${user_id} and user_id=${store_id} `
@@ -158,13 +172,13 @@ storesRouter.post(
 
       // db에 저장
       const [saveStoreLike, err] = await pool.query(
-        `INSERT INTO like_store(user_id, store_id, time) VALUES ("${user_id}", '${store_id}','${time}');`
+        `INSERT INTO like_store(user_id, store_id) VALUES ("${user_id}", '${store_id}');`
       );
       if (err) throw err;
 
       //저장된 데이터
       const [saveData, , getDataErr] = await pool.query(
-        `SELECT store_id, time FROM like_store WHERE user_id="${user_id}" and store_id="${store_id}"`
+        `SELECT store_id, like_store_id, time FROM like_store WHERE user_id="${user_id}" and store_id="${store_id}"`
       );
       if (getDataErr) throw getDataErr;
 

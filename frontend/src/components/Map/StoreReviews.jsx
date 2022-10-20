@@ -12,14 +12,13 @@ function StoreReviews ({
     setReviews,
 }) {
     const [isEditing, setIsEditing] = useState(false); // 리뷰 편집 중인지 아닌지 체크
-    const [isEditable, setIsEditable] = useState(true); // 임시
-
+    
     return (
         <>
             {isEditing ? (
                 <StoreReviewEditForm
                     setIsEditing={setIsEditing}
-                    reviewId={reviews.review_id}
+                    reviewId={reviews[0].review_id}
                     clickedStoreId={clickedStoreId}
                     setReviews={setReviews}
                     currentUser={currentUser}
@@ -30,14 +29,11 @@ function StoreReviews ({
                     <Card.Title>리뷰 목록</Card.Title>
                     {reviews.map((reviews) => (
                         <StoreReviewCard 
-                            nickname={reviews.nickname}
-                            description={reviews.description}
-                            star={reviews.star}
+                            currentReview={reviews}    
                             clickedStoreId={clickedStoreId}
                             currentUser={currentUser}
-                            isEditable={isEditable}
+                            isEditable={currentUser===reviews.nickname}
                             setIsEditing={setIsEditing}
-                            reviewId={reviews.review_id}
                             setReviews={setReviews}
                         />
                     ))}

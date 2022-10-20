@@ -12,7 +12,7 @@ function StorePage ({
 }) {
   const [currentUser, setCurrentUser] = useState(""); // 리뷰 수정 여부 체크 위한 현재 로그인 중인 유저 닉네임
   const [reviews, setReviews] = useState([]); // 해당 가게 전체 리뷰
-  const [isAddable, setIsAddable] = useState(true); // 로그인 상태에서만 작성 가능
+  const [isAddable, setIsAddable] = useState(false); // 로그인 상태에서만 작성 가능해야 함
   const [isAdding, setIsAdding] = useState(false);
   
   const clickedStore = useLocation();
@@ -25,6 +25,14 @@ function StorePage ({
   useEffect(() => {
     getNickname();
   }, []); // 현재 로그인 중인 유저 닉네임 받아오기
+
+  function checkLogin () {
+    if (currentUser != "")
+      setIsAddable(true);
+  };
+  useEffect(() => {
+    checkLogin();
+  }, [currentUser]); // 로그인한 상태인지 아닌지 체크
 
   const getReviews = async () => {
     const resultReviews = await Api.get(`stores/${clickedStoreId}/reviews`);

@@ -23,7 +23,7 @@ function ClickedStoreCard({
                         <div className="row">
                             <h4 className="col card-title text-dark">{thisStore[0]?.name}</h4>
                             <h5 className="col text-secondary">{thisStore[0]?.address_detail}</h5>
-                            <div className="col"><StarRate /></div>
+                            <div className="col"><StarRate star={thisStore[0]?.avg_star} /></div>
                         </div>
                         <p className="card-text text-secondary">{thisStore[0]?.description}</p>
                     </div>

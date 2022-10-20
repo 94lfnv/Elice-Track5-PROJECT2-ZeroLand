@@ -14,19 +14,28 @@ function StoreReviewAddForm({
 }) {
     const [star, setStar] = useState("");
     const [description, setDescription] = useState("");
+    const [photo, setPhoto] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        e.stopPropagation();
 
-        // 리뷰 정보 api에서 post, get
+        // 리뷰 등록
         await Api.post(`stores/${clickedStoreId}/review`, {
             star,
             description,
+            photo,
         });
 
-        const res = await Api.get(`stores/${clickedStoreId}/reviews`); // 해당 스토어 전체 리뷰 가져오기
-        setReviews(res.data);
+        // 등록한 리뷰 포함 해당 스토어 전체 리뷰 가져오기
+        const res = await Api.get(`stores/${clickedStoreId}/reviews`);
+        const UpdateReviews = res.data;
+        setReviews(UpdateReviews);
         setIsAdding(false);
+    };
+
+    const handleChangeScore = (score) => {
+        setStar(score);
     };
 
     return (
@@ -34,15 +43,14 @@ function StoreReviewAddForm({
         <AddformTitle>리뷰 작성하기</AddformTitle>
         <Form onSubmit={handleSubmit}>
             <Rating
-                value={star}
-                onChange={(e) => setStar.apply(e.target.value)}
+                onChangeScore={handleChangeScore}
             />
             <Form.Group controlId="reviewAddDescription">
                 <Form.Control
                     type="text"
                     placeholder="내용을 작성해주세요."
                     value={description}
-                    onChange={(e) => setDescription.apply(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                 />
             </Form.Group>
 

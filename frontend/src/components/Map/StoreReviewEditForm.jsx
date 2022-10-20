@@ -16,14 +16,17 @@ function StoreReviewEditForm({
 }) {
     const [star, setStar] = useState("");
     const [description, setDescription] = useState("");
+    const [photo, setPhoto] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         e.stopPropagation();
+        console.log({star, description, photo});
 
         await Api.put(`review/${reviewId}`, {
             star,
             description,
+            photo,
         });
 
         const res = await Api.get(`stores/${clickedStoreId}/reviews`);
@@ -32,20 +35,23 @@ function StoreReviewEditForm({
         setIsEditing(false);
     };
 
+    const handleChangeScore = (score) => {
+        setStar(score);
+    };
+
     return (
         <>
         <EditformTitle>리뷰 수정하기</EditformTitle>
         <Form onSubmit={handleSubmit}>
             <Rating
-                value={star}
-                onChange={(e) => setStar.apply(e.target.value)}
+                onChangeScore={handleChangeScore}
             />
             <Form.Group controlId="reviewEditDescription">
                 <Form.Control
                     type="text"
                     placeholder="내용을 작성해주세요."
                     value={description}
-                    onChange={(e) => setDescription.apply(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                 />
             </Form.Group>
 
