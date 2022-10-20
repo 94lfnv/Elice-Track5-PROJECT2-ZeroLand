@@ -12,7 +12,7 @@ function ChangeInfo() {
   const [changeNickName, setChangeNickName] = useState();
   const [changeIntroduction, setChangeIntroduction] = useState();
   const {user}=useContext(UserStateContext)
-  console.log(user)
+  // console.log(user)
   const [errMsg, setErrMsg] = useState("");
   
   const handleSubmit = async (e) => {
@@ -24,15 +24,21 @@ function ChangeInfo() {
       return;
     }
 
+    
     setErrMsg("");
-    try {
-      // "awards/수상 id" 엔드포인트로 PUT 요청함.
-      await Api.put(`/user/updateInfo`, {
-        nickname,  
+    try { 
+      await Api.put(`user/updateInfo`, {
+        nickname: changeNickName,  
         description: changeIntroduction
       });
+
+      // console.log("데이터", res.data)
+      console.log({nickname: changeNickName,  
+        description: changeIntroduction})
+
+      //info화면으로 이동.
       changeMenu("info");
-      //myPage초기 화면으로 이동 해야함.
+
     } catch (err) {
       console.log(err);
     }

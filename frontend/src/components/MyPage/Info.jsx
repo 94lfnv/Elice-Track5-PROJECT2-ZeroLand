@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import ChangePassword from "./ChangePassword.jsx";
 import { MyPageContext } from "../Pages/Mypage.jsx";
 import * as Api from "../../utils/Api";
+import Withdrawal from "./Withdrawal.jsx"
 
 
 // const userInfo = {

@@ -3,7 +3,7 @@ const { pool } = require("../db/database");
 // const { reviewService } = require("../services/reviewService");
 const login_required = require("../middlewares/login_required")
 const upload = require("../middlewares/image_upload");
-
+const fs = require("fs");
 const reviewRouter = express.Router();
 
 
@@ -22,7 +22,7 @@ reviewRouter.post("/stores/:store_id/review", login_required, upload.array("phot
     if (req.files[0] != undefined){
       photo1 = req.files[0].filename}
     if (req.files[1] != undefined){
-      photo2 = req.files[0].filename}
+      photo2 = req.files[1].filename}
     
     // db에 저장
     const [results, fields, error] = await pool.query({
@@ -90,6 +90,25 @@ reviewRouter.put("/review/:review_id", login_required, upload.array("photo"), as
     const review_id = req.params.review_id;
     const { star, description} = req.body;
 
+    const [reviewPhoto, filed, err] = await pool.query(
+      `SELECT photo, photo2 FROM reviews WHERE review_id=${review_id};`
+    );
+    if (err) throw err;
+
+    //사진 삭제하기.
+    let file_name = [reviewPhoto[0].photo, reviewPhoto[0].photo2]
+
+    for (let i=0; i<=2; i++) {
+      if (fs.existsSync("uploads/" + file_name[i])) {
+        try {
+          fs.unlinkSync("uploads/" + file_name[i]);
+          console.log("image delete");
+        } catch (deleteError) {
+          console.log(deleteError);
+        }
+      }
+    }
+
     //사진 저장. 사진이름 뽑기.
     let photo1 = req.files[0]
     let photo2 = req.files[1]
@@ -114,11 +133,31 @@ reviewRouter.put("/review/:review_id", login_required, upload.array("photo"), as
 reviewRouter.delete("/stores/:store_id/:review_id", login_required, async (req, res, next) => {
   try {
     const review_id = req.params.review_id;
-    const [results, fields, error] = await pool.query(
-      `DELETE FROM reviews WHERE review_id=${review_id};`
+
+    const [reviewPhoto, filed, error] = await pool.query(
+      `SELECT photo, photo2 FROM reviews WHERE review_id=${review_id};`
     );
     if (error) throw error;
 
+    const [results, fields, err] = await pool.query(
+      `DELETE FROM reviews WHERE review_id=${review_id};`
+    );
+    if (err) throw err;
+    
+    //사진 삭제하기.
+    let file_name = [reviewPhoto[0].photo, reviewPhoto[0].photo2]
+
+    for (let i=0; i<=2; i++) {
+      if (fs.existsSync("uploads/" + file_name[i])) {
+        try {
+          fs.unlinkSync("uploads/" + file_name[i]);
+          console.log("image delete");
+        } catch (deleteError) {
+          console.log(deleteError);
+        }
+      }
+    }
+    
     res.status(201).json({
       message: "리뷰가 삭제되었습니다.",
     });
@@ -126,7 +165,6 @@ reviewRouter.delete("/stores/:store_id/:review_id", login_required, async (req, 
     next(err);
   }
 });
-//예외처리 - 요청한 리뷰가 없을때도 잘삭제됐다고 나옴.
 
 //리뷰 좋아요
 reviewRouter.post(

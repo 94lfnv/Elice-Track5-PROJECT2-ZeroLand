@@ -5,6 +5,7 @@ import MyFav from "../MyPage/MyFav.jsx";
 import MyReview from "../MyPage/MyReview.jsx";
 import ChangeInfo from "../MyPage/ChangeInfo.jsx";
 import ChangePassword from "../MyPage/ChangePassword.jsx";
+import Withdrawal from "../MyPage/Withdrawal.jsx"
 import * as Api from "../../utils/Api";
 
 const navMenuList = [
@@ -21,6 +22,7 @@ const mapPathToComp = {
   myreview: () => <MyReview />,
   changeinfo: () => <ChangeInfo />,
   changepassword: () => <ChangePassword />,
+  withdrawal: () => <Withdrawal />
   // withdrawal: () =>
 };
 
