@@ -14,6 +14,7 @@ function StoreReviewCard({
   isEditable,
   setIsEditing,
   setReviews,
+  onClickEditButton,
 }) {
 
   const handleDelete = async (e) => { // 삭제함수
@@ -62,7 +63,7 @@ function StoreReviewCard({
       {isEditable && (
         <>
           <Col xs="auto">
-            <button onClick={() => setIsEditing(true)} size="sm">
+            <button onClick={() => onClickEditButton(currentReview.review_id)} size="sm">
               편집
             </button>
           </Col>

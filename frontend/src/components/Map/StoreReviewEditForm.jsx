@@ -21,7 +21,6 @@ function StoreReviewEditForm({
     const handleSubmit = async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log({star, description, photo});
 
         await Api.put(`review/${reviewId}`, {
             star,
