@@ -47,13 +47,13 @@ function checkStore(A, B, C, D, S, res) {
         resultMessage: "상점이 지도 프레임 밖에 위해하여 표시되지 않습니다.",
       });
     }
-    ///// else if (x축 기준, A좌표가 D좌표보다 작을 때) /////
+    ///// else if (x축 기준, A좌표가 D좌표보다 작을 때) //// (일 때도 동일)
     // 1) S(x) > LineAB(x), S(y) < LineAB
     // 2) S(x) > LineAD(x), S(y) > LineAD
     // 3) S(x) < LineBC(x), S(y) < LineBC
     // 4) S(x) < LineCD(x), S(y) > LineCD
     // 계산식 (기울기 = y의 증가량/x의 증가량)
-  } else if (A.경도 < D.경도) {
+  } else {
     try {
       const lineAB = function () {
         // 1)
@@ -126,89 +126,89 @@ function checkStore(A, B, C, D, S, res) {
       });
     }
 
-    ///// else (x축 기준, A좌표가 D좌표보다 클 때) /////
-    // 1) S(x) < LineAB(x), S(y) < LineAB
-    // 2) S(x) > LineAD(x), S(y) < LineAD
-    // 3) S(x) < LineBC(x), S(y) > LineB클
-    // 4) S(x) > LineCD(x), S(y) > LineCD
-    // 계산식 (기울기 = y의 증가량/x의 증가량)
-  } else if (A.경도 > D.경도) {
-    try {
-      const lineAB = function () {
-        // 1)
-        const a = (B.위도 - A.위도) / (B.경도 - A.경도); // 기울기
-        const x = S.경도 <= S.위도 / a; // x
-        const y = S.위도 <= S.경도 * a; // y
-        if (x == true && y == true) {
-          return true;
-        } else {
-          return false;
-        }
-      };
-      const lineAD = function () {
-        // 1)
-        const a = (A.위도 - D.위도) / (A.경도 - D.경도); // 기울기
-        const x = S.경도 >= S.위도 / a; // x
-        const y = S.위도 <= S.경도 * a; // y
-        if (x == true && y == true) {
-          return true;
-        } else {
-          return false;
-        }
-      };
-      const lineBC = function () {
-        // 1)
-        const a = (B.위도 - C.위도) / (B.경도 - C.경도); // 기울기
-        const x = S.경도 <= S.위도 / a; // x
-        const y = S.위도 >= S.경도 * a; // y
-        if (x == true && y == true) {
-          return true;
-        } else {
-          return false;
-        }
-      };
-      const lineCD = function () {
-        // 1)
-        const a = (C.위도 - D.위도) / (C.경도 - D.경도); // 기울기
-        const x = S.경도 >= S.위도 / a; // x
-        const y = S.위도 >= S.경도 * a; // y
-        if (x == true && y == true) {
-          return true;
-        } else {
-          return false;
-        }
-      };
-      // promis all 적용이 효율적
-      Promise.all([lineAB, lineAD, lineBC, lineCD]).then((value) => {
-        if (
-          value[0] == true &&
-          value[1] == true &&
-          value[2] == true &&
-          value[3] == true
-        ) {
-          res.json({
-            result: true,
-            resultMessage: "상점이 지도에 표시됩니다.",
-          });
-        } else {
-          res.json({
-            result: false,
-            resultMessage:
-              "상점이 지도 프레임 밖에 위해하여 표시되지 않습니다.",
-          });
-        }
-      });
-    } catch (err) {
-      res.json({
-        result: false,
-        resultMessage: err,
-      });
-    }
-  } else {
-    res.json({
-      result: false,
-      resultMessage: err,
-    });
+    //     ///// else (x축 기준, A좌표가 D좌표보다 클 때) ///// (작을 때도 동일)
+    //     // 1) S(x) < LineAB(x), S(y) < LineAB
+    //     // 2) S(x) > LineAD(x), S(y) < LineAD
+    //     // 3) S(x) < LineBC(x), S(y) > LineB클
+    //     // 4) S(x) > LineCD(x), S(y) > LineCD
+    //     // 계산식 (기울기 = y의 증가량/x의 증가량)
+    //   } else if (A.경도 > D.경도) {
+    //     try {
+    //       const lineAB = function () {
+    //         // 1)
+    //         const a = (B.위도 - A.위도) / (B.경도 - A.경도); // 기울기
+    //         const x = S.경도 <= S.위도 / a; // x
+    //         const y = S.위도 <= S.경도 * a; // y
+    //         if (x == true && y == true) {
+    //           return true;
+    //         } else {
+    //           return false;
+    //         }
+    //       };
+    //       const lineAD = function () {
+    //         // 1)
+    //         const a = (A.위도 - D.위도) / (A.경도 - D.경도); // 기울기
+    //         const x = S.경도 >= S.위도 / a; // x
+    //         const y = S.위도 <= S.경도 * a; // y
+    //         if (x == true && y == true) {
+    //           return true;
+    //         } else {
+    //           return false;
+    //         }
+    //       };
+    //       const lineBC = function () {
+    //         // 1)
+    //         const a = (B.위도 - C.위도) / (B.경도 - C.경도); // 기울기
+    //         const x = S.경도 <= S.위도 / a; // x
+    //         const y = S.위도 >= S.경도 * a; // y
+    //         if (x == true && y == true) {
+    //           return true;
+    //         } else {
+    //           return false;
+    //         }
+    //       };
+    //       const lineCD = function () {
+    //         // 1)
+    //         const a = (C.위도 - D.위도) / (C.경도 - D.경도); // 기울기
+    //         const x = S.경도 >= S.위도 / a; // x
+    //         const y = S.위도 >= S.경도 * a; // y
+    //         if (x == true && y == true) {
+    //           return true;
+    //         } else {
+    //           return false;
+    //         }
+    //       };
+    //       // promis all 적용이 효율적
+    //       Promise.all([lineAB, lineAD, lineBC, lineCD]).then((value) => {
+    //         if (
+    //           value[0] == true &&
+    //           value[1] == true &&
+    //           value[2] == true &&
+    //           value[3] == true
+    //         ) {
+    //           res.json({
+    //             result: true,
+    //             resultMessage: "상점이 지도에 표시됩니다.",
+    //           });
+    //         } else {
+    //           res.json({
+    //             result: false,
+    //             resultMessage:
+    //               "상점이 지도 프레임 밖에 위해하여 표시되지 않습니다.",
+    //           });
+    // }
+    //   });
+    // } catch (err) {
+    //   res.json({
+    //     result: false,
+    //     resultMessage: err,
+    //   });
+    // }
+    //   } else {
+    //     res.json({
+    //       result: false,
+    //       resultMessage: err,
+    //     });
   }
 }
 
