@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import StarRate from "../Common/StarRate";
 import * as Api from "../../utils/Api";
+import StoreLike from "./StoreLike";
 
 function ClickedStoreCard({
     clickedStoreId
@@ -24,6 +25,7 @@ function ClickedStoreCard({
                             <h4 className="col card-title text-dark">{thisStore[0]?.name}</h4>
                             <h5 className="col text-secondary">{thisStore[0]?.address_detail}</h5>
                             <div className="col"><StarRate star={thisStore[0]?.avg_star} /></div>
+                            <StoreLike store_id={clickedStoreId} />
                         </div>
                         <p className="card-text text-secondary">{thisStore[0]?.description}</p>
                     </div>
