@@ -82,14 +82,22 @@ function Mypage() {
 
     // myFav부분
   const [favStores,setFavStores] = useState([{
+
+    // description:"",
+    // photo:"",
+    // photo2:"",
+    // store_name:"",
+    // address_detail:"",
+    // star: 0
     name:"",
     description:"",
+    tag:"",
     url:"",
     phone:"",
-    open_time:"",
-    close_time:"",
-    // reviews:[{}],
-    star_avg:0
+    open_time: null,
+    close_time:null,
+    address_detail:"",
+    avg_star:0
   }])
 
   const changeMenu = (path) => {

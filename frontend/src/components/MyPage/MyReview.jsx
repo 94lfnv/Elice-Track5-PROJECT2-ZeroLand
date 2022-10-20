@@ -2,10 +2,18 @@ import React, { useEffect, useState, useContext } from "react";
 import ReviewCard from "../Common/ReviewCard.jsx";
 import * as Api from "../../utils/Api";
 import { MyPageContext } from "../Pages/Mypage.jsx";
+import Pagination from "./Pagination.jsx"
+
 
 function MyReview( ) {
 
-  const { setReviews, reviews } = useContext(MyPageContext);
+  // 이거 뭐지...
+  // const { setReviews, reviews } = useContext(MyPageContext);
+  const { reviews, setReviews } = useContext(MyPageContext);
+  // 페이지네이션 코드
+  const limit= 4;
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
   // const [reviews,setReviews] = useState([{
   //   review_id: 0,
   //   star: 0,
@@ -30,22 +38,22 @@ function MyReview( ) {
 
   return(
     <>
-      {reviews?.map((review) =>( // map 할 값이 없을 때 에러를  피하기 위해 .map 앞에 '?'를 추가
+      <h2 className="text-dark">My Review</h2>
+      <br />
+      {reviews?.slice(offset, offset + limit).map((review) =>( // map 할 값이 없을 때 에러를  피하기 위해 .map 앞에 '?'를 추가
         <ReviewCard
           review={review}
-          // review_id={review.review_id}
-          // star={review.star}
-          // description={review.description}
-          // photo={review.photo}
-          // photo2={review.photo2}
-          // created_time={review.created_time}
-          // updated_time={review.updated_time}
-          // user_id={review.user_id}
-          // store_name={review.store_name}
-          // like_reviews={review.like_reviews}
-          // dike_reviews={review.dike_reviews}
+
         />
       ))}
+      <footer>
+          <Pagination
+            total={reviews.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        </footer>
     </>
   )}
 

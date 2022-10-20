@@ -18,7 +18,7 @@ function RegisterForm () {
 
   const [isAccepted, setIsAccpted] = useState(false);
   
-
+  
   //각 항목 조건이 맞지 않을 때 띄우는 메시지 
   const [emailMsg, setEmailMsg] = useState("");
   const [pwdMsg, setPwdMsg] = useState('');
