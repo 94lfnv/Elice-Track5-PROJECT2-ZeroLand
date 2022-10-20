@@ -136,6 +136,94 @@ const naverSignin = async (req, res, next) => {
   }
 };
 
+// POST: naver api 로그인
+const naverLogin = async (req, res, next) => {
+  const code = req.body.code;
+  const state = "green";
+  const client_id = "JRa7NrbtcesvuNyjkj6I";
+  const client_secret = "wKlBmjAspw";
+  const redirectURI = "http://127.0.0.1:5173/login/oauth2/code/naver";
+  const encoded = encodeURIComponent(redirectURI);
+  const url = `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${client_id}&client_secret=${client_secret}&redirect_uri=${encoded}&code=${code}&state=${state}`;
+
+  try {
+    let naverToken = "";
+    await axios({
+      method: "GET",
+      url: url,
+    })
+      .then((res) => {
+        naverToken = res;
+      })
+      .catch((err) => {
+        console.log("오류메시지: ", err);
+      });
+
+    ///////정보 받아오기///////
+    let naverUser = "";
+    const access_token = JSON.stringify(naverToken.access_token);
+    await axios({
+      method: "GET",
+      headers: {
+        Authorization: `bearer ${access_token}`,
+      },
+      url: "https://openapi.naver.com/v1/nid/me",
+    })
+      .then((res) => {
+        naverUser = res;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // 이메일 중복 확인
+    const naverUserRes = naverUser.response;
+    const naverUserEmail = naverUserRes.email;
+    const [res_checkID, fld_checkID, err_checkID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [naverUserEmail],
+    });
+    if (err_checkID) throw err_checkID;
+    else if (JSON.stringify(res_checkID) === "[]") {
+      res.status(200).json({
+        result: false,
+        errorMessage: "일치하는 email이 없습니다. 다시 한 번 확인해 주세요.",
+        errorCause: "email",
+      });
+    }
+
+    //  JWT 웹 토큰 생성
+    const [res_logID, fld_logID, err_logID] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [naverUserEmail],
+    });
+    if (err_logID) throw err_logID;
+    const res_logID_arrayId = JSON.stringify(res_logID, ["user_id"]);
+    const res_logID_Id = res_logID_arrayId.replace(/[^0-9]/g, "");
+    const secretKey = process.env.JWT_SECRET_KEY || "jwt-secret-key";
+    const token = jwt.sign({ user_id: res_logID_Id }, secretKey);
+    const [res_logID_tk, fld_logID_tk, err_logID_tk] = await pool.query({
+      sql: "SELECT * FROM users WHERE `email` = ? ",
+      values: [naverUserEmail],
+    });
+    if (err_logID_tk) throw err_logID_tk;
+    const userWToken = Object.assign(
+      {
+        result: true,
+        resultMessage: "naver api를 이용한 로그인이 성공적으로 이뤄졌습니다.",
+        provider: "naver",
+        token: token,
+      },
+      res_logID_tk[0]
+    );
+    delete userWToken.user_id;
+    delete userWToken.password;
+    res.status(200).json(userWToken);
+  } catch (error) {
+    next(error);
+  }
+};
+
 ////////////////////////////////////////
 /////////////  카  카  오  ///////////////
 ////////////////////////////////////////
@@ -340,6 +428,7 @@ const kakaoLogin = async (req, res, next) => {
 };
 
 socialLoginRouter.post("/naverSignin", asyncHandler(naverSignin));
+socialLoginRouter.post("/naverLogin", asyncHandler(naverLogin));
 socialLoginRouter.post("/kakaoSignin", asyncHandler(kakaoSignin));
 socialLoginRouter.post("/kakaoLogin", asyncHandler(kakaoLogin));
 module.exports = socialLoginRouter;
