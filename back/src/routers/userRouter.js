@@ -222,17 +222,24 @@ const userCurrent = async function (req, res, next) {
         values: [user_id],
       });
     if (err_currentUser) throw err_currentUser;
-
-    delete res_currentUser[0].password;
-    delete res_currentUser[0].user_id;
-    const resultWMessage = Object.assign(
-      {
-        result: true,
-        resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
-      },
-      res_currentUser[0]
-    );
-    res.status(200).json(resultWMessage);
+    if (res_currentUser && res_currentUser.length) {
+      // false, 검색된 결과가 없을 때
+      delete res_currentUser[0].password;
+      delete res_currentUser[0].user_id;
+      const resultWMessage = Object.assign(
+        {
+          result: true,
+          resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
+        },
+        res_currentUser[0]
+      );
+      res.status(200).json(resultWMessage);
+    } else {
+      res.status(200).json({
+        result: false,
+        resultMessage: "로그인이 실패했습니다.",
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -423,7 +430,7 @@ userAuthRouter.post(
   asyncHandler(upload.single("file")),
   asyncHandler(profileUpload)
 );
-userAuthRouter.delete(
+userAuthRouter.post(
   "/user/delete",
   asyncHandler(login_required),
   asyncHandler(userDelete)
