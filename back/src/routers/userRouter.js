@@ -378,6 +378,20 @@ const userDelete = async function (req, res, next) {
   }
 };
 
+//한 유저가 좋아요 누른 가게 모아보기
+const userlikestore = async (req, res, next) => {
+  try {
+    const user_id = req.user_id;
+    const [results, fields, error] = await pool.query(
+      `select * from like_store where user_id="${user_id}";`
+    );
+    if (error) throw error;
+    res.status(200).json(results);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // api index
 userAuthRouter.get("/userlist", asyncHandler(userList));
 userAuthRouter.post("/user/register/email", asyncHandler(userRegisterEmail));
@@ -413,6 +427,12 @@ userAuthRouter.delete(
   "/user/delete",
   asyncHandler(login_required),
   asyncHandler(userDelete)
+);
+
+userAuthRouter.get(
+  "/user/like-store",
+  asyncHandler(login_required),
+  asyncHandler(userlikestore)
 );
 
 module.exports = userAuthRouter;

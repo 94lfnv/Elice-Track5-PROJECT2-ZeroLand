@@ -1,13 +1,18 @@
 // 리뷰 수정 창
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
-import StoreReviewList from "./StoreReviewList";
+import styled from 'styled-components';
 
 import Rating from "./Rating";
 
+import * as Api from "../../utils/Api";
+
 function StoreReviewEditForm({
     setIsEditing,
-    store_id
+    reviewId,
+    clickedStoreId,
+    setReviews,
+    currentUser,
 }) {
     const [star, setStar] = useState("");
     const [description, setDescription] = useState("");
@@ -16,24 +21,26 @@ function StoreReviewEditForm({
         e.preventDefault();
         e.stopPropagation();
 
-        await Api.put(`review/${review_id}`, {
+        await Api.put(`review/${reviewId}`, {
             star,
             description,
         });
 
-        const res = await Api.get(`/stores/${store_id}/reviews`);
+        const res = await Api.get(`stores/${clickedStoreId}/reviews`);
         const UpdateReview = res.data;
-        // UpdateReview로 기존 리뷰 대체... setReview(UpdateReview) ?
+        setReviews(UpdateReview);
         setIsEditing(false);
     };
 
     return (
+        <>
+        <EditformTitle>리뷰 수정하기</EditformTitle>
         <Form onSubmit={handleSubmit}>
             <Rating
                 value={star}
                 onChange={(e) => setStar.apply(e.target.value)}
             />
-            <Form.Group controlId="reviewAddDescription">
+            <Form.Group controlId="reviewEditDescription">
                 <Form.Control
                     type="text"
                     placeholder="내용을 작성해주세요."
@@ -51,13 +58,21 @@ function StoreReviewEditForm({
                 </button>
                 <button
                     size="sm"
-                    onClick={() => setIsAdding(false)}
+                    onClick={() => setIsEditing(false)}
                 >
                     취소
                 </button>
             </Form.Group>
         </Form>
+        </>
     );
 }
 
 export default StoreReviewEditForm;
+
+const EditformTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
+  color: black;
+`;

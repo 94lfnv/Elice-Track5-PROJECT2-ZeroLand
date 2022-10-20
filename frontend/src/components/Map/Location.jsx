@@ -1,15 +1,19 @@
 /*global kakao*/
 import { useEffect } from "react";
+import useGeolocation from "../../hooks/useGeolocation";
 
 function Location() {
+  const geo = useGeolocation();
+
     const loadKakaoMap = () => {
       if ("kakao" in window) {
         window.kakao.maps.load(() => {
           const kakaoMap = document.getElementById("kakao-map");
           const mapOption = {
-            center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+            center: new window.kakao.maps.LatLng(geo.lat, geo.lon),
             level: 3,
           };
+
           var map = new window.kakao.maps.Map(kakaoMap, mapOption);
           var positions = [
             {
@@ -27,7 +31,11 @@ function Location() {
             {
                 content: `<div className="inner">근린공원</div>`,
                 latlng: new kakao.maps.LatLng(33.451393, 126.570738)
-            }
+            },
+            {
+              content: `<div className="inner">한라산</div>`,
+              latlng: new kakao.maps.LatLng(33.3617, 126.5292)
+          }
         ];
 
         var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
@@ -85,7 +93,7 @@ function Location() {
       return () => {
         kakaoMapScript.removeEventListener("load", loadKakaoMap);
       };
-    }, []);
+    }, [geo]);
     return (
       <div>
         <div id="kakao-map" style={{ width: "500px", height: "500px", float: "left" }}></div>

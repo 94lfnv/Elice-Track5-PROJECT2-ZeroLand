@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react"
+import React from "react"
 
 import Location from "../Map/Location";
 import StoreList from "../Map/StoreList";
@@ -11,7 +11,7 @@ function Map() {
           <div>
           <h3>내 주변의 제로웨이스트샵</h3>
             <Location /> {/* 카카오맵 api */}
-            <StoreList /> {/* 지도 상에 표시된 가게들 카드 리스트 */}
+            <StoreList /> {/* 가게 리스트 */}
           </div>
         </div>
       </section>

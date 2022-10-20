@@ -1,32 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import { Card, Row, Col } from "react-bootstrap";
+import * as Api from "../../utils/Api";
 
-import StoreCard from '../Common/StoreCard';
-import StoreReviewList from './StoreReviewList';
+import ClickedStoreCard from './ClickedStoreCard';
+import StoreReviews from "./StoreReviews";
+import StoreReviewAddForm from "./StoreReviewAddForm";
+import { useLocation } from "react-router-dom";
+
 
 function StorePage ({
-  store_Id,
-  isEditable, // 로그인한 상태 && 그 리뷰를 작성한 유저인 경우에만 편집 폼이 떠야 함
-  isAddable, // 로그인한 상태에만 리뷰 작성 버튼이 떠야 함
-  review,
-  setReview,
 }) {
-    const [isEditing, setIsEditing] = useState(false);
+  const [currentUser, setCurrentUser] = useState(""); // 리뷰 수정 여부 체크 위한 현재 로그인 중인 유저 닉네임
+  const [reviews, setReviews] = useState([]); // 해당 가게 전체 리뷰
+  const [isAddable, setIsAddable] = useState(true); // 로그인 상태에서만 작성 가능
+  const [isAdding, setIsAdding] = useState(false);
+  
+  const clickedStore = useLocation();
+  const clickedStoreId = clickedStore.state.data.store_id; // 선택한 가게 store_id
 
-    return (
-          <>
-          <StoreCard 
-            currentStore={store_Id}
-            store_Id={store_Id}
+  const getNickname = async () => {
+    const resultNickname = await Api.get('user');
+    setCurrentUser(resultNickname.data.nickname);
+  };
+  useEffect(() => {
+    getNickname();
+  }, []); // 현재 로그인 중인 유저 닉네임 받아오기
+
+  const getReviews = async () => {
+    const resultReviews = await Api.get(`stores/${clickedStoreId}/reviews`);
+    setReviews(resultReviews.data);
+  };
+  useEffect(() => {
+    getReviews();
+  }, []) // 해당 가게 전체 리뷰 불러오기
+
+  return (
+    <Card className="mb-4">
+      <Card.Body>
+        <Card.Title>가게 정보</Card.Title>
+        <ClickedStoreCard
+          clickedStoreId={clickedStoreId}
+        />
+        <StoreReviews
+          clickedStoreId={clickedStoreId}
+          currentUser={currentUser}
+          reviews={reviews}
+          setReviews={setReviews}
+        />
+        {isAddable && (
+          <Row className="mt-3 text-center">
+            <Col sm={{ span: 20 }}>
+              <button onClick={() => setIsAdding(true)}>
+                리뷰 작성하기
+              </button>
+            </Col>
+          </Row>
+        )}
+        {isAdding && (
+          <StoreReviewAddForm
+            clickedStoreId={clickedStoreId}
+            setReviews={setReviews}
+            setIsAdding={setIsAdding}
           />
-          <StoreReviewList
-            currentStore={store_Id}
-            isEditable={isEditable}
-            isAddable={true} // 원래 기본 상태 isAddable={isAddable} 인데 테스트용으로 보이게 함
-            setIsEditing={setIsEditing}
-            setReview={setReview}
-            store_Id={store_Id}
-           />
-      </>
+        )}
+      </Card.Body>
+    </Card>
   );
 }
 
