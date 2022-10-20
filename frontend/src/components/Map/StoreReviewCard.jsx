@@ -3,6 +3,7 @@ import React from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import StarRate from "../Common/StarRate";
 import * as Api from "../../utils/Api";
+import ReviewLike from "./ReviewLike";
 
 import swal from "sweetalert";
 
@@ -51,6 +52,12 @@ function StoreReviewCard({
           <br />
           <span className="text-muted">{currentReview.description}</span>
         </Card.Text>
+      </Col>
+      <Col xs="auto">
+        <ReviewLike 
+          clickedStoreId={clickedStoreId}
+          reviewId={currentReview.review_id}
+        />
       </Col>
       {isEditable && (
         <>

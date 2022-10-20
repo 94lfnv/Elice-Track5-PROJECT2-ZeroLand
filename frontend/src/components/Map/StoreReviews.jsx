@@ -12,13 +12,20 @@ function StoreReviews ({
     setReviews,
 }) {
     const [isEditing, setIsEditing] = useState(false); // 리뷰 편집 중인지 아닌지 체크
+
+    let reviewIds = []; // reviewIds < 리뷰 아이디만 모아둔 거, 이걸 순서대로 넘겨줘야 함
+    let i;
+    for (i=0; i<reviews.length; i++) {
+        reviewIds[i] = reviews[i].review_id;
+    };
+
     
     return (
         <>
             {isEditing ? (
                 <StoreReviewEditForm
                     setIsEditing={setIsEditing}
-                    reviewId={reviews[0].review_id}
+                    reviewId={reviews[0].review_id} // 이 부분 이상함... 
                     clickedStoreId={clickedStoreId}
                     setReviews={setReviews}
                     currentUser={currentUser}
