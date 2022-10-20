@@ -12,6 +12,7 @@ const storesRouter = require("./routers/storesRouter");
 const reviewRouter = require("./routers/reviewRouter");
 const myPageRouter = require("./routers/myPageRouter");
 const introRouter = require("./routers/introRouter");
+const socialLoginRouter = require("./routers/socialLoginRouter");
 
 const app = express();
 // CORS 에러 방지
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 app.use(userAuthRouter);
 app.use(reviewRouter);
 app.use(introRouter);
+app.use(socialLoginRouter);
 
 // app.use(connection);
 // app.use(userList);
