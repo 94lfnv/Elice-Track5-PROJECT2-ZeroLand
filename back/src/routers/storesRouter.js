@@ -17,7 +17,11 @@ storesRouter.get("/store/:storeId", async (req, res, next) => {
     const [avg_star] = await pool.query(
       `select avg(star) as avg_star from reviews where store_id = ${storeId}`
     )
-    results[0].avg_star = avg_star[0].avg_star
+    if (avg_star[0].avg_star == null){
+      results[0].avg_star = 0
+    }else{
+      results[0].avg_star = avg_star[0].avg_star
+    }
     console.log(results)
 
     res.status(200).json(results);
@@ -39,7 +43,11 @@ storesRouter.get("/store", async (req, res, next) => {
       const [avg_star] = await pool.query(
         `select avg(star) as avg_star from reviews where store_id = ${k}`
       )
-      results[i].avg_star = avg_star[0].avg_star
+      if (avg_star[0].avg_star == null){
+        results[i].avg_star = 0
+      }else{
+        results[i].avg_star = avg_star[0].avg_star
+      }
     }
     
     res.status(200).json(results);
