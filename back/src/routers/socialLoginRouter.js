@@ -8,7 +8,7 @@ const asyncHandler = require("../util/asyncHandler");
 const { pool } = require("../db/database");
 // const kakaoService = require("../services/kakaoService.js");
 // const naverService = require("../services/naverService.js");
-const request = require("request");
+// const request = require("request");
 
 const socialLoginRouter = express.Router();
 axios.interceptors.response.use(
@@ -63,15 +63,15 @@ const naverReqToken = async (req, res, next) => {
         "X-Naver-Client-Secret": client_secret,
       },
     };
-    request.get(options, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        res.writeHead(200, { "Content-Type": "text/json;charset=utf-8" });
-        res.end(body);
-      } else {
-        res.status(response.statusCode).end();
-        console.log("error = " + response.statusCode);
-      }
-    });
+    // request.get(options, function (error, response, body) {
+    //   if (!error && response.statusCode == 200) {
+    //     res.writeHead(200, { "Content-Type": "text/json;charset=utf-8" });
+    //     res.end(body);
+    //   } else {
+    //     res.status(response.statusCode).end();
+    //     console.log("error = " + response.statusCode);
+    //   }
+    // });
     /////////
     let naverToken = "";
     await axios({
