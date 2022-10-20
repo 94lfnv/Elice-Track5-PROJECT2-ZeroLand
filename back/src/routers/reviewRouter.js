@@ -12,17 +12,25 @@ reviewRouter.post("/stores/:store_id/review", login_required, upload.array("phot
   try {
     //로그인된 유저를 토큰 값으로 확인한후 user_id를 받아오기
     const user_id = req.user_id;
+
     // const user_id = 3;
     const { star, description } = req.body;
     const store_id = req.params.store_id;
-
+    
+    let photo1;
+    let photo2;
     //사진 저장. 사진이름 뽑기.
-    let photo1 = req.files[0]
-    let photo2 = req.files[1]
-    if (req.files[0] != undefined){
-      photo1 = req.files[0].filename}
-    if (req.files[1] != undefined){
-      photo2 = req.files[1].filename}
+    if (req.files) {
+      photo1 = req.files[0]||""
+      photo2 = req.files[1]||""
+      if (req.files[0] != undefined){
+        photo1 = req.files[0].filename}
+      if (req.files[1] != undefined){
+        photo2 = req.files[0].filename}
+    } else {
+      photo1 = "";
+      photo2= "";
+    };
     
     // db에 저장
     const [results, fields, error] = await pool.query({
@@ -31,10 +39,8 @@ reviewRouter.post("/stores/:store_id/review", login_required, upload.array("phot
     });
     if (error) throw error;
 
-    console.log(results);
     const review_id = results.insertId;
     const saveData = { review_id, star, description, photo1, photo2 };
-    
     res.status(201).send(saveData);
   } catch (err) {
     next(err);
@@ -110,12 +116,17 @@ reviewRouter.put("/review/:review_id", login_required, upload.array("photo"), as
     }
 
     //사진 저장. 사진이름 뽑기.
-    let photo1 = req.files[0]
-    let photo2 = req.files[1]
-    if (req.files[0] != undefined){
-      photo1 = req.files[0].filename}
-    if (req.files[1] != undefined){
-      photo2 = req.files[0].filename}
+    if (req.files) {
+      photo1 = req.files[0]||""
+      photo2 = req.files[1]||""
+      if (req.files[0] != undefined){
+        photo1 = req.files[0].filename}
+      if (req.files[1] != undefined){
+        photo2 = req.files[0].filename}
+    } else {
+      photo1 = "";
+      photo2= "";
+    };
 
     const [results, fields, error] = await pool.query(
       `UPDATE reviews SET star=${star}, description="${description}", photo="${photo1}", photo2 ="${photo2}" WHERE review_id = ${review_id}`

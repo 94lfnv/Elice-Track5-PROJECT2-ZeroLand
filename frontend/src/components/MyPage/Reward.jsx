@@ -27,9 +27,9 @@ function Reward() {
 
           {/* <!-- 자식 div --> */}
             <div style={{position:"absolute", backgroundColor:"blueviolet", opacity:"0.7", width:"100%", height:"100%"}}>
-              <p>그래 친구하자</p>
+              <p>나무</p>
             </div>
-            <p style={{color:"black"}}> 안녕 친구하지 않을래 </p>   
+            <p style={{color:"black"}}> 숲숲숲숲숲숲숲숲숲숲숲숲숲숲숲 </p>   
           </div>  
         </div>
       </div>

@@ -7,16 +7,14 @@ import * as Api from "../../utils/Api";
 import swal from "sweetalert";
 
 function StoreReviewCard({
-  nickname,
-  description,
-  star,
+  currentReview,
   clickedStoreId,
   currentUser,
   isEditable,
   setIsEditing,
-  reviewId,
   setReviews,
 }) {
+
   const handleDelete = async (e) => { // 삭제함수
     e.preventDefault();
     e.stopPropagation();
@@ -30,7 +28,7 @@ function StoreReviewCard({
         dangerMode: true,
       }).then(async (willDelete) => {
         if (willDelete) {
-          await Api.delete(`stores/${clickedStoreId}/${reviewId}`);
+          await Api.delete(`stores/${clickedStoreId}/${currentReview.review_id}`);
           const res = await Api.get(`stores/${clickedStoreId}/reviews`);
           setReviews(res.data);
           swal("삭제 완료", "리뷰가 삭제되었습니다.", "success");
@@ -47,11 +45,11 @@ function StoreReviewCard({
     <Row className="mb-4">
       <Col>
         <Card.Text>
-          <span className="text-muted">{nickname}</span>
+          <span className="text-muted">{currentReview.nickname}</span>
           <br />
-          <span className="text-muted"><StarRate star={star} /></span>
+          <span className="text-muted"><StarRate star={currentReview.star} /></span>
           <br />
-          <span className="text-muted">{description}</span>
+          <span className="text-muted">{currentReview.description}</span>
         </Card.Text>
       </Col>
       {isEditable && (
