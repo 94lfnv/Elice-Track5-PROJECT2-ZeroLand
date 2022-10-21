@@ -3,7 +3,7 @@ import StarRate from "./StarRate.jsx"
 
 function StoreCard({...props}) {
     const {favStore}= props
-    console.log(favStore)
+    console.log(favStore.avg_star)
 
   return(
     <div className="card mb-3">

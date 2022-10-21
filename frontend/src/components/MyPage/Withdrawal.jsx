@@ -10,17 +10,22 @@ function Withdrawal(){
     const {changeMenu} = useContext(MyPageContext);
     const [checkPassword, setCheckPassword] = useState("")
     const {user}=useContext(UserStateContext)
+
+    // 모달 컨펌용
     const [isAccepted, setIsAccpted] = useState(false);
 
+
+    // ????
     const onChangeAccount = (e) => {
       setCheckPassword(e.target.value)
       };
     
     // 회원 탈퇴 delete
-    const handleCheckAccept = useCallback(() => {
-      setIsAccpted(true);
-    }, []);
+    // const handleCheckAccept = useCallback(() => {
+    //   setIsAccpted(true);
+    // }, []);
 
+      
     const handleSubmit = async (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -35,15 +40,16 @@ function Withdrawal(){
         //     return;
         //   }
 
-
         try {
-            // "awards/수상 id" 엔드포인트로 PUT 요청함.
+            
+          console.log({email: user.email,
+            password: checkPassword})
+
             await Api.post(`user/delete`, {
                 email: user.email,
                 password: checkPassword
             });
-            console.log(user.email)
-
+    
 
             changeMenu("info");
             //로그 아웃된 초기 화면으로 이동 해야함.(나중에 변경)
@@ -51,8 +57,11 @@ function Withdrawal(){
             console.log(err);
         }
         };
-
-
+      
+      // 모달 컨펌용
+      const handleCheckAccept = useCallback(() => {
+        setIsAccpted(true);
+      }, []);
 
     return (
         <form onSubmit={handleSubmit}>

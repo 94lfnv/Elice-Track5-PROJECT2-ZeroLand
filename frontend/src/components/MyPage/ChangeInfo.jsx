@@ -24,7 +24,7 @@ function ChangeInfo() {
       return;
     }
 
-    
+
     setErrMsg("");
     try { 
       await Api.put(`user/updateInfo`, {

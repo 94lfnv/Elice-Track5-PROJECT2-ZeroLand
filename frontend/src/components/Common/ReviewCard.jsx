@@ -3,7 +3,7 @@ import StarRate from "./StarRate.jsx"
 
 function ReviewCard({...props}) {
     const {review}= props  //
-    console.log(review)
+    console.log(review.star)
   return(
     <div className="card mb-3">
         <div className="row g-0">
@@ -13,6 +13,7 @@ function ReviewCard({...props}) {
             </div>
             <div className="col-md-8">
                 <div className="card-body">
+                    <img className="ratio ratio-1x1" />
                     <div className="row">
                         <div className="row">
                             <h4 className="col card-title text-secondary">

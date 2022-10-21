@@ -17,11 +17,13 @@ function ChangePassword() {
 
 
   const [confirmPwd, setConfirmPwd] = useState("");
+
   const [isAccepted, setIsAccpted] = useState(false);
 
   const {user}=useContext(UserStateContext)
   const [pwdMsg, setPwdMsg] = useState("");
   const [confirmPwdMsg, setConfirmPwdMsg] = useState("");
+  const {user}=useContext(UserStateContext)
 
   // pw, pw확인 유효성 검사
   const validatePwd = (newPwd) => {
@@ -33,7 +35,7 @@ function ChangePassword() {
   const isConfirmPwd = newPwd === confirmPwd;
   const isAllValid = isPwdValid && isConfirmPwd;
 
-  // 비밀번호
+  // New 비밀번호 유효성 검사
   const onChangePwd = useCallback((e) => {
     const currNewPwd = e.target.value;
     setNewPwd(currNewPwd);
@@ -45,7 +47,7 @@ function ChangePassword() {
     }
   }, []);
 
-  // 비밀번호 확인
+  // confirm 비밀번호 확인
   const onChangeConfirmPwd = useCallback(
     (e) => {
       const currConfirmPwd = e.target.value;
@@ -59,10 +61,6 @@ function ChangePassword() {
     },
     [newPwd]
   );
-
-  const handleCheckAccept = useCallback(() => {
-    setIsAccpted(true);
-  }, []);
 
   // 여기까지 유효성 검사
 
@@ -79,8 +77,10 @@ function ChangePassword() {
         current_password: currentPwd ,
         new_password: newPwd,
       });
+      console.log("성공?")
+      // console.log({currentPwd, newPwd})
+      
       changeMenu("info");
-      //myPage초기 화면으로 이동 해야함.
     } catch (err) {
       console.log(err);
     }
