@@ -19,16 +19,13 @@ export const Chart2 = () => {
         fill: true,
         borderWidth: 1, //경계선 굵기
       },
-    ],
-    options: {
-      scales: {
-        x: {
-          display: false,
-        }
-      }
-    }
+    ]
   };
 
-  return <Bar ref={ref} data={data} />;
+  const options = {
+    options: {indexAxis: 'y'},
+  };
+
+  return <Bar ref={ref} data={data} options={options.options} />;
 };
 export default Chart2;
