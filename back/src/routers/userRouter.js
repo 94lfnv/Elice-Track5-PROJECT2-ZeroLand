@@ -423,7 +423,7 @@ userAuthRouter.post(
   asyncHandler(upload.single("file")),
   asyncHandler(profileUpload)
 );
-userAuthRouter.delete(
+userAuthRouter.post(
   "/user/delete",
   asyncHandler(login_required),
   asyncHandler(userDelete)
