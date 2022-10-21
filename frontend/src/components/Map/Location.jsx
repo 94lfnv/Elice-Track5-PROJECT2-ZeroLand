@@ -7,7 +7,6 @@ function Location({
   stores, counts,
 }) {
   const geo = useGeolocation();
-  // console.log(stores[0].name);
 
   const loadKakaoMap = () => {
     if ("kakao" in window) {
@@ -20,7 +19,7 @@ function Location({
 
         var map = new window.kakao.maps.Map(kakaoMap, mapOption);
 
-        var positions = []
+        let positions = []
         for (i=0; i<counts; i++) {
             positions[i] = {
               content: `<div className="inner">${stores[i].name}</div>`,
