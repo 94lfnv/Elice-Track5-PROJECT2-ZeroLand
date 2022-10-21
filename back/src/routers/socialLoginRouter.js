@@ -26,14 +26,13 @@ const makeFormData = (params) => {
 
 ////////////////////////////////////////
 /////////////  네  이  버  ///////////////
-// FE에서 code를 얻는 곳: https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=JRa7NrbtcesvuNyjkj6I&redirect_uri=http%3A%2F%2F127.0.0.1%3A5173%2Flogin%2Foauth2%2Fcode%2Fnaver&state=green
 ////////////////////////////////////////
 const naverOauth = async (req, res, next) => {
   const code = req.body.code;
-  const state = "green";
-  const client_id = "JRa7NrbtcesvuNyjkj6I";
-  const client_secret = "wKlBmjAspw";
-  const redirectURI = "http://127.0.0.1:5173/login/oauth2/code/naver";
+  const state = process.env.STATE;
+  const client_id = process.env.CLIENT_ID;
+  const client_secret = process.env.CLIENT_SECRET;
+  const redirectURI = process.env.REDIRECT_URL;
   const encoded = encodeURIComponent(redirectURI);
   //   const FE_url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${client_id}&redirect_uri=${encoded}&state=${state}`;
   //   console.log("FE_url: ", FE_url);
@@ -159,13 +158,12 @@ const naverOauth = async (req, res, next) => {
 
 ////////////////////////////////////////
 /////////////  카  카  오  ///////////////
-// FE_URL: kauth.kakao.com/oauth/authorize?client_id=9fd6d9d615c25ff01b60a3a988e942bc&redirect_uri=http://127.0.0.1:5173/login/oauth2/code/kakao&response_type=code
 ////////////////////////////////////////
 // POST: kakao api 회원가입
 const kakaoOauth = async (req, res, next) => {
   const code = req.body.code;
-  const REST_API_KEY = "9fd6d9d615c25ff01b60a3a988e942bc";
-  const REDIRECT_URI = "http://127.0.0.1:5173/login/oauth2/code/kakao";
+  const REST_API_KEY = process.env.KAKAO_REST_API_KEY;
+  const REDIRECT_URI = process.env.KAKAO_REDIRECT_URL;
   try {
     let kakaoToken = "";
     await axios({

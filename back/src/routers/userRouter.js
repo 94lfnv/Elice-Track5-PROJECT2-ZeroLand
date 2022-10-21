@@ -1,5 +1,5 @@
 const express = require("express");
-const { pool, connection } = require("../db/database");
+const { pool } = require("../db/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 // const asyncHandler = require("../util/asyncHandler");
@@ -345,7 +345,7 @@ const userDelete = async function (req, res, next) {
   try {
     const email = req.body.email;
     const password = req.body.password;
-    
+
     const [res_userDelete_check, fld_userDelete_check, err_userDelete_check] =
       await pool.query({
         sql: "SELECT * FROM users WHERE `email` = ? ",
@@ -357,7 +357,7 @@ const userDelete = async function (req, res, next) {
     const res_logID_array = JSON.stringify(res_userDelete_check, ["password"]);
     const res_logID_pw = res_logID_array.split(`"`);
     const correctPasswordHash = res_logID_pw[3];
-    console.log(password, correctPasswordHash)
+    console.log(password, correctPasswordHash);
     const isPasswordCorrect = await bcrypt.compare(
       password,
       correctPasswordHash
