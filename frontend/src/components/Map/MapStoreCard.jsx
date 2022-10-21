@@ -19,7 +19,7 @@ function MapStoreCard({
                     <div className="row">
                         <Link state={{ data: {store_id}}} to={"/storepage"}>{name}</Link>
                         <h5 className="col text-secondary">{address_detail}</h5>
-                        <div className="col"><StarRate star={star} /></div>
+                        <div className="col">🌟: {star}</div>
                         <StoreLike store_id={store_id} />
                     </div>
                     <p className="card-text text-secondary">{description}</p>

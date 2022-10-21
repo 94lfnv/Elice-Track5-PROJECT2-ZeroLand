@@ -9,8 +9,7 @@ function MyReview( ) {
 
   // 이거 뭐지...
   // const { setReviews, reviews } = useContext(MyPageContext);
-  // const { reviews, setReviews } = useContext(MyPageContext);
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState([]);
   // 페이지네이션 코드
   const limit= 4;
   const [page, setPage] = useState(1);
@@ -39,13 +38,12 @@ function MyReview( ) {
 
   return(
     <>
-      <h2 className="text-dark">My Review</h2>
+      <h2 className="text-dark">MY REVIEW</h2>
       <br />
       {reviews?.slice(offset, offset + limit).map((review, index) =>( // map 할 값이 없을 때 에러를  피하기 위해 .map 앞에 '?'를 추가
         <ReviewCard
           key={index.toString()}
           review={review}
-
         />
       ))}
       <footer>

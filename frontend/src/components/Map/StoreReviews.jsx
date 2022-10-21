@@ -12,16 +12,23 @@ function StoreReviews ({
     setReviews,
 }) {
     const [isEditing, setIsEditing] = useState(false); // 리뷰 편집 중인지 아닌지 체크
+    const [editReviewId, setEditReviewId] = useState(-1);
+
+    const handleClickEditButton = (reviewId) => {
+        setIsEditing(true);
+        setEditReviewId(reviewId);
+    }
     
     return (
         <>
             {isEditing ? (
                 <StoreReviewEditForm
                     setIsEditing={setIsEditing}
-                    reviewId={reviews[0].review_id}
+                    reviewId={editReviewId}
                     clickedStoreId={clickedStoreId}
                     setReviews={setReviews}
                     currentUser={currentUser}
+                    reviews={reviews}
                 />
             ) : (
                 <Card className="mb-4">
@@ -34,6 +41,7 @@ function StoreReviews ({
                             currentUser={currentUser}
                             isEditable={currentUser===reviews.nickname}
                             setIsEditing={setIsEditing}
+                            onClickEditButton={handleClickEditButton}
                             setReviews={setReviews}
                         />
                     ))}

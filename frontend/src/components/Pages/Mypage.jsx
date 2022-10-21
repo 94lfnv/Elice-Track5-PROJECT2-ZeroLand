@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Info from "../MyPage/Info.jsx";
-import Reward from "../MyPage/Reward.jsx";
 import MyFav from "../MyPage/MyFav.jsx";
 import MyReview from "../MyPage/MyReview.jsx";
 import ChangeInfo from "../MyPage/ChangeInfo.jsx";
@@ -8,16 +7,16 @@ import ChangePassword from "../MyPage/ChangePassword.jsx";
 import Withdrawal from "../MyPage/Withdrawal.jsx"
 import * as Api from "../../utils/Api";
 
+import * as MP from "../StyledComponents/MyPageStyled";
+
 const navMenuList = [
-  { label: "Info", path: "info" },
-  { label: "Reward", path: "reward" },
-  { label: "MyFav", path: "myfav" },
-  { label: "MyReview", path: "myreview" },
+  { label: "Information", path: "info" },
+  { label: "Favorites", path: "myfav" },
+  { label: "My review", path: "myreview" },
 ];
 
 const mapPathToComp = {
   info: () => <Info />,
-  reward: () => <Reward />,
   myfav: () => <MyFav />,
   myreview: () => <MyReview />,
   changeinfo: () => <ChangeInfo />,
@@ -63,14 +62,12 @@ function Mypage() {
     email: "rabbilt@elice.com",
     phone: "010-1010-2020",
     introduction: "소개",
-    close_time: "오후 10시",
-    reviews: "리뷰",
-    star_avg: 4.8,});
+});
 
     // myReview 부분
   const [reviews,setReviews] = useState([{
     review_id: 0,
-    star: 0,
+    avg_star: 0,
     description: "",
     // photo: null,
     created_time:"",
@@ -104,7 +101,7 @@ function Mypage() {
     setMenu(path);
   };
 
-  const navMenuClassStyle = "py-4 nav-link text-white border border-secondary";
+  const navMenuClassStyle = "menu-name";
   const contextValue = {
     changeMenu,
     setInfo,
@@ -121,27 +118,23 @@ function Mypage() {
 
   return (
     <MyPageContext.Provider value={contextValue}>
-      <div className="container py-2">
-        {/* <article id="main" class="w-auto h-1">
-            <header>
-              <h2>ZEROLAND / 서비스 소개</h2>
-            </header>
-          </article> */}
-        <div className="row mx-4 mt-4">
-          <nav className="fs-4 text-end ps-0 nav flex-column col-3 justify-content-left bg-secondary bg-gradient">
+      <MP.PageFormBox>
+      <MP.PageContainer>
+        <MP.Menubox>
+          <MP.Menus>MY PAGE</MP.Menus>
           {navMenuList.map((nav, index) => (
-            <div
+            <MP.Menus
               key={`${nav.path}-${index}`}
               className={navMenuClassStyle}
               onClick={() => changeMenu(nav.path)}
             >
               {nav.label}
-            </div>
+            </MP.Menus>
           ))}
-          </nav>
-          <div className="col-9 bg-light">{mapPathToComp[menu]()}</div>
-        </div>
-      </div>
+          </MP.Menubox>
+          <MP.ContentBox>{mapPathToComp[menu]()}</MP.ContentBox>
+        </MP.PageContainer>
+      </MP.PageFormBox>
     </MyPageContext.Provider>
   );
 }

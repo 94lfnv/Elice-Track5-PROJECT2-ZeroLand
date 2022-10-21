@@ -27,7 +27,7 @@ function Header () {
         <Navbar expand="lg">
             <Container className="my-2" id="my-nav-container">
                 <Navbar.Brand className="my-2" id="logo" href="/">
-                    <img src="img/zeroland_logo.png" />
+                    <img src="/img/zeroland_logo.png" />
                 </Navbar.Brand>
                 <Nav.Item id="my-nav-item" className="ms-auto">
                     <Nav.Link href="/introduction">Introduction</Nav.Link>

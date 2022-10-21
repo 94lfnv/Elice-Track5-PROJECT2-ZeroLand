@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense, useEffect, useReducer, useState, createContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -14,9 +13,10 @@ import "./App.css";
 import { ErrorBoundary } from "react-error-boundary";
 import UiErrorFallback from "./components/Common/UiErrorFallback";
 
-import LayOut from "./components/Common/Layout";
-import * as api from "./utils/Api";
+import LayOut from "./components/Common/LayOut";
+import * as Api from "./utils/Api";
 import { loginReducer } from "./utils/reducer";
+import KakaoAuth from "./components/User/KakaoAuth";
 
 export const UserStateContext = createContext(null);
 export const DispatchContext = createContext(null);
@@ -46,13 +46,17 @@ function App() {
   const [userState, dispatch] = useReducer(loginReducer, {
     user: null,
   });
-
   const [isFetchCompleted, setIsFetchCompleted] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(userState);
+  // }, [userState])
 
   const fetchCurrentUser = async() => {
     try {
-      const res = await api.get("user");
+      const res = await Api.get("user");
       const currentUser = res.data;
+      console.log(currentUser);
 
       dispatch({
         type: "LOGIN",
@@ -85,7 +89,10 @@ function App() {
         >
             <Router>
               <LayOut>
-                <Routes>{ setRoute() }</Routes>
+                <Routes>
+                  { setRoute() }
+                  <Route path="login/oauth2/code/kakao" element={<KakaoAuth />} />
+                </Routes>
               </LayOut>
             </Router>
         </Suspense>

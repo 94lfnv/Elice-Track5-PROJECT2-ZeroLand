@@ -6,6 +6,7 @@ import { MyPageContext } from "../Pages/Mypage.jsx";
 import { UserStateContext } from "../../App.jsx";
 import * as Api from "../../utils/Api";
 
+
 function ChangePassword() {
   
   const {changeMenu} = useContext(MyPageContext);
@@ -13,10 +14,13 @@ function ChangePassword() {
   const navigate = useNavigate();
   const [currentPwd, setCurrentPwd] = useState("");
   const [newPwd, setNewPwd] = useState("")
+
+
   const [confirmPwd, setConfirmPwd] = useState("");
 
   const [isAccepted, setIsAccpted] = useState(false);
 
+  
   const [pwdMsg, setPwdMsg] = useState("");
   const [confirmPwdMsg, setConfirmPwdMsg] = useState("");
   const {user}=useContext(UserStateContext)
@@ -55,7 +59,7 @@ function ChangePassword() {
         setConfirmPwdMsg("올바른 비밀번호입니다.");
       }
     },
-    [newPwd] //이거 뭐지
+    [newPwd]
   );
 
   // 여기까지 유효성 검사
@@ -67,6 +71,7 @@ function ChangePassword() {
     e.stopPropagation();
 
     try {
+      // "awards/수상 id" 엔드포인트로 PUT 요청함.
       await Api.put(`user/updatePW`, {
         email: user.email,
         current_password: currentPwd ,

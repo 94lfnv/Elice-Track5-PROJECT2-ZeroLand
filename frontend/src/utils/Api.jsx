@@ -50,8 +50,8 @@ const put = async (endpoint, data) => {
 }
 
 const del = async (endpoint, data) => {
-    const bodyData = JSON.stringify(data);
-    return customAxios.delete(BASE_URL + endpoint, bodyData);
+  const bodyData = JSON.stringify(data);
+  return customAxios.delete(BASE_URL + endpoint, bodyData);
 }
 
 export { post, get, put, del as delete };
