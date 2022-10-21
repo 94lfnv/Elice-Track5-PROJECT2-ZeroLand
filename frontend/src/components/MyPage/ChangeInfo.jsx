@@ -24,10 +24,11 @@ function ChangeInfo() {
       return;
     }
 
-    
+
     setErrMsg("");
     try { 
       await Api.put(`user/updateInfo`, {
+        email: user.email,
         nickname: changeNickName,  
         description: changeIntroduction
       });

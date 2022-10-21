@@ -338,6 +338,7 @@ const userDelete = async function (req, res, next) {
   try {
     const email = req.body.email;
     const password = req.body.password;
+    
     const [res_userDelete_check, fld_userDelete_check, err_userDelete_check] =
       await pool.query({
         sql: "SELECT * FROM users WHERE `email` = ? ",
@@ -349,6 +350,7 @@ const userDelete = async function (req, res, next) {
     const res_logID_array = JSON.stringify(res_userDelete_check, ["password"]);
     const res_logID_pw = res_logID_array.split(`"`);
     const correctPasswordHash = res_logID_pw[3];
+    console.log(password, correctPasswordHash)
     const isPasswordCorrect = await bcrypt.compare(
       password,
       correctPasswordHash
@@ -423,7 +425,7 @@ userAuthRouter.post(
   asyncHandler(upload.single("file")),
   asyncHandler(profileUpload)
 );
-userAuthRouter.delete(
+userAuthRouter.post(
   "/user/delete",
   asyncHandler(login_required),
   asyncHandler(userDelete)

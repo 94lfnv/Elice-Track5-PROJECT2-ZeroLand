@@ -49,8 +49,9 @@ const put = async (endpoint, data) => {
     return customAxios.put(BASE_URL + endpoint, bodyData);
 }
 
-const del = async (endpoint, params="") => {
-    return customAxios.delete(BASE_URL + endpoint + "/" + params);
+const del = async (endpoint, data) => {
+    const bodyData = JSON.stringify(data);
+    return customAxios.delete(BASE_URL + endpoint, bodyData);
 }
 
 export { post, get, put, del as delete };
