@@ -21,7 +21,7 @@ function ReviewLike ({
         e.preventDefault();
         e.stopPropagation();
 
-        await Api.post(`stores/${clickedStoreId}/${reviewId}/like`);
+        await Api.post(`stores/${clickedStoreId}/${reviewId}/dislike`);
         setReviewDislike(true);
     };
 

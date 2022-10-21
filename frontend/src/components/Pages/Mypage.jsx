@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Info from "../MyPage/Info.jsx";
-import Reward from "../MyPage/Reward.jsx";
 import MyFav from "../MyPage/MyFav.jsx";
 import MyReview from "../MyPage/MyReview.jsx";
 import ChangeInfo from "../MyPage/ChangeInfo.jsx";
@@ -10,14 +9,12 @@ import * as Api from "../../utils/Api";
 
 const navMenuList = [
   { label: "Info", path: "info" },
-  { label: "Reward", path: "reward" },
   { label: "MyFav", path: "myfav" },
   { label: "MyReview", path: "myreview" },
 ];
 
 const mapPathToComp = {
   info: () => <Info />,
-  reward: () => <Reward />,
   myfav: () => <MyFav />,
   myreview: () => <MyReview />,
   changeinfo: () => <ChangeInfo />,
