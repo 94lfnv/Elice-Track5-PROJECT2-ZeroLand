@@ -20,7 +20,7 @@ function ChangePassword() {
 
   const [isAccepted, setIsAccpted] = useState(false);
 
-  const {user}=useContext(UserStateContext)
+  
   const [pwdMsg, setPwdMsg] = useState("");
   const [confirmPwdMsg, setConfirmPwdMsg] = useState("");
   const {user}=useContext(UserStateContext)
