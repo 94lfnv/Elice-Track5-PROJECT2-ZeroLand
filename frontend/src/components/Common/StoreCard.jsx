@@ -3,7 +3,7 @@ import StarRate from "./StarRate.jsx"
 
 function StoreCard({...props}) {
     const {favStore}= props
-    console.log(favStore)
+    console.log(favStore.avg_star)
 
   return(
     <div className="card mb-3">
@@ -21,7 +21,9 @@ function StoreCard({...props}) {
                         <h5 className="col text-secondary">
                         {"address_detail" in favStore ? favStore.address_detail : "상세 주소"}
                         </h5>
-                        <div className="col"><StarRate star={favStore.star_avg} /></div>
+                        <div className="col text-dark">
+                            🌟: {favStore.avg_star}
+                        </div>
                     </div>
                     <p className="card-text text-secondary">
                     {"description" in favStore ? favStore.description : "설명"}

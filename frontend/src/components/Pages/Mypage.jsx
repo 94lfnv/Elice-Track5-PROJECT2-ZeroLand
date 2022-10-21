@@ -59,7 +59,7 @@ function Mypage() {
     nickname: "사용자 이름",
     email: "rabbilt@elice.com",
     phone: "010-1010-2020",
-    introduction: "소개",
+    description: "소개",
     close_time: "오후 10시",
     reviews: "리뷰",
     star_avg: 4.8,});
@@ -67,7 +67,7 @@ function Mypage() {
     // myReview 부분
   const [reviews,setReviews] = useState([{
     review_id: 0,
-    star: 0,
+    avg_star: 0,
     description: "",
     // photo: null,
     created_time:"",

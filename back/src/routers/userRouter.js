@@ -222,17 +222,24 @@ const userCurrent = async function (req, res, next) {
         values: [user_id],
       });
     if (err_currentUser) throw err_currentUser;
-
-    delete res_currentUser[0].password;
-    delete res_currentUser[0].user_id;
-    const resultWMessage = Object.assign(
-      {
-        result: true,
-        resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
-      },
-      res_currentUser[0]
-    );
-    res.status(200).json(resultWMessage);
+    if (res_currentUser && res_currentUser.length) {
+      // false, 검색된 결과가 없을 때
+      delete res_currentUser[0].password;
+      delete res_currentUser[0].user_id;
+      const resultWMessage = Object.assign(
+        {
+          result: true,
+          resultMessage: "로그인이 성공적으로 이뤄졌습니다.",
+        },
+        res_currentUser[0]
+      );
+      res.status(200).json(resultWMessage);
+    } else {
+      res.status(200).json({
+        result: false,
+        resultMessage: "로그인이 실패했습니다.",
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -338,6 +345,7 @@ const userDelete = async function (req, res, next) {
   try {
     const email = req.body.email;
     const password = req.body.password;
+    
     const [res_userDelete_check, fld_userDelete_check, err_userDelete_check] =
       await pool.query({
         sql: "SELECT * FROM users WHERE `email` = ? ",
@@ -349,6 +357,7 @@ const userDelete = async function (req, res, next) {
     const res_logID_array = JSON.stringify(res_userDelete_check, ["password"]);
     const res_logID_pw = res_logID_array.split(`"`);
     const correctPasswordHash = res_logID_pw[3];
+    console.log(password, correctPasswordHash)
     const isPasswordCorrect = await bcrypt.compare(
       password,
       correctPasswordHash
@@ -423,7 +432,7 @@ userAuthRouter.post(
   asyncHandler(upload.single("file")),
   asyncHandler(profileUpload)
 );
-userAuthRouter.delete(
+userAuthRouter.post(
   "/user/delete",
   asyncHandler(login_required),
   asyncHandler(userDelete)

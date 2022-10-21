@@ -24,10 +24,11 @@ function MyFav( ) {
 
   return(
     <>
-      <h2 className="text-dark">My Review</h2>
+      <h2 className="text-dark">FAVORITE STORE</h2>
       <br />
-      {favStores?.slice(offset, offset + limit).map((favStore) =>(
+      {favStores?.slice(offset, offset + limit).map((favStore, index) =>(
         <StoreCard
+          key={index.toString()}
           favStore={favStore}
         />
       ))}

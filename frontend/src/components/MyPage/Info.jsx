@@ -63,7 +63,7 @@ function Info() {
 
         <p>{"email" in info ? info.email : "이메일"}</p>
         <h4>{"name" in info ? info.name : "이름"}</h4>
-        <p>{"introduction" in info ? info.introduction : "소개"}</p>
+        <p>{"description" in info ? info.description : "소개"}</p>
       </div>
       <hr className="ms-3 me-5" style={{ backgroundColor: "gray" }} />
       {/* -------------------------------------------------- */}

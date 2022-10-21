@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js --exec babel-node",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "pm2": "pm2 start index.js --interpreter babel-node"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
@@ -30,8 +29,10 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "mysql2-promise": "^0.1.4",
+    "negotiator": "^0.6.3",
     "path": "^0.12.7",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "toidentifier": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

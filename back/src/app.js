@@ -1,11 +1,5 @@
-// reference:
-// https://nodejs.org/en/docs/guides/getting-started-guide/
-
-// const { connection } = require("./src/db/database.js");
-
 const express = require("express");
 const cors = require("cors");
-// const { errorMiddleware } = require("./middlewares/errorMiddleware");
 const userAuthRouter = require("./routers/userRouter");
 // router를 만들면 추가하기
 const storesRouter = require("./routers/storesRouter");
@@ -34,9 +28,6 @@ app.use(userAuthRouter);
 app.use(reviewRouter);
 app.use(introRouter);
 app.use(socialLoginRouter);
-
-// app.use(connection);
-// app.use(userList);
 app.use(myPageRouter);
 app.use(storesRouter);
 
@@ -47,5 +38,4 @@ app.use(express.static("uploads"));
 // app.use(errorMiddleware);
 
 // import error와 같이 export도 error발생
-// export { app };
 module.exports = app;

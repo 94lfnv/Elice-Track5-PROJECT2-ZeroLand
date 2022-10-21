@@ -39,9 +39,10 @@ const Nav = styled.nav`
 const Button = styled.button`
   border: none;
   border-radius: 8px;
-  padding: 8px;
+  padding: 18px;
   margin: 0;
-  background: black;
+  // 활성화된 버튼 컬러
+  background: #DADBDC;
   color: white;
   font-size: 1rem;
 
@@ -58,7 +59,7 @@ const Button = styled.button`
   }
 
   &[aria-current] {
-    background: deeppink;
+    background: #767E86;
     font-weight: bold;
     cursor: revert;
     transform: revert;
