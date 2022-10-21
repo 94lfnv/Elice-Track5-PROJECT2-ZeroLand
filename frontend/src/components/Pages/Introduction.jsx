@@ -5,6 +5,7 @@ import { Pagination } from "swiper";
 import 'swiper/css';
 import "swiper/css/pagination";
 import ChartLine from "../Introduction/ChartLine";
+import Chart2 from "../Introduction/Chart2";
 
 const slideContentList = [
   // 1번
@@ -45,6 +46,8 @@ const slideContentList = [
     또한 친환경적 생활 습관의 실천이 어려운 이유 중 제품을 구매할 때 친환경적인 대안이 없다는 점이 가장 높은 원인임을 주목하였습니다. <br />
     <br />
     따라서 <b>웹 서비스에 대한 접근성이 높은 20대와 30대</b>를 서비스 타겟으로 선정해 제로웨이스트 샵에 대한 정보를 제공하고, 사용자들의 경험을 공유할 수 있는 공간을 제공하기로 했습니다.
+    <Chart2 />
+    <br />
     </div>
   </div>,
   // 4번

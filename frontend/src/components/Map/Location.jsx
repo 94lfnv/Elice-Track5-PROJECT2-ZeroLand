@@ -79,6 +79,7 @@ function Location({
       kakaoMapScript.async = true;
       document.head.appendChild(kakaoMapScript);
       kakaoMapScript.addEventListener("load", loadKakaoMap);
+      
       return () => {
         kakaoMapScript.removeEventListener("load", loadKakaoMap);
       };
