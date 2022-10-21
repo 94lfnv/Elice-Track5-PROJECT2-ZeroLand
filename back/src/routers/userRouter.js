@@ -357,7 +357,6 @@ const userDelete = async function (req, res, next) {
     const res_logID_array = JSON.stringify(res_userDelete_check, ["password"]);
     const res_logID_pw = res_logID_array.split(`"`);
     const correctPasswordHash = res_logID_pw[3];
-    console.log(password, correctPasswordHash);
     const isPasswordCorrect = await bcrypt.compare(
       password,
       correctPasswordHash
