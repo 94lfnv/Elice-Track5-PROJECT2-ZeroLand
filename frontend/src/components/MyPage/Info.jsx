@@ -105,7 +105,24 @@ function Info() {
             </svg>
             <h2 className="text-dark text-center">게시글</h2>
           </div>
-
+          <div className="col-4">
+            <svg
+              className="bd-placeholder-img rounded-circle"
+              width="110"
+              height="110"
+              role="img"
+              focusable="false"
+            >
+              <rect width="100%" height="100%" fill="#777" />
+              <text x="20" y="50%" fill="white" dy=".5em" onClick={() => {
+              changeMenu("reward");
+            }}>
+                {/* {userInfo.myReward} */}
+                {"myReward" in info ? info.myReward : 0}
+              </text>
+            </svg>
+            <h2 className="text-dark text-center">활동 배지</h2>
+          </div>
         </div>
         <br />
         <br />
