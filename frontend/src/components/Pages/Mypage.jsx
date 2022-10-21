@@ -67,7 +67,7 @@ function Mypage() {
     // myReview 부분
   const [reviews,setReviews] = useState([{
     review_id: 0,
-    star: 0,
+    avg_star: 0,
     description: "",
     // photo: null,
     created_time:"",

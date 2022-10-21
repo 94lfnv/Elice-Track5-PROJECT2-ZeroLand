@@ -38,7 +38,7 @@ function MyReview( ) {
 
   return(
     <>
-      <h2 className="text-dark">My Review</h2>
+      <h2 className="text-dark">MY REVIEW</h2>
       <br />
       {reviews?.slice(offset, offset + limit).map((review) =>( // map 할 값이 없을 때 에러를  피하기 위해 .map 앞에 '?'를 추가
         <ReviewCard
