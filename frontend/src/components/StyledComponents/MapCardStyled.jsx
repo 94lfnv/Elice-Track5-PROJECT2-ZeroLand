@@ -1,31 +1,15 @@
 import styled from "styled-components";
 
-export const FavCardBox = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 47vw;
-    height: 69vh;
-    border: 1px solid #01402E;
-    max-width: 635px;
-    border-radius: 30px;
-    align-items: center;
-    color: #01402E;
-
-    h2 {
-        margin-top: 10px;
-        color: #01402E;
-    }
-`
 
 export const CardBox = styled.div`
     display: flex;
     flex-direction: column;
-    width: 25vw;
-    height: 15vh;
+    width: 20vw;
+    height: 20vh;
     min-width: 430px;
     max-width: 450px;
     border: 1px solid #01261F;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     background-color: #f4f5ea;
     color: #01261F;
 `
@@ -51,14 +35,19 @@ export const StarBox = styled.div`
     width: 150px;
     height: 30px;
     padding-top: 15px;
-    // 좋아요 밑으로 떨어지게 하려고 넣은 값. 조절해주세요.
-    margin-right: 70px;
+    margin-left: 8px;
 `
 
 export const LikeIcon = styled.div`
-    width: 25px;
+    display: flex;
+    justify-content: right;
+    width: 120px;
     height: 25px;
-    margin-left: 15px;
+
+    &.like {
+        margin-top: 25px;
+        margin-left: 145px;
+    }
 `
 
 export const StoreAdress = styled.div`
@@ -68,10 +57,11 @@ export const StoreAdress = styled.div`
     font-size: 14px;
     padding-left: 2px;
     border-bottom: 1px solid #01261F;
+    padding-top: 5px;
 `
 
 export const StoreInfoBox = styled.div`
-    margin: 0px 10px;
+    margin: 0px 8px;
     padding-left: 5px;
     font-size: 15px;
 `

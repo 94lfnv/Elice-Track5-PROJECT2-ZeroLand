@@ -4,6 +4,7 @@ import ConfirmWithdrawal from "./ConfirmWithdrawal"
 import { MyPageContext } from "../Pages/Mypage.jsx";
 import { UserStateContext } from "../../App.jsx";
 import * as Api from "../../utils/Api";
+import * as WD from "../StyledComponents/ChangeInfoStyled";
 
 function Withdrawal(){
 
@@ -19,36 +20,20 @@ function Withdrawal(){
     const onChangeAccount = (e) => {
       setCheckPassword(e.target.value)
       };
-    
-    // 회원 탈퇴 delete
-    // const handleCheckAccept = useCallback(() => {
-    //   setIsAccpted(true);
-    // }, []);
 
       
     const handleSubmit = async (e) => {
         e.preventDefault();
         e.stopPropagation();
 
-        // if (!checkPassword) {
-        //     setErrMsg("패스워드를 입력해 주세요.");
-        //     return;
-        //   }
-    
-        // if (!) {
-        //     setErrMsg("약관을 확인해 주세요.");
-        //     return;
-        //   }
 
         try {
-            
-          console.log({email: user.email,
-            password: checkPassword})
+            const res = await Api.post(`user/delete`, {
+                  email: user.email,
+                  password: checkPassword
+              });
 
-            await Api.post(`user/delete`, {
-                email: user.email,
-                password: checkPassword
-            });
+              console.log(res.data);
     
 
             changeMenu("info");
@@ -65,9 +50,10 @@ function Withdrawal(){
 
     return (
         <form onSubmit={handleSubmit}>
-          <div className="container my-5 pe-5">
-            <div className="row">
-              <p className="col text-secondary">비밀번호</p>
+          <WD.ChangeInfoBox>
+          <h3>회원 탈퇴</h3>
+          <WD.NickConBox>
+          <WD.NickCon>비밀번호</WD.NickCon>
               <input
                 className="col text-dark"
                 name="checkPassword"
@@ -75,27 +61,27 @@ function Withdrawal(){
                 placeholder="**********"
                 onChange={onChangeAccount}
               />
-            </div>
-          </div>
+              <WD.NickCon>
           <ConfirmWithdrawal isAccepted={isAccepted} setIsAccpted={setIsAccpted} onCheckAccept={handleCheckAccept} />
-          <br />
-          <div className="row">
-            <div>
-              <button className="col"
+          </WD.NickCon>
+
+          <WD.FootBtnBox>
+              <WD.FootBtn 
                 onClick={() => {
                   changeMenu("info");
                 }}
               >
                 취소
-              </button>
-              <button className="col"
+              </WD.FootBtn>
+              <WD.FootBtn className="col"
                 type="submit"
                 disabled={!isAccepted}
               >
                 회원 탈퇴
-              </button>
-            </div>
-          </div>
+              </WD.FootBtn>
+              </WD.FootBtnBox>
+              </WD.NickConBox>
+          </WD.ChangeInfoBox>
         </form>
       );
     

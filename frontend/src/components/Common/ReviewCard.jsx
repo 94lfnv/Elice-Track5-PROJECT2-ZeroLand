@@ -1,43 +1,34 @@
-import React from "react"
-import StarRate from "./StarRate.jsx"
+import React, { useState } from "react"
+import * as RC from "../StyledComponents/StoreCardStyled";
 
 function ReviewCard({...props}) {
     const {review}= props  //
     console.log(review.star)
+    const [date, setDate] = useState(new Date(review.created_time));
+    const newDate = date.toISOString().split("T")[0];
+
   return(
-    <div className="card mb-3">
-        <div className="row g-0">
-            <div className="col-md-4">
-                {/* <img src="..." class="img-fluid rounded-start" alt="..."> */}
-                {"photo" in review ? review.photo : "사진"}
-            </div>
-            <div className="col-md-8">
-                <div className="card-body">
-                    <img className="ratio ratio-1x1" />
-                    <div className="row">
-                        <div className="row">
-                            <h4 className="col card-title text-secondary">
-                                {"store_name" in review ? review.store_name : "매장이름"}
-                            </h4>
-                            <div className="col text-dark">
-                                🌟: {"star" in review ? review.star : 0}
+            <RC.CardBox>
+                <RC.InnerBox>
+                    <RC.StoreName>
+                            {"store_name" in review ? review.store_name : "매장이름"}
+                            </RC.StoreName>
+
+                            <div style={{marginLeft:"10px"}}>
+                                🌟:{"star" in review ? review.star : 0}
                             </div>
-                            <div className="col text-dark">🧡x
+                            <div className="col hearts">🧡x
                             {"like_reviews" in review ? review.like_reviews.length : 0}
                             </div>
-                        </div>
-                        <p className="card-text col"><small className="text-muted text-secondary">
-                        {"created_time" in review ? review.created_time : ""}</small></p>
-                    </div>
-                    <div className="row">
-                        <p className="col card-text text-secondary">
-                        {"description" in review ? review.description : ""}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
+                            <RC.StoreAdress>
+                            {"created_time" in review ? newDate : ""}
+                             </RC.StoreAdress>
+                             <RC.StoreInfoBox>
+                            {"description" in review ? review.description : ""}
+                        </RC.StoreInfoBox>
+                    </RC.InnerBox>
+            </RC.CardBox>
   )
 }
 

@@ -28,28 +28,6 @@ const mapPathToComp = {
 export const MyPageContext = React.createContext({
   changeMenu: () => {},
   setInfo: () => {},
-  // info: {
-  //   name: "이름",
-  //   nickname: "사용자 이름",
-  //   email: "rabbilt@elice.com",
-  //   phone: "010-1010-2020",
-  //   introduction: "소개",
-  //   close_time: "오후 10시",
-  //   reviews: "리뷰",
-  //   star_avg: 4.8,
-  // },
-  // setReviews: () =>{},
-  // reviews: [{
-  //   review_id: 0,
-  //   star: 0,
-  //   description: "",
-  //   // photo: null,
-  //   created_time:"",
-  //   updated_time:"",
-  //   user_id: "",
-  //   store_id: "",
-  //   like_reviews: 0
-  // }],
 });
 
 function Mypage() {
@@ -70,7 +48,7 @@ function Mypage() {
     avg_star: 0,
     description: "",
     // photo: null,
-    created_time:"",
+    created_time: "",
     updated_time:"",
     user_id: "",
     store_id: "",
@@ -79,13 +57,6 @@ function Mypage() {
 
     // myFav부분
   const [favStores,setFavStores] = useState([{
-
-    // description:"",
-    // photo:"",
-    // photo2:"",
-    // store_name:"",
-    // address_detail:"",
-    // star: 0
     name:"",
     description:"",
     tag:"",
@@ -112,9 +83,9 @@ function Mypage() {
     favStores,
   };
 
-  useEffect(() => {
-    console.log(info);
-  }, [info]);
+  // useEffect(() => {
+  //   console.log(info);
+  // }, [info]);
 
   return (
     <MyPageContext.Provider value={contextValue}>

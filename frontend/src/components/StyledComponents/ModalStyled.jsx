@@ -21,6 +21,7 @@ export const ModalButton = styled.div`
 `;
 
 export const ModalForm = styled.div`
+    text-align: center;
     width: 450px;
     height: 440px;
     background-color: #f2f2f2;

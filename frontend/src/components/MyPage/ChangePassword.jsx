@@ -5,6 +5,7 @@ import Info from "./Info.jsx";
 import { MyPageContext } from "../Pages/Mypage.jsx";
 import { UserStateContext } from "../../App.jsx";
 import * as Api from "../../utils/Api";
+import * as CP from "../StyledComponents/ChangeInfoStyled";
 
 
 function ChangePassword() {
@@ -88,20 +89,21 @@ function ChangePassword() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="container my-5 pe-5">
-        <div className="row">
-          <p className="col text-secondary">이전 비밀번호</p>
+      <CP.ChangeInfoBox>
+      <h3>비밀번호 변경</h3>
+        <CP.ChangeBox>
+        <CP.PwConBox>
+        <CP.NickCon>이전 비밀번호</CP.NickCon>
           <input
             className="col text-dark"
             name="currentPwd"
             type="password"
             placeholder="**********"
           />
-        </div>
-      </div>
-      <div className="container my-5 pe-5">
-        <div className="row">
-          <p className="col text-secondary">새 비밀번호</p>
+        </CP.PwConBox>
+
+      <CP.PwConBox>
+      <CP.NickCon>새 비밀번호</CP.NickCon>
           <input
             className="col text-dark"
             name="newPwd"
@@ -109,18 +111,17 @@ function ChangePassword() {
             placeholder="**********"
             onChange={onChangePwd}
           />
-          <p
+        </CP.PwConBox>
+        <CP.ErrPlace
             className={
               isPwdValid ? "success text-secondary" : "error text-secondary"
             }
           >
             {pwdMsg}
-          </p>
-        </div>
-      </div>
-      <div className="container my-5 pe-5">
-        <div className="row">
-          <p className="col text-secondary">새 비밀번호 확인</p>
+        </CP.ErrPlace>
+
+        <CP.PwConBox>
+      <CP.NickCon>새 비밀번호 확인</CP.NickCon>
           <input
             className="col text-dark"
             name="confirmPwd"
@@ -128,34 +129,32 @@ function ChangePassword() {
             placeholder="**********"
             onChange={onChangeConfirmPwd}
           />
-          <p
+          </CP.PwConBox>
+          <CP.NickCon
             className={
               isConfirmPwd ? "success text-secondary" : "error text-secondary"
             }
           >
             {confirmPwdMsg}
-          </p>
-        </div>
-      </div>
-      <div>
-        <div>
-          {/* <button onClick={()=>{changeMenu(<Info changeMenu={changeMenu} />)}}>취소</button> */}
-          <button
+          </CP.NickCon>
+
+        <CP.FootBtnBox>
+          <CP.FootBtn
             onClick={() => {
               changeMenu("info");
             }}
           >
             취소
-          </button>
-          <button
-            variant="primary"
+          </CP.FootBtn>
+          <CP.FootBtn
             type="submit"
             disabled={!isAllValid}
           >
             변경하기
-          </button>
-        </div>
-      </div>
+          </CP.FootBtn>
+          </CP.FootBtnBox>
+        </CP.ChangeBox>
+      </CP.ChangeInfoBox>
     </form>
   );
 }

@@ -3,28 +3,17 @@ import ReviewCard from "../Common/ReviewCard.jsx";
 import * as Api from "../../utils/Api";
 import { MyPageContext } from "../Pages/Mypage.jsx";
 import Pagination from "./Pagination.jsx"
+import * as SC from "../StyledComponents/StoreCardStyled"
 
 
 function MyReview( ) {
 
-  // 이거 뭐지...
-  // const { setReviews, reviews } = useContext(MyPageContext);
   const [reviews, setReviews] = useState([]);
   // 페이지네이션 코드
-  const limit= 4;
+  const limit= 3;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-  // const [reviews,setReviews] = useState([{
-  //   review_id: 0,
-  //   star: 0,
-  //   description: "",
-  //   // photo: null,
-  //   created_time:"",
-  //   updated_time:"",
-  //   user_id: "",
-  //   store_id: "",
-  //   like_reviews: 0
-  // }]);
+
 
   const fetchData = async () =>{  
     const response = await Api.get('mypage/reviews');
@@ -38,7 +27,8 @@ function MyReview( ) {
 
   return(
     <>
-      <h2 className="text-dark">MY REVIEW</h2>
+    <SC.FavCardBox>
+      <h2>MY REVIEW</h2>
       <br />
       {reviews?.slice(offset, offset + limit).map((review, index) =>( // map 할 값이 없을 때 에러를  피하기 위해 .map 앞에 '?'를 추가
         <ReviewCard
@@ -54,6 +44,7 @@ function MyReview( ) {
             setPage={setPage}
           />
         </footer>
+      </SC.FavCardBox>
     </>
   )}
 

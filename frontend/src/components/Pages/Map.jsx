@@ -19,7 +19,7 @@ function Map() {
 
   return (
     <article id="main">
-      <section className="wrapper style5">
+      <section className="wrapper style5" style={{backgroundColor: "#e7e8db"}}>
         <div className="inner">
           <div>
           <h3>내 주변의 제로웨이스트샵</h3>

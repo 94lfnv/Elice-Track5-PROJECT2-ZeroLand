@@ -92,13 +92,13 @@ export const ProfilePB = styled.div`
 `
 
 export const ProfilePhoto = styled.div`
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     border: 1px solid #01402E;
-    margin-top: 20px;
+    margin-top: 25px;
     margin-right: 10px;
-    background-image: url("/img/zeroland_logo.png");
+    background-color: #e7e8db;
 `
 
 export const ProfileIntro = styled.div`
@@ -111,13 +111,14 @@ export const ProfileIntro = styled.div`
 
 export const ProfileBtn = styled.div`
     border: 1px solid #01402E;
-    width: 110px;
+    width: 120px;
     height: 30px;
     color: #01402E;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 21px;
     cursor: pointer;
     background-color: #BFBEAB;
+    font-size: 14px;
 `
 
 export const ProfileEmail = styled.div`
@@ -171,6 +172,7 @@ export const ReviewOne = styled.div`
     font-size: 20px;
     color: #01402E;
     background-color: #7fbfad;
+    margin-top: 20px;
     
     &.second-one {
         background-color: #d0ceb8;

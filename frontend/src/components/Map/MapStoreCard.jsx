@@ -2,6 +2,7 @@ import React from "react"
 import StarRate from "../Common/StarRate";
 import { Link } from "react-router-dom";
 import StoreLike from "./StoreLike";
+import * as MSC from "../StyledComponents/MapCardStyled"
 
 function MapStoreCard({
     store_id,
@@ -12,21 +13,17 @@ function MapStoreCard({
 }) {
 
   return(
-    <div className="card mb-3">
-        <div className="row g-0">
-            <div className="col-md-8">
-                <div className="card-body">
-                    <div className="row">
-                        <Link state={{ data: {store_id}}} to={"/storepage"}>{name}</Link>
-                        <h5 className="col text-secondary">{address_detail}</h5>
-                        <div className="col">🌟: {star}</div>
-                        <StoreLike store_id={store_id} />
-                    </div>
-                    <p className="card-text text-secondary">{description}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <MSC.CardBox>
+        <MSC.InnerBox>
+                <MSC.StoreName>
+                    <Link state={{ data: {store_id}}} to={"/storepage"}>{name}</Link>
+                </MSC.StoreName>
+                <MSC.StoreAdress>{address_detail}</MSC.StoreAdress>
+                <MSC.StarBox>🌟: {star}</MSC.StarBox>
+                <MSC.LikeIcon className="like"><StoreLike store_id={store_id} /></MSC.LikeIcon>
+                    <MSC.StoreInfoBox>{description}</MSC.StoreInfoBox> 
+        </MSC.InnerBox> 
+    </MSC.CardBox>
   )
 }
 

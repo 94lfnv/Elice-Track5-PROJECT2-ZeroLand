@@ -7,23 +7,12 @@ import Withdrawal from "./Withdrawal.jsx"
 import * as MP from "../StyledComponents/MyPageStyled";
 
 
-// const userInfo = {
-  // nickname: "닉네임",
-  // email: "rabbilt@elice.com",
-  // phone: "010-1010-2020",
-  // introduction: "소개부분", 
-  // myFavStores: 4,
-  // myReviews: 5,
-  // myReward: 8
-// };
 
 function Info() {
   const { changeMenu, setInfo, info } = useContext(MyPageContext);
-  console.log(info)
 
   const fetchData = async () =>{
     const response = await Api.get('mypage/info');
-    console.log(response.data)
     setInfo(response.data);
   };
 
@@ -57,7 +46,7 @@ function Info() {
             {"name" in info ? info.name : "이름"}
             </MP.ProfileEmail> */}
         <MP.ProfileMyInfo>
-          {"introduction" in info ? info.introduction : "소개"}
+          {"description" in info ? info.description : "소개"}
         </MP.ProfileMyInfo>
           </MP.ProfileIntro>
         </MP.ProfileBox>

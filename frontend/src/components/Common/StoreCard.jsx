@@ -1,33 +1,29 @@
 import React from "react"
-import StarRate from "./StarRate.jsx"
+import * as SC from "../StyledComponents/StoreCardStyled";
 
 function StoreCard({...props}) {
     const {favStore}= props
     console.log(favStore.avg_star)
 
   return(
-    <div className="card mb-3">
-        <div className="row g-0">
-            <div className="col-md-8">
-                <div className="card-body">
-                    <div className="row">
-                         <h3 className="col text-dark">
+    <>
+        <SC.CardBox>
+            <SC.InnerBox>
+                    <SC.StoreName>
                         {"name" in favStore ? favStore.name : "매장 명"}
-                        </h3>
-                        <h5 className="col text-secondary">
+                        </SC.StoreName>
+                        <SC.StoreAdress>
                         {"address_detail" in favStore ? favStore.address_detail : "상세 주소"}
-                        </h5>
-                        <div className="col text-dark">
+                        </SC.StoreAdress>
+                        <SC.StarBox>
                             🌟: {favStore.avg_star}
-                        </div>
-                    </div>
-                    <p className="card-text text-secondary">
+                        </SC.StarBox>
+                    <SC.StoreInfoBox>
                     {"description" in favStore ? favStore.description : "설명"}
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
+                    </SC.StoreInfoBox>
+                </SC.InnerBox>
+        </SC.CardBox>
+    </>
   )
 }
 

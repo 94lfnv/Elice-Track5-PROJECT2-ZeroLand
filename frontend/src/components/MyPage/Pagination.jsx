@@ -30,24 +30,23 @@ function Pagination({ total, limit, page, setPage }) {
 
 const Nav = styled.nav`
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 4px;
-  margin: 16px;
+  gap: 6px;
+  margin: 20px;
 `;
 
 const Button = styled.button`
-  border: none;
-  border-radius: 8px;
-  padding: 18px;
-  margin: 0;
+  width: 20px;
+  height: 20px;
+  padding: 17px;
   // 활성화된 버튼 컬러
-  background: #DADBDC;
-  color: white;
-  font-size: 1rem;
+  background: #D9D8D2;
+  color: #f2f2f2;
+  font-size: 14px;
+  line-height: 5px;
 
   &:hover {
-    background: tomato;
+    background: #D8D9C5;
     cursor: pointer;
     transform: translateY(-2px);
   }
@@ -59,7 +58,7 @@ const Button = styled.button`
   }
 
   &[aria-current] {
-    background: #767E86;
+    background: #68A694;
     font-weight: bold;
     cursor: revert;
     transform: revert;
