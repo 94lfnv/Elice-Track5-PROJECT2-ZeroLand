@@ -1,7 +1,6 @@
 // 지도 페이지 - 스토어 리뷰 카드
 import React from "react";
 import { Card, Row, Col } from "react-bootstrap";
-import StarRate from "../Common/StarRate";
 import * as Api from "../../utils/Api";
 import ReviewLike from "./ReviewLike";
 
@@ -42,6 +41,7 @@ function StoreReviewCard({
       alert("오류가 발생했습니다.", err);
     }
   };
+  console.log(currentReview);
     
   return (
     <Row className="mb-4">
@@ -49,7 +49,7 @@ function StoreReviewCard({
         <Card.Text>
           <span className="text-muted">{currentReview.nickname}</span>
           <br />
-          <span className="text-muted"><StarRate star={currentReview.star} /></span>
+          <span className="text-muted">🌟: {currentReview.star}</span>
           <br />
           <span className="text-muted">{currentReview.description}</span>
         </Card.Text>
