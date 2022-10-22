@@ -41,7 +41,6 @@ function StoreReviewCard({
       alert("오류가 발생했습니다.", err);
     }
   };
-  console.log(currentReview);
     
   return (
     <Row className="mb-4">
