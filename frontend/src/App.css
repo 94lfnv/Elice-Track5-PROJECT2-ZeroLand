@@ -1,0 +1,54 @@
+.app-layout-wrapper {
+  width: 100%;
+  height: 100vh;
+  min-width: 550px;
+  background-image: url("/img/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top center;
+  background-attachment: fixed;
+  margin: 0 auto;
+  animation: fadein 5s ease 3s;
+  -webkit-animation: fadein 3s;
+}
+@keyframes fadein {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+  
+@-webkit-keyframes fadein {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+.welcome {
+  color: #fff;
+  position: relative;
+  text-decoration: none;
+}
+
+.main {
+  position: absolute;
+  top: 8rem;
+  left: 15rem;
+  animation: transY 2s ease-in-out;
+  font-size: 40px;
+}
+@keyframes transY {
+  0% {
+    transform: translateY(300px); 
+    opacity: 0; 
+  }
+  100% {
+    transform: translateY(0px);   
+    opacity: 1; 
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js --exec babel-node",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pm2": "pm2 start index.js --interpreter babel-node"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.19.1",
+    "@glennsl/bs-json": "^5.0.4",
+    "@sindresorhus/is": "^5.3.0",
+    "axios": "^1.1.2",
+    "bcrypt": "^5.1.0",
+    "bluebird": "^3.7.2",
+    "bs-mysql2": "^10.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.37",
+    "multer": "^1.4.5-lts.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "mysql2-promise": "^0.1.4",
+    "negotiator": "^0.6.3",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
+    "toidentifier": "^1.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/node": "^7.19.1",
+    "@babel/preset-env": "^7.19.3",
+    "nodemon": "^2.0.20"
+  }
+}
